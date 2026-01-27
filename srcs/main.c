@@ -5,32 +5,45 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 21:24:34 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/26 23:05:05 by fgargot          ###   ########.fr       */
+/*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
+/*   Updated: 2026/01/27 14:31:42 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+
+#include <unistd.h>
 #include <stdlib.h>
-#include "../includes/minishell.h"
+
+#define PROMPT CYAN"🐚 "BLUE"minicoquille"CYAN" ⟩ "RESET
+#define DEBUG 1
+
+#include "minishell.h"
 
 int	main(void)
 {
-	char *input;
+	char	*line;
+	t_cmd	*cmd;
+	t_token	*tokens;
+
 	while (1)
 	{
-		input = readline("minishell> ");
-		if (!input || !strcmp(input, "exit"))
+		line = readline(PROMPT);
+		if (!line)
+			break ;
+		tokens = lexer(line);
+		if (DEBUG)
+			print_tokens(tokens);
+		cmd = parser(tokens);
+		if (DEBUG)
 		{
-			printf("exit\n");
-			free(input);
-			return (0);
+			print_str_list(cmd->args);
+			print_redirs(cmd->redirs);
 		}
-		if (!strncmp(input, "echo ", 5))
-			builtin_echo(&input[5], 1);
-		free(input);
+		//free_tokens(tokens);
+		free(line);
 	}
 	return (0);
 }

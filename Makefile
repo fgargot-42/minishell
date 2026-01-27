@@ -7,7 +7,12 @@ OBJDIR=objs
 INCDIR=includes
 LIBFTDIR=libft
 LIBFT=$(LIBFTDIR)/libft.a
-SRC=main.c exit.c echo.c
+SRC=main.c \
+	execution/executor.c \
+	lexer/lexer.c \
+	lexer/lexer_utils.c \
+	parser/parser.c \
+	parser/redir.c
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(addprefix $(OBJDIR)/,$(OBJ)) $(LIBFT)
@@ -16,7 +21,7 @@ $(NAME): $(addprefix $(OBJDIR)/,$(OBJ)) $(LIBFT)
 all: $(NAME)
 
 $(OBJDIR)/%.o:$(SRCDIR)/%.c
-	mkdir -p $(OBJDIR)
+	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I$(INCDIR) -c $? -o $@
 
 $(LIBFT):
