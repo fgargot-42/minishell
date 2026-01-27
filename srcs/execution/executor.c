@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 21:35:13 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/27 22:24:22 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ int	exec_command(t_cmd *cmd)
 	// check les buitlitns ici
 	if (is_builtin(cmd))
 	{
-		printf("1 -> %s", cmd->args[0]);
 		call_builtin(cmd);
+		return (42);
 	}
+
 	path = find_in_path(cmd->args[0]);
 	if (!path)
 	{

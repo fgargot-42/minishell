@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 21:30:44 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/27 22:25:25 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 # include <stdlib.h>
 
 // Color codes
-# define RED     "\033[0;31m"
-# define GREEN   "\033[0;32m"
-# define YELLOW  "\033[0;33m"
-# define BLUE    "\033[0;34m"
-# define MAGENTA "\033[0;35m"
-# define CYAN    "\033[0;36m"
-# define RESET   "\033[0m"
+# define RED     "\001\033[0;31m\002"
+# define GREEN   "\001\033[0;32m\002"
+# define YELLOW  "\001\033[0;33m\002"
+# define BLUE    "\001\033[0;34m\002"
+# define MAGENTA "\001\033[0;35m\002"
+# define CYAN    "\001\033[0;36m\002"
+# define RESET   "\001\033[0m\002"
 
 typedef enum e_node_type
 {
@@ -138,6 +138,8 @@ void	add_redirection(t_cmd *cmd, t_token **tokens);
 // execution.c
 int		exec_command(t_cmd *cmd);
 
+// exec_tree
+int		exec(t_node *root);
 // builtin.c
 
 typedef int (*t_builtin_func)(t_cmd *cmd);
@@ -151,4 +153,5 @@ int	builtin_export(t_cmd *cmd);
 int	builtin_unset(t_cmd *cmd);
 int	builtin_env(t_cmd *cmd);
 int	builtin_exit(t_cmd *cmd);
+
 #endif	//MINISHELL_H
