@@ -9,6 +9,7 @@ LIBFTDIR=libft
 LIBFT=$(LIBFTDIR)/libft.a
 SRC=main.c \
 	execution/executor.c \
+	execution/builtin.c \
 	lexer/lexer.c \
 	lexer/lexer_utils.c \
 	parser/tree_parser.c \

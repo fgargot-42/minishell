@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 19:07:53 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/27 21:03:57 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,4 +138,8 @@ void	add_redirection(t_cmd *cmd, t_token **tokens);
 // execution.c
 int		exec_command(t_cmd *cmd);
 
+// builtin.c
+
+typedef int (*t_builtin_func)(t_cmd *cmd);
+int		is_builtin(t_cmd *cmd);
 #endif	//MINISHELL_H

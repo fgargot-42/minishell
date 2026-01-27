@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 19:08:21 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/27 21:12:05 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ int	main(void)
 		tree = parse_tree(tokens);
 		print_tree(tree, 0);
 		//free_tokens(tokens);
+		if (tree->type == NODE_CMD)
+			exec_command(tree->cmd);
+		//exec(tree);
 		free(line);
 	}
 	return (0);
