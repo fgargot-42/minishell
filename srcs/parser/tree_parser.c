@@ -39,17 +39,20 @@ t_node *parse_and(t_token **tokens)
 
 t_node	*parse_pipe(t_token **tokens)
 {
+	t_node	*root;
 	t_node *left;
-	t_node *right;
 	left = parse_primary(tokens);
 
-	while (*tokens && (*tokens)->type == TOKEN_PIPE)
+	if (*tokens && (*tokens)->type == TOKEN_PIPE)
 	{
+		root = create_node(NODE_PIPE, left, NULL);
 		*tokens = (*tokens)->next; // skip les |
-		right = parse_primary(tokens);
-		left = create_node(NODE_PIPE, left, right);
+		root->right = parse_pipe(tokens);
 	}
-	return (left);
+	else
+		root = left;
+
+	return (root);
 }
 
 t_node	*parse_primary(t_token **tokens)
@@ -72,7 +75,6 @@ t_node	*parse_primary(t_token **tokens)
 		}
 		return (create_node(NODE_GROUP, node, NULL));
 	}
-
 	cmd = parse_command(tokens);
 	if (!cmd)
 		return (NULL);
