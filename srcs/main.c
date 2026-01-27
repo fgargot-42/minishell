@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 14:31:42 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/27 19:08:21 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 int	main(void)
 {
 	char	*line;
-	t_cmd	*cmd;
+	t_node	*tree;
 	t_token	*tokens;
 
 	while (1)
@@ -36,12 +36,8 @@ int	main(void)
 		tokens = lexer(line);
 		if (DEBUG)
 			print_tokens(tokens);
-		cmd = parser(tokens);
-		if (DEBUG)
-		{
-			print_str_list(cmd->args);
-			print_redirs(cmd->redirs);
-		}
+		tree = parse_tree(tokens);
+		print_tree(tree, 0);
 		//free_tokens(tokens);
 		free(line);
 	}

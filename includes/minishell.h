@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 15:00:19 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/27 19:07:53 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,43 @@
 # define CYAN    "\033[0;36m"
 # define RESET   "\033[0m"
 
+typedef enum e_node_type
+{
+	NODE_CMD,
+	NODE_PIPE,
+	NODE_AND,
+	NODE_OR,
+	NODE_GROUP
+}	t_node_type;
+
+typedef struct s_node
+{
+	t_node_type	type;
+
+	struct s_node *left;
+	struct s_node *right;
+
+	struct s_cmd  *cmd; // set as null si pas fin de branche
+}	t_node;
+
+/*
+
+	echo "salut" && ls -l
+
+		AND
+		/ \
+	  CMD  CMD
+    
+	cat file.txt | wc -l || (ls)
+	
+        OR
+		/ \
+	PIPE   cmd (ls)
+	/   \
+cmd(cat) cmd(wc)
+
+
+	*/
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -75,12 +112,30 @@ void	free_tokens(t_token *tokens);
 t_token	*lexer(char *input);
 
 // parser.c
-t_cmd	*parser(t_token *tokens);
-void	print_str_list(char **str_list);
+//t_cmd	*parser(t_token *tokens);
+//void	print_str_list(char **str_list);
+
+// tree_parser.c le bon
+
+t_node *parse_tree(t_token *tokens);
+t_node *parse_or(t_token **tokens);
+t_node *parse_and(t_token **tokens);
+t_node	*parse_pipe(t_token **tokens);
+t_node	*parse_primary(t_token **tokens);
+t_cmd	*parse_command(t_token **tokens);
+
+// nodes.c
+t_node *create_node(t_node_type type, t_node *left, t_node *right); 
+t_node *create_cmd_node(t_cmd *cmd);
+void print_tree(t_node *node, int d);
+
 
 // redir.c
 void	print_redirs(t_redir *redirs);
 int		is_redirection(t_token_type type);
 void	add_redirection(t_cmd *cmd, t_token **tokens);
+
+// execution.c
+int		exec_command(t_cmd *cmd);
 
 #endif	//MINISHELL_H

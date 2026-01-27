@@ -11,8 +11,9 @@ SRC=main.c \
 	execution/executor.c \
 	lexer/lexer.c \
 	lexer/lexer_utils.c \
-	parser/parser.c \
-	parser/redir.c
+	parser/tree_parser.c \
+	parser/nodes.c \
+	parser/redir.c 
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(addprefix $(OBJDIR)/,$(OBJ)) $(LIBFT)
