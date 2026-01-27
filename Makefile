@@ -14,7 +14,14 @@ SRC=main.c \
 	lexer/lexer_utils.c \
 	parser/tree_parser.c \
 	parser/nodes.c \
-	parser/redir.c 
+	parser/redir.c \
+	builtins/echo.c \
+	builtins/cd.c \
+	builtins/pwd.c \
+	builtins/export.c \
+	builtins/unset.c \
+	builtins/env.c \
+	builtins/exit.c
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(addprefix $(OBJDIR)/,$(OBJ)) $(LIBFT)

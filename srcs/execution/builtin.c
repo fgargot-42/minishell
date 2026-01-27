@@ -21,7 +21,6 @@ int	is_builtin(t_cmd *cmd)
 	}
 	return (0);
 }
-/*
 int	call_builtin(t_cmd *cmd)
 {
 	char *c;
@@ -48,11 +47,12 @@ int	call_builtin(t_cmd *cmd)
 		builtin_exit
 	};
 	i = 0;
-	while (i++ < 7)
+	while (i < 7)
 	{
 		if (strcmp(c, cmds[i]) == 0)
 			cmds_func[i](cmd);
+		i++;
 	}
 	return (0);
 
-}*/
+}

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 21:03:57 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/27 21:30:44 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,4 +142,13 @@ int		exec_command(t_cmd *cmd);
 
 typedef int (*t_builtin_func)(t_cmd *cmd);
 int		is_builtin(t_cmd *cmd);
+int		call_builtin(t_cmd *cmd);
+// builtins;
+int	builtin_echo(t_cmd *cmd);
+int	builtin_cd(t_cmd *cmd);
+int	builtin_pwd(t_cmd *cmd);
+int	builtin_export(t_cmd *cmd);
+int	builtin_unset(t_cmd *cmd);
+int	builtin_env(t_cmd *cmd);
+int	builtin_exit(t_cmd *cmd);
 #endif	//MINISHELL_H

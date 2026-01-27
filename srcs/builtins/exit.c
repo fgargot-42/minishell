@@ -6,13 +6,16 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/26 23:05:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/27 21:33:00 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "minishell.h"
 
-void	builtin_exit(void)
+int	builtin_exit(t_cmd *cmd)
 {
+	(void)cmd;
+	printf("<EXIT>\n");
 	exit(0);
 }

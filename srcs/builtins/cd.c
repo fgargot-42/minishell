@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 21:39:30 by mabarrer         ###   ########.fr       */
+/*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
+/*   Updated: 2026/01/27 21:32:42 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "minishell.h"
-int	builtin_echo(t_cmd *cmd)
+int	builtin_cd(t_cmd *cmd)
 {
-	const char **av = cmds->args;
-
-	printf("<ECHO>\n");
-	if 
+	(void)cmd;
+	printf("<CD>\n");
 	return (0);
 }

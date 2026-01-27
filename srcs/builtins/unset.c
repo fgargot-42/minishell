@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 21:39:30 by mabarrer         ###   ########.fr       */
+/*   Created: 2026/01/27 21:22:56 by mabarrer          #+#    #+#             */
+/*   Updated: 2026/01/27 21:33:23 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <stdio.h>
 #include "minishell.h"
-int	builtin_echo(t_cmd *cmd)
+int	builtin_unset(t_cmd *cmd)
 {
-	const char **av = cmds->args;
-
-	printf("<ECHO>\n");
-	if 
+	(void)cmd;
+	printf("<UNSET>\n");
 	return (0);
 }
