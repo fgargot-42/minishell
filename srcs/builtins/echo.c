@@ -6,14 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 19:05:35 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 19:24:15 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "minishell.h"
 #include <string.h>
-int	builtin_echo(t_cmd *cmd, t_env *envs)
+int	builtin_echo(t_cmd *cmd, t_env **envs)
 {
 	(void)envs;
 	const char **av = (const char **)cmd->args;

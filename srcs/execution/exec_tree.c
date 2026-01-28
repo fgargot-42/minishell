@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include <sys/types.h>
 #include <unistd.h>
-int	exec(t_node *root, t_env *envs)
+int	exec(t_node *root, t_env **envs)
 {
 	int code;
 

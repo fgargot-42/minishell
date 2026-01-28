@@ -6,12 +6,12 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/28 19:09:15 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 19:24:51 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-int	builtin_export(t_cmd *cmd, t_env *envs)
+int	builtin_export(t_cmd *cmd, t_env **envs)
 {
 	(void)cmd;
 	(void)envs;

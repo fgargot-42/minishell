@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 18:30:49 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 19:32:41 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int ac, char **av, char **env)
 		print_tree(tree, 0);
 		
 		//free_tokens(tokens);
-		int errcode = exec(tree, envs);
+		int errcode = exec(tree, &envs);
 		printf("LAST ERROR CODE: %d\n", errcode);
 		free(line);
 	}

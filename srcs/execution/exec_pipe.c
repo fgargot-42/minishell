@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include <unistd.h>
 #include <sys/wait.h>
-int	exec_pipeline(t_node *node, t_env *envs)
+int	exec_pipeline(t_node *node, t_env **envs)
 {
 	int fd[2];
 	int status;

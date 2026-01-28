@@ -6,14 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 19:10:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 19:24:42 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minishell.h"
 
-int	builtin_exit(t_cmd *cmd, t_env *envs)
+int	builtin_exit(t_cmd *cmd, t_env **envs)
 {
 	(void)envs;
 	int err_code;
