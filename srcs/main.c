@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 19:32:41 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 21:26:56 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 	t_node	*tree;
 	t_token	*tokens;
+	t_list	*envs;
+
 	(void)ac;
 	(void)av;
-	t_env	*envs;
-
 	envs = generate_env(env);
 	print_env_export(envs);
 	while (1)

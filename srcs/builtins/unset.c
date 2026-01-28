@@ -6,13 +6,19 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:22:56 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/28 20:47:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 22:19:18 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 #include <string.h>
 
-static void	env_delete(t_env **envs, t_env *to_delete, t_env *prev)
+static void	del_envlist_content(void *to_delete)
+{
+	free(((t_env *)to_delete)->key);
+	free(((t_env *)to_delete)->value);
+}
+
+static void	env_delete(t_list **envs, t_list *to_delete, t_list *prev)
 {
 	if (!envs)
 		return ;
@@ -20,16 +26,14 @@ static void	env_delete(t_env **envs, t_env *to_delete, t_env *prev)
 		*envs = (*envs)->next;
 	else
 		prev->next = to_delete->next;
-	free(to_delete->key);
-	free(to_delete->value);
-	free(to_delete);
+	ft_lstdelone(to_delete, &del_envlist_content);
 }
 
-int	builtin_unset(t_cmd *cmd, t_env **envs)
+int	builtin_unset(t_cmd *cmd, t_list **envs)
 {
 	char	**args;
-	t_env	*current;
-	t_env	*prev;
+	t_list	*current;
+	t_list	*prev;
 
 	printf("<UNSET>\n");
 	if (!envs)
@@ -41,7 +45,7 @@ int	builtin_unset(t_cmd *cmd, t_env **envs)
 		prev = NULL;
 		while (current)
 		{
-			if (!strcmp(current->key, *args))
+			if (!strcmp(((t_env *)current->content)->key, *args))
 			{
 				env_delete(envs, current, prev);
 				break ;

@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_tree.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
+/*   Updated: 2026/01/28 21:45:20 by fgargot          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <sys/types.h>
 #include <unistd.h>
-int	exec(t_node *root, t_env **envs)
+
+int	exec(t_node *root, t_list **envs)
 {
 	int code;
 
@@ -12,9 +25,7 @@ int	exec(t_node *root, t_env **envs)
 		code = exec_command(root->cmd, envs);
 	}
 	else if (root->type == NODE_PIPE)
-	{
-		return (exec_pipeline(root, envs));
-	}
+		code = exec_pipeline(root, envs);
 	else if (root->type == NODE_OR)
 	{
 		code = exec(root->left, envs);

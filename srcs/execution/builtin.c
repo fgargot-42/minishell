@@ -22,7 +22,7 @@ int	is_builtin(t_cmd *cmd)
 	return (0);
 }
 
-int	call_builtin(t_cmd *cmd, t_env **envs)
+int	call_builtin(t_cmd *cmd, t_list **envs)
 {
 	char *c;
 	int i;

@@ -6,23 +6,25 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:55 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/28 19:26:41 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 22:43:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-int	builtin_env(t_cmd *cmd, t_env **envs)
+int	builtin_env(t_cmd *cmd, t_list **envs)
 {
-	t_env	*current;
+	t_list	*current;
+	t_env	*curr_env;
 
 	printf("<ENV>\n");
 	if (!cmd || !envs || !*envs)
 		return (1);
 	current = *envs;
-	while (current && current->key)
+	while (current && ((t_env *)current->content)->key)
 	{
-		if (current->value && current->value[0] != '\0')
-			printf("%s=%s\n", current->key, current->value);
+		curr_env = (t_env *)current->content;
+		if (curr_env->value && curr_env->value[0] != '\0')
+			printf("%s=%s\n", curr_env->key, curr_env->value);
 		current = current->next;
 	}
 	return (0);

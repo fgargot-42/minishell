@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 19:44:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 21:53:55 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*find_in_path(char *cmd)
 	return (NULL);
 }
 
-int	exec_command(t_cmd *cmd, t_env **envs)
+int	exec_command(t_cmd *cmd, t_list **envs)
 {
 	pid_t	pid;
 	int		status;

@@ -6,13 +6,13 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:41 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/28 19:25:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 22:07:06 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <unistd.h>
-int	builtin_pwd(t_cmd *cmd, t_env **envs)
+int	builtin_pwd(t_cmd *cmd, t_list **envs)
 {
 	(void)cmd;
 	(void)envs;

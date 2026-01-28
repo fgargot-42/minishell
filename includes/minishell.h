@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 20:38:50 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 21:59:01 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include "libft.h"
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -95,7 +96,7 @@ typedef struct s_cmd
 {
 	char		**args; // ["ls", "-la", NULL]
 	t_redir		*redirs;
-	t_env		*envs;
+	t_list		*envs;
 }	t_cmd;
 
 typedef struct s_lexer
@@ -143,33 +144,33 @@ int		is_redirection(t_token_type type);
 void	add_redirection(t_cmd *cmd, t_token **tokens);
 
 // execution.c
-int		exec_command(t_cmd *cmd, t_env **envs);
+int		exec_command(t_cmd *cmd, t_list **envs);
 
 // exec_tree
-int		exec(t_node *root, t_env **envs);
+int		exec(t_node *root, t_list **envs);
 
 // exec_pipeline.c
-int		exec_pipeline(t_node *node, t_env **envs);
+int		exec_pipeline(t_node *node, t_list **envs);
 // builtin.c
 
-typedef int	(*t_builtin_func)(t_cmd *cmd, t_env **envs);
+typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs);
 int		is_builtin(t_cmd *cmd);
-int		call_builtin(t_cmd *cmd, t_env **envs);
+int		call_builtin(t_cmd *cmd, t_list **envs);
 
 // env.c
 
-t_env	*generate_env(char **env);
-void	print_env_export(t_env *env);
-const char	**reconstruct_envs(t_env *envs);
+t_list	*generate_env(char **env);
+void	print_env_export(t_list *env);
+const char	**reconstruct_envs(t_list *envs);
 // env_utils.c
-void	envlist_addback(t_env **lst, t_env *new);
+//void	envlist_addback(t_env **lst, t_list *new);
 // builtins;
-int		builtin_echo(t_cmd *cmd, t_env **envs);
-int		builtin_cd(t_cmd *cmd, t_env **envs);
-int		builtin_pwd(t_cmd *cmd, t_env **envs);
-int		builtin_export(t_cmd *cmd, t_env **envs);
-int		builtin_unset(t_cmd *cmd, t_env **envs);
-int		builtin_env(t_cmd *cmd, t_env **envs);
-int		builtin_exit(t_cmd *cmd, t_env **envs);
+int		builtin_echo(t_cmd *cmd, t_list **envs);
+int		builtin_cd(t_cmd *cmd, t_list **envs);
+int		builtin_pwd(t_cmd *cmd, t_list **envs);
+int		builtin_export(t_cmd *cmd, t_list **envs);
+int		builtin_unset(t_cmd *cmd, t_list **envs);
+int		builtin_env(t_cmd *cmd, t_list **envs);
+int		builtin_exit(t_cmd *cmd, t_list **envs);
 
 #endif	//MINISHELL_H

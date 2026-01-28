@@ -1,39 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
+/*   Updated: 2026/01/28 22:24:46 by fgargot          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "libft.h"
 
-t_env	*new_env(char *env_line)
+t_list	*new_env(char *env_line)
 {
-	t_env *new;
-	char **splitted;
+	t_env	*new;
+	char	**splitted;
 
 	new = (t_env *)malloc(sizeof(t_env));
 	splitted = ft_split(env_line, '=');
 	new->key = splitted[0];
 	new->value = splitted[1];
 	new->next = NULL;
-	return (new);
+	return (ft_lstnew(new));
 }
 
-t_env	*generate_env(char **env)
+t_list	*generate_env(char **env)
 {
-	t_env *head;
+	t_list	*head;
+
 	head = NULL;
 	while (*env)
 	{
-		envlist_addback(&head, new_env(*env));
+		ft_lstadd_back(&head, new_env(*env));
 		env++;
 	}
 	return (head);
 }
 
-void print_env_export(t_env *env)
+void print_env_export(t_list *env)
 {
-    t_env *current;
+    t_list *current;
 
     current = env;
     while (current != NULL)
     {
-        printf("%s=%s\n", current->key, current->value);
+        printf("%s=%s\n", ((t_env *)current->content)->key,
+			((t_env *)current->content)->value);
         current = current->next;
     }
 }
@@ -52,30 +66,23 @@ static char	*create_env_line(char *key, char *value)
 	return (result);
 }
 
-const char	**reconstruct_envs(t_env *envs)
+const char	**reconstruct_envs(t_list *envs)
 {
-	char **array;
-	t_env	*current;
+	char 	**array;
+	t_list	*current;
+	int 	count;
+	int 	i;
 
-	int count;
-	int i;
-
-	//lst count
-	count = 0;
+	count = ft_lstsize(envs);
 	current = envs;
-	while (current && ++count)
-		current = current->next;
-
 	array = malloc(sizeof(char *) * (count + 1));
 	if (!array)
 		return (NULL);
-
 	i = 0;
-	current = envs;
-
 	while (current)
 	{
-		array[i] = create_env_line(current->key, current->value);
+		array[i] = create_env_line(((t_env *)current->content)->key,
+			((t_env *)current->content)->value);
 		if (!array[i])
 		{
 			while (--i >= 0)
