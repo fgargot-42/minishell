@@ -7,7 +7,10 @@ int	exec(t_node *root)
 
 	code = 42;
 	if (root->type == NODE_CMD)
+	{
+		print_redirs(root->cmd->redirs);
 		code = exec_command(root->cmd);
+	}
 	else if (root->type == NODE_PIPE)
 	{
 		exec(root->left);
