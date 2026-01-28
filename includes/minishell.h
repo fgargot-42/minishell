@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 19:42:00 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 20:38:50 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_env
 	char	*value;
 	struct s_env *next;
 }	t_env;
+
 
 typedef enum e_node_type
 {

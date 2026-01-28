@@ -25,7 +25,9 @@ int	exec(t_node *root, t_env **envs)
 	{
 		code = exec(root->left, envs);
 		if (code == 0)
-			code = exec(root->right,envs);
+			code = exec(root->right, envs);
 	}
+	else if (root->type == NODE_GROUP)
+		code = exec(root->left, envs);
 	return (code);
 }
