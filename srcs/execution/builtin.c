@@ -21,7 +21,7 @@ int	is_builtin(t_cmd *cmd)
 	}
 	return (0);
 }
-int	call_builtin(t_cmd *cmd)
+int	call_builtin(t_cmd *cmd, t_env *envs)
 {
 	char *c;
 	int i;
@@ -50,7 +50,7 @@ int	call_builtin(t_cmd *cmd)
 	while (i < 7)
 	{
 		if (strcmp(c, cmds[i]) == 0)
-			return (cmds_func[i](cmd));
+			return (cmds_func[i](cmd, envs));
 		i++;
 	}
 	return (43);

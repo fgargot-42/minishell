@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include <unistd.h>
 #include <sys/wait.h>
-int	exec_pipeline(t_node *node)
+int	exec_pipeline(t_node *node, t_env *envs)
 {
 	int fd[2];
 	int status;
@@ -16,7 +16,7 @@ int	exec_pipeline(t_node *node)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		return (exec(node->left));
+		return (exec(node->left, envs));
 	}
 
 	pid_right = fork();
@@ -25,7 +25,7 @@ int	exec_pipeline(t_node *node)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
-		return (exec(node->right));
+		return (exec(node->right, envs));
 	}
 	close(fd[0]);
 	close(fd[1]);

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 16:34:34 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 18:54:49 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,18 @@ char	*find_in_path(char *cmd)
 	return (NULL);
 }
 
-int	exec_command(t_cmd *cmd)
+int	exec_command(t_cmd *cmd, t_env *envs)
 {
 	pid_t	pid;
 	int		status;
 	char	*path;
+	const char	**char_envs = reconstruct_envs(envs);
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
 	// check les buitlitns ici
 	if (is_builtin(cmd))
-	{
-		return (call_builtin(cmd));
-	}
+		return (call_builtin(cmd, envs));
 
 	path = find_in_path(cmd->args[0]);
 	if (!path)
@@ -66,7 +65,9 @@ int	exec_command(t_cmd *cmd)
 	}
 	pid = fork();
 	if (pid == 0) //enfant
-		execve(path, cmd->args, NULL);
+		execve(path, cmd->args, (char *const*)char_envs);
+
+	// FREE LE CHAR ENVS
 	waitpid(pid, &status, 0);
 	free(path);
 	if (WIFEXITED(status))

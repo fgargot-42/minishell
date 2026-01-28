@@ -97,7 +97,7 @@ static size_t	count_words(t_token *tokens)
 	return (count);
 }
 
-t_cmd	*parse_command(t_token **tokens, t_env *custom_envs)
+t_cmd	*parse_command(t_token **tokens)
 {
 	t_cmd			*cmd;
 	int				i;
@@ -105,7 +105,6 @@ t_cmd	*parse_command(t_token **tokens, t_env *custom_envs)
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	cmd->args = malloc(sizeof(char *) * (count + 1));
-	cmd->envs = custom_envs;
 	cmd->redirs = NULL;
 	// parsing args
 	i = 0;

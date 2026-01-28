@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 17:57:28 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 18:55:40 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ t_node	*parse_or(t_token **tokens);
 t_node	*parse_and(t_token **tokens);
 t_node	*parse_pipe(t_token **tokens);
 t_node	*parse_primary(t_token **tokens);
-t_cmd	*parse_command(t_token **tokens, t_env *custom_envs);
+t_cmd	*parse_command(t_token **tokens);
 
 // nodes.c
 t_node	*create_node(t_node_type type, t_node *left, t_node *right);
@@ -142,24 +142,24 @@ int		is_redirection(t_token_type type);
 void	add_redirection(t_cmd *cmd, t_token **tokens);
 
 // execution.c
-int		exec_command(t_cmd *cmd);
+int		exec_command(t_cmd *cmd, t_env *envs);
 
 // exec_tree
-int		exec(t_node *root);
+int		exec(t_node *root, t_env *envs);
 
 // exec_pipeline.c
-int		exec_pipeline(t_node *node);
+int		exec_pipeline(t_node *node, t_env *envs);
 // builtin.c
 
-typedef int	(*t_builtin_func)(t_cmd *cmd);
+typedef int	(*t_builtin_func)(t_cmd *cmd, t_env *envs);
 int		is_builtin(t_cmd *cmd);
-int		call_builtin(t_cmd *cmd);
+int		call_builtin(t_cmd *cmd, t_env *envs);
 
 // env.c
 
 t_env	*generate_env(char **env);
 void	print_env_export(t_env *env);
-
+const char	**reconstruct_envs(t_env *envs);
 // env_utils.c
 void	envlist_addback(t_env **lst, t_env *new);
 // builtins;

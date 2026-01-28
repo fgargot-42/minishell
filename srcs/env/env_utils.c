@@ -22,3 +22,5 @@ void	envlist_addback(t_env **lst, t_env *new)
 		last->next = new;
 }
 
+
+
