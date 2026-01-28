@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 15:59:28 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:46:50 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,17 @@
 
 #include "minishell.h"
 
-int	main(void)
+int	main(int ac, char **av, char **env)
 {
 	char	*line;
 	t_node	*tree;
 	t_token	*tokens;
+	(void)ac;
+	(void)av;
+	t_env	*envs;
 
+	envs = generate_env(env);
+	print_env_export(envs);
 	while (1)
 	{
 		line = readline(PROMPT);

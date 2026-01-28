@@ -6,14 +6,24 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/27 21:32:42 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:05:38 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <unistd.h>
 int	builtin_cd(t_cmd *cmd)
 {
-	(void)cmd;
 	printf("<CD>\n");
-	return (0);
+	char *path;
+	if (!cmd->args[1])
+	{
+		path = getenv("HOME");
+		if (!path)
+			printf("home not set");
+	}
+	else
+		path = cmd->args[1];
+
+	return (chdir(path));
 }

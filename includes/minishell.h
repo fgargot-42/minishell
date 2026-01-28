@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 16:28:39 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:57:28 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,14 @@
 # define MAGENTA "\001\033[0;35m\002"
 # define CYAN    "\001\033[0;36m\002"
 # define RESET   "\001\033[0m\002"
+
+
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+	struct s_env *next;
+}	t_env;
 
 typedef enum e_node_type
 {
@@ -86,6 +94,7 @@ typedef struct s_cmd
 {
 	char		**args; // ["ls", "-la", NULL]
 	t_redir		*redirs;
+	t_env		*envs;
 }	t_cmd;
 
 typedef struct s_lexer
@@ -120,7 +129,7 @@ t_node	*parse_or(t_token **tokens);
 t_node	*parse_and(t_token **tokens);
 t_node	*parse_pipe(t_token **tokens);
 t_node	*parse_primary(t_token **tokens);
-t_cmd	*parse_command(t_token **tokens);
+t_cmd	*parse_command(t_token **tokens, t_env *custom_envs);
 
 // nodes.c
 t_node	*create_node(t_node_type type, t_node *left, t_node *right);
@@ -139,13 +148,20 @@ int		exec_command(t_cmd *cmd);
 int		exec(t_node *root);
 
 // exec_pipeline.c
-
 int		exec_pipeline(t_node *node);
 // builtin.c
 
 typedef int	(*t_builtin_func)(t_cmd *cmd);
 int		is_builtin(t_cmd *cmd);
 int		call_builtin(t_cmd *cmd);
+
+// env.c
+
+t_env	*generate_env(char **env);
+void	print_env_export(t_env *env);
+
+// env_utils.c
+void	envlist_addback(t_env **lst, t_env *new);
 // builtins;
 int		builtin_echo(t_cmd *cmd);
 int		builtin_cd(t_cmd *cmd);

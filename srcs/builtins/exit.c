@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 21:33:00 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 17:08:29 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 
 int	builtin_exit(t_cmd *cmd)
 {
-	(void)cmd;
+	int err_code;
+	err_code = 0;
 	printf("<EXIT>\n");
-	exit(0);
+	printf("exit\n");
+	if (cmd->args[1])
+		err_code = atoi(cmd->args[1]);
+	exit(err_code);
 }
