@@ -50,9 +50,9 @@ int	call_builtin(t_cmd *cmd)
 	while (i < 7)
 	{
 		if (strcmp(c, cmds[i]) == 0)
-			cmds_func[i](cmd);
+			return (cmds_func[i](cmd));
 		i++;
 	}
-	return (0);
+	return (43);
 
 }

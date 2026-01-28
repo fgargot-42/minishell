@@ -13,9 +13,7 @@ int	exec(t_node *root)
 	}
 	else if (root->type == NODE_PIPE)
 	{
-		exec(root->left);
-		//pipe
-		return (exec(root->right));
+		return (exec_pipeline(root));
 	}
 	else if (root->type == NODE_OR)
 	{

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 15:25:44 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/28 16:28:39 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,10 @@ int		exec_command(t_cmd *cmd);
 
 // exec_tree
 int		exec(t_node *root);
+
+// exec_pipeline.c
+
+int		exec_pipeline(t_node *node);
 // builtin.c
 
 typedef int	(*t_builtin_func)(t_cmd *cmd);

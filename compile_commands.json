@@ -1,0 +1,98 @@
+[
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/main.c", "-o", "objs/main.o"],
+	"file": "srcs/main.c",
+	"output": "objs/main.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/execution/executor.c", "-o", "objs/execution/executor.o"],
+	"file": "srcs/execution/executor.c",
+	"output": "objs/execution/executor.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/execution/builtin.c", "-o", "objs/execution/builtin.o"],
+	"file": "srcs/execution/builtin.c",
+	"output": "objs/execution/builtin.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/execution/exec_tree.c", "-o", "objs/execution/exec_tree.o"],
+	"file": "srcs/execution/exec_tree.c",
+	"output": "objs/execution/exec_tree.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/lexer/lexer.c", "-o", "objs/lexer/lexer.o"],
+	"file": "srcs/lexer/lexer.c",
+	"output": "objs/lexer/lexer.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/lexer/lexer_utils.c", "-o", "objs/lexer/lexer_utils.o"],
+	"file": "srcs/lexer/lexer_utils.c",
+	"output": "objs/lexer/lexer_utils.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/parser/tree_parser.c", "-o", "objs/parser/tree_parser.o"],
+	"file": "srcs/parser/tree_parser.c",
+	"output": "objs/parser/tree_parser.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/parser/nodes.c", "-o", "objs/parser/nodes.o"],
+	"file": "srcs/parser/nodes.c",
+	"output": "objs/parser/nodes.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/parser/redir.c", "-o", "objs/parser/redir.o"],
+	"file": "srcs/parser/redir.c",
+	"output": "objs/parser/redir.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/builtins/echo.c", "-o", "objs/builtins/echo.o"],
+	"file": "srcs/builtins/echo.c",
+	"output": "objs/builtins/echo.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/builtins/cd.c", "-o", "objs/builtins/cd.o"],
+	"file": "srcs/builtins/cd.c",
+	"output": "objs/builtins/cd.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/builtins/pwd.c", "-o", "objs/builtins/pwd.o"],
+	"file": "srcs/builtins/pwd.c",
+	"output": "objs/builtins/pwd.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/builtins/export.c", "-o", "objs/builtins/export.o"],
+	"file": "srcs/builtins/export.c",
+	"output": "objs/builtins/export.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/builtins/unset.c", "-o", "objs/builtins/unset.o"],
+	"file": "srcs/builtins/unset.c",
+	"output": "objs/builtins/unset.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/builtins/env.c", "-o", "objs/builtins/env.o"],
+	"file": "srcs/builtins/env.c",
+	"output": "objs/builtins/env.o"
+},
+{
+	"directory": "/home/mabarrer/Documents/DRAFT/minishell",
+	"arguments": ["cc", "-Wall", "-Werror", "-Wextra", "-g", "-Iincludes", "-c", "srcs/builtins/exit.c", "-o", "objs/builtins/exit.o"],
+	"file": "srcs/builtins/exit.c",
+	"output": "objs/builtins/exit.o"
+}
+]
