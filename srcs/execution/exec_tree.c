@@ -4,8 +4,10 @@
 int	exec(t_node *root)
 {
 	int code;
+
+	code = 42;
 	if (root->type == NODE_CMD)
-		return (exec_command(root->cmd));
+		code = exec_command(root->cmd);
 	else if (root->type == NODE_PIPE)
 	{
 		exec(root->left);
@@ -16,13 +18,13 @@ int	exec(t_node *root)
 	{
 		code = exec(root->left);
 		if (code != 0)
-			return (exec(root->right));
+			code = exec(root->right);
 	}
 	else if (root->type == NODE_AND)
 	{
 		code = exec(root->left);
 		if (code == 0)
-			return (exec(root->right));
+			code = exec(root->right);
 	}
-	return (42);
+	return (code);
 }

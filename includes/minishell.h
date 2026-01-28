@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 22:25:25 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 15:25:44 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,10 @@ typedef enum e_node_type
 
 typedef struct s_node
 {
-	t_node_type	type;
-
-	struct s_node *left;
-	struct s_node *right;
-
-	struct s_cmd  *cmd; // set as null si pas fin de branche
+	t_node_type		type;
+	struct s_node	*left;
+	struct s_node	*right;
+	struct s_cmd	*cmd; // set as null si pas fin de branche
 }	t_node;
 
 /*
@@ -117,18 +115,17 @@ t_token	*lexer(char *input);
 
 // tree_parser.c le bon
 
-t_node *parse_tree(t_token *tokens);
-t_node *parse_or(t_token **tokens);
-t_node *parse_and(t_token **tokens);
+t_node	*parse_tree(t_token *tokens);
+t_node	*parse_or(t_token **tokens);
+t_node	*parse_and(t_token **tokens);
 t_node	*parse_pipe(t_token **tokens);
 t_node	*parse_primary(t_token **tokens);
 t_cmd	*parse_command(t_token **tokens);
 
 // nodes.c
-t_node *create_node(t_node_type type, t_node *left, t_node *right); 
-t_node *create_cmd_node(t_cmd *cmd);
-void print_tree(t_node *node, int d);
-
+t_node	*create_node(t_node_type type, t_node *left, t_node *right);
+t_node	*create_cmd_node(t_cmd *cmd);
+void	print_tree(t_node *node, int d);
 
 // redir.c
 void	print_redirs(t_redir *redirs);
@@ -142,16 +139,16 @@ int		exec_command(t_cmd *cmd);
 int		exec(t_node *root);
 // builtin.c
 
-typedef int (*t_builtin_func)(t_cmd *cmd);
+typedef int	(*t_builtin_func)(t_cmd *cmd);
 int		is_builtin(t_cmd *cmd);
 int		call_builtin(t_cmd *cmd);
 // builtins;
-int	builtin_echo(t_cmd *cmd);
-int	builtin_cd(t_cmd *cmd);
-int	builtin_pwd(t_cmd *cmd);
-int	builtin_export(t_cmd *cmd);
-int	builtin_unset(t_cmd *cmd);
-int	builtin_env(t_cmd *cmd);
-int	builtin_exit(t_cmd *cmd);
+int		builtin_echo(t_cmd *cmd);
+int		builtin_cd(t_cmd *cmd);
+int		builtin_pwd(t_cmd *cmd);
+int		builtin_export(t_cmd *cmd);
+int		builtin_unset(t_cmd *cmd);
+int		builtin_env(t_cmd *cmd);
+int		builtin_exit(t_cmd *cmd);
 
 #endif	//MINISHELL_H
