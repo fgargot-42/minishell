@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 18:55:40 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/28 19:07:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,12 +163,12 @@ const char	**reconstruct_envs(t_env *envs);
 // env_utils.c
 void	envlist_addback(t_env **lst, t_env *new);
 // builtins;
-int		builtin_echo(t_cmd *cmd);
-int		builtin_cd(t_cmd *cmd);
-int		builtin_pwd(t_cmd *cmd);
-int		builtin_export(t_cmd *cmd);
-int		builtin_unset(t_cmd *cmd);
-int		builtin_env(t_cmd *cmd);
-int		builtin_exit(t_cmd *cmd);
+int		builtin_echo(t_cmd *cmd, t_env *envs);
+int		builtin_cd(t_cmd *cmd, t_env *envs);
+int		builtin_pwd(t_cmd *cmd, t_env *envs);
+int		builtin_export(t_cmd *cmd, t_env *envs);
+int		builtin_unset(t_cmd *cmd, t_env *envs);
+int		builtin_env(t_cmd *cmd, t_env *envs);
+int		builtin_exit(t_cmd *cmd, t_env *envs);
 
 #endif	//MINISHELL_H
