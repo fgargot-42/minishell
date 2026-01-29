@@ -6,7 +6,7 @@
 #    By: fgargot <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 19:31:22 by fgargot           #+#    #+#              #
-#    Updated: 2026/01/29 16:39:27 by fgargot          ###   ########.fr        #
+#    Updated: 2026/01/29 21:48:52 by fgargot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC_MAIN=ft_isalpha.c \
 		 ft_isascii.c \
 		 ft_isprint.c \
 		 ft_strlen.c \
+		 ft_strcmp.c \
 		 ft_memset.c \
 		 ft_bzero.c \
 		 ft_memcpy.c \

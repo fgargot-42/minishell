@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 15:34:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 22:20:13 by fgargot          ###   ########.fr       */
+/*   Created: 2026/01/29 21:47:48 by fgargot           #+#    #+#             */
+/*   Updated: 2026/01/29 21:48:25 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
-char	*ft_strdup(const char *s)
+int	ft_strcmp(char *s1, char *s2)
 {
-	char	*cpy;
-	size_t	i;
+	int	i;
 
 	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i])
-		i++;
-	cpy = malloc(sizeof(char) * (i + 1));
-	if (!cpy)
-		return (NULL);
-	i = 0;
-	while (s[i])
+	while (s1[i] != '\0' || s2[i] != '\0')
 	{
-		cpy[i] = s[i];
+		if (s1[i] != s2[i])
+		{
+			return (s1[i] - s2[i]);
+		}
 		i++;
 	}
-	cpy[i] = '\0';
-	return (cpy);
+	return (0);
 }

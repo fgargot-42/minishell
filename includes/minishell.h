@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 19:55:48 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/29 21:55:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,9 +160,13 @@ void	builtin_export_print(t_list **envs);
 
 // env.c
 
+t_list	*new_env(char *env_line);
 t_list	*generate_env(char **env);
 void	print_env_export(t_list *env);
 const char	**reconstruct_envs(t_list *envs);
+
+// env_utils.c
+t_list	*get_env_node_by_key(t_list *env_list, char *key);
 
 // builtins;
 int		builtin_echo(t_cmd *cmd, t_list **envs);

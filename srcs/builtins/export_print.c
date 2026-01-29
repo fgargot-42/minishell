@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 19:48:35 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 20:19:26 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/29 20:43:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	*env_dup_content(void *content)
 	dup = malloc(sizeof(t_env));
 	if (!dup)
 		return (NULL);
-	dup->key = ft_strdup(((t_env*)content)->key);
-	dup->value = ft_strdup(((t_env*)content)->value);
+	dup->key = ft_strdup(((t_env *)content)->key);
+	dup->value = ft_strdup(((t_env *)content)->value);
 	return (dup);
 }
 
@@ -65,7 +65,7 @@ void	builtin_export_print(t_list **envs)
 		printf("declare -x %s", ((t_env *)current->content)->key);
 		if (((t_env *)current->content)->value)
 			printf("=\"%s\"", ((t_env *)current->content)->value);
-		printf("\n");	
+		printf("\n");
 		current = current->next;
 	}
 	ft_lstclear(&env_dup, &env_free);
