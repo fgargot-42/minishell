@@ -6,7 +6,7 @@
 #    By: fgargot <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/20 19:31:22 by fgargot           #+#    #+#              #
-#    Updated: 2025/10/23 13:42:30 by fgargot          ###   ########.fr        #
+#    Updated: 2026/01/29 16:39:27 by fgargot          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,8 @@ SRC_BONUS=ft_lstnew_bonus.c \
 		  ft_lstdelone_bonus.c \
 		  ft_lstclear_bonus.c \
 		  ft_lstiter_bonus.c \
-		  ft_lstmap_bonus.c
+		  ft_lstmap_bonus.c \
+		  ft_lstsort_bonus.c
 OBJ_MAIN=$(SRC_MAIN:.c=.o)
 OBJ_BONUS=$(SRC_BONUS:.c=.o)
 
