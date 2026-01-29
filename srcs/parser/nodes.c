@@ -21,7 +21,6 @@ t_node *create_cmd_node(t_cmd *cmd)
 	node->cmd = cmd;
 	return (node);
 }
-
 void print_tree(t_node *node, int d)
 {
     int i;

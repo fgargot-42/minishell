@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 21:14:57 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/29 23:12:57 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int	exec_command(t_cmd *cmd, t_list **envs)
 	char	*path;
 	const char	**char_envs = reconstruct_envs(*envs);
 
-	print_str_list(cmd->args);
+	if (DEBUG)
+		print_str_list(cmd->args);
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
 	// check les buitlitns ici

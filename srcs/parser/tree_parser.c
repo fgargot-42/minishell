@@ -139,7 +139,9 @@ t_cmd	*parse_command(t_token **tokens)
 	return (cmd);
 }*/
 
-t_cmd	*parse_command(t_token **tokens)
+
+//OLD
+/*t_cmd	*parse_command(t_token **tokens)
 {
 	t_cmd			*cmd;
 	int				i;
@@ -165,8 +167,45 @@ t_cmd	*parse_command(t_token **tokens)
 	}
 	cmd->args[i] = NULL;
 	return (cmd);
-}
+}*/
 
+
+t_cmd	*parse_command(t_token **tokens)
+{
+	t_cmd			*cmd;
+	int				i;
+	const size_t	count = count_args(*tokens);
+
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	cmd->args = malloc(sizeof(char *) * (count + 1));
+	cmd->redirs = NULL;
+	
+	i = 0;
+	while (*tokens)
+	{
+		if ((*tokens)->type == TOKEN_PIPE || 
+		    (*tokens)->type == TOKEN_AND || 
+		    (*tokens)->type == TOKEN_OR ||
+		    (*tokens)->type == TOKEN_RPAREN)
+			break;
+
+		if (is_redirection((*tokens)->type))
+		{
+			add_redirection(cmd, tokens);
+			continue;
+		}
+		
+		if ((*tokens)->type == TOKEN_WORD)
+		{
+			cmd->args[i] = strdup((*tokens)->value);
+			i++;
+		}
+		
+		*tokens = (*tokens)->next;
+	}
+	cmd->args[i] = NULL;
+	return (cmd);
+}
 
 void	print_str_list(char **str_list)
 {

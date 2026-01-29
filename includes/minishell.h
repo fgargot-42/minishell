@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 20:07:55 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/29 23:12:13 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "libft.h"
+
+
+#define DEBUG 0
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -27,6 +30,9 @@
 # define RESET   "\001\033[0m\002"
 
 
+# define PROMPT_OK    " ✨ "CYAN"> "RESET
+# define PROMPT_127   " ❌ "RED"> "RESET
+# define PROMPT_ERR   " ⚠️  "RED"> "RESET
 typedef struct s_env
 {
 	char	*key;
