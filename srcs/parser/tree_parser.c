@@ -80,8 +80,7 @@ t_node	*parse_primary(t_token **tokens)
 		return (NULL);
 	return (create_cmd_node(cmd));
 }
-
-
+/*
 static size_t	count_words(t_token *tokens)
 {
 	size_t	count;
@@ -95,8 +94,27 @@ static size_t	count_words(t_token *tokens)
 		tmp = tmp->next;
 	}
 	return (count);
+}*/
+
+static size_t	count_args(t_token *tokens)
+{
+	size_t	count;
+	t_token	*tmp;
+
+	count = 0;
+	tmp = tokens;
+	while (tmp)
+	{
+		if (tmp->type == TOKEN_WORD)
+			count++;
+		if (is_redirection(tmp->type))
+			tmp = tmp->next;
+		tmp = tmp->next;
+	}
+	return (count);
 }
 
+/*
 t_cmd	*parse_command(t_token **tokens)
 {
 	t_cmd			*cmd;
@@ -119,4 +137,52 @@ t_cmd	*parse_command(t_token **tokens)
 	while (*tokens && is_redirection((*tokens)->type))
 		add_redirection(cmd, tokens);
 	return (cmd);
+}*/
+
+t_cmd	*parse_command(t_token **tokens)
+{
+	t_cmd			*cmd;
+	int				i;
+	const size_t	count = count_args(*tokens);
+
+	cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	cmd->args = malloc(sizeof(char *) * (count + 1));
+	cmd->redirs = NULL;
+	// parsing args
+	i = 0;
+	while (*tokens)
+	{
+		while (is_redirection((*tokens)->type))
+			add_redirection(cmd, tokens);
+		if ((*tokens)->type == TOKEN_WORD)
+		{
+			cmd->args[i] = strdup((*tokens)->value);
+			i++;
+		}
+		if ((*tokens)->type == TOKEN_PIPE)
+			break;
+		*tokens = (*tokens)->next;
+	}
+	cmd->args[i] = NULL;
+	return (cmd);
+}
+
+
+void	print_str_list(char **str_list)
+{
+	int	i;
+
+	i = 0;
+	printf(CYAN"\n═══════════════════════════ ARGS ════════════════════════════\n"RESET);
+	printf(BLUE"⟩ "CYAN"["RESET);
+	while (str_list[i])
+	{
+		printf(MAGENTA"%s"RESET, str_list[i]);
+		i++;
+		if (str_list[i])
+			printf(BLUE", "RESET);
+		else
+			printf(BLUE", "RESET);
+	}
+	printf(RED"NULL"CYAN"]\n"RESET);
 }

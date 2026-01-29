@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:32:10 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 18:50:23 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/29 20:07:33 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,6 @@
 //debug
 #include <string.h>
 
-void	print_str_list(char **str_list)
-{
-	int	i;
-
-	i = 0;
-	printf(CYAN"\n═══════════════════════════ ARGS ════════════════════════════\n"RESET);
-	printf(BLUE"⟩ "CYAN"["RESET);
-	while (str_list[i])
-	{
-		printf(MAGENTA"%s"RESET, str_list[i]);
-		i++;
-		if (str_list[i])
-			printf(BLUE", "RESET);
-		else
-			printf(BLUE", "RESET);
-	}
-	printf(RED"NULL"CYAN"]\n"RESET);
-}
 
 static size_t	count_words(t_token *tokens)
 {
@@ -40,14 +22,17 @@ static size_t	count_words(t_token *tokens)
 
 	count = 0;
 	tmp = tokens;
-	while (tmp && tmp->type == TOKEN_WORD)
+	while (tmp)
 	{
-		count++;
+		if (tmp->type == TOKEN_WORD)
+			count++;
+		if (is_redirection(tmp->type))
+			tmp = tmp->next;
 		tmp = tmp->next;
 	}
 	return (count);
 }
-
+/*
 t_cmd	*parser(t_token *tokens)
 {
 	t_cmd			*cmd;
@@ -59,7 +44,7 @@ t_cmd	*parser(t_token *tokens)
 	cmd->redirs = NULL;
 	// parsing args
 	i = 0;
-	while (tokens && tokens->type == TOKEN_WORD)
+	while (tokens  == TOKEN_WORD)
 	{
 		cmd->args[i] = strdup(tokens->value);
 		i++;
@@ -70,4 +55,5 @@ t_cmd	*parser(t_token *tokens)
 	while (tokens && is_redirection(tokens->type))
 		add_redirection(cmd, &tokens);
 	return (cmd);
-}
+}*/
+

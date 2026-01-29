@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 22:50:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/29 20:07:55 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ t_token	*lexer(char *input);
 
 // parser.c
 //t_cmd	*parser(t_token *tokens);
-//void	print_str_list(char **str_list);
 
 // tree_parser.c le bon
 
@@ -132,7 +131,7 @@ t_node	*parse_and(t_token **tokens);
 t_node	*parse_pipe(t_token **tokens);
 t_node	*parse_primary(t_token **tokens);
 t_cmd	*parse_command(t_token **tokens);
-
+void	print_str_list(char **str_list);
 // nodes.c
 t_node	*create_node(t_node_type type, t_node *left, t_node *right);
 t_node	*create_cmd_node(t_cmd *cmd);

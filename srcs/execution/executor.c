@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/28 21:53:55 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/29 21:14:57 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 
 char	*find_in_path(char *cmd)
 {
@@ -46,11 +47,16 @@ char	*find_in_path(char *cmd)
 
 int	exec_command(t_cmd *cmd, t_list **envs)
 {
+	int		fd_in;
+	int		fd_out;
+	fd_in = -1;
+	fd_out = -1;
 	pid_t	pid;
 	int		status;
 	char	*path;
 	const char	**char_envs = reconstruct_envs(*envs);
 
+	print_str_list(cmd->args);
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
 	// check les buitlitns ici
@@ -65,11 +71,38 @@ int	exec_command(t_cmd *cmd, t_list **envs)
 	}
 	pid = fork();
 	if (pid == 0) //enfant
+	{
+
+		while (cmd->redirs)
+		{
+			if (cmd->redirs->type == TOKEN_REDIR_IN)
+			{
+				fd_in = open(cmd->redirs->file, O_RDONLY);
+				dup2(fd_in, STDIN_FILENO);
+			}
+			if (cmd->redirs->type == TOKEN_REDIR_OUT)
+			{
+				fd_out = open(cmd->redirs->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				dup2(fd_out, STDOUT_FILENO);
+			}
+			if (cmd->redirs->type == TOKEN_APPEND)
+			{
+				fd_out = open(cmd->redirs->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				dup2(fd_out, STDOUT_FILENO);
+			}
+			cmd->redirs = cmd->redirs->next;
+		}
 		execve(path, cmd->args, (char *const*)char_envs);
+	}
 
 	// FREE LE CHAR ENVS
 	waitpid(pid, &status, 0);
 	free(path);
+
+	if (fd_in != -1)
+		close(fd_in);
+	if (fd_out != -1)
+		close(fd_out);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (-1);
