@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/29 17:06:49 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/29 18:23:02 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	builtin_export(t_cmd *cmd, t_list **envs)
 
 	if (cmd->args[1])
 		return (1);
+	if (!envs || !*envs)
+		return (0);
 	env_dup = ft_lstmap(*envs, &env_dup_content, &env_free);
 	ft_lstsort(&env_dup, &env_cmp);
 	(void)cmd;
