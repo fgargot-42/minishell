@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/29 22:02:11 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/30 15:30:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static void	add_env(char *env, t_list **env_list)
 	key = malloc(sizeof(char) * (key_len + 1));
 	if (!key)
 		return ;
+	ft_strlcpy(key, env, key_len + 1);
 	env_node = get_env_node_by_key(*env_list, key);
 	if (!env_node)
 		ft_lstadd_back(env_list, new_env(env));
