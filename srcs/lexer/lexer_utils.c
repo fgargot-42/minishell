@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:48:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 14:49:03 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/30 19:48:34 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,33 @@
 
 void	print_tokens(t_token *tokens)
 {
-	printf(CYAN"\n═══════════════════════════ LEXER ═══════════════════════════\n"RESET);
-	printf(BLUE"⟩ "RESET);
+	fprintf(stderr, CYAN"\n═══════════════════════════ LEXER ═══════════════════════════\n"RESET);
+	fprintf(stderr, BLUE"⟩ "RESET);
 	while (tokens && tokens->type != TOKEN_EOF)
 	{
 		if (tokens->type == TOKEN_WORD)
-			printf(MAGENTA"WORD"RESET"("CYAN"%s"RESET")", tokens->value);
+			fprintf(stderr, MAGENTA"WORD"RESET"("CYAN"%s"RESET")", tokens->value);
 		else if (tokens->type == TOKEN_PIPE)
-			printf(YELLOW"PIPE"RESET);
+			fprintf(stderr, YELLOW"PIPE"RESET);
 		else if (tokens->type == TOKEN_REDIR_IN)
-			printf(GREEN"REDIR_IN"RESET);
+			fprintf(stderr, GREEN"REDIR_IN"RESET);
 		else if (tokens->type == TOKEN_REDIR_OUT)
-			printf(GREEN"REDIR_OUT"RESET);
+			fprintf(stderr, GREEN"REDIR_OUT"RESET);
 		else if (tokens->type == TOKEN_APPEND)
-			printf(GREEN"APPEND"RESET);
+			fprintf(stderr, GREEN"APPEND"RESET);
 		else if (tokens->type == TOKEN_HEREDOC)
-			printf(GREEN"HEREDOC"RESET);
+			fprintf(stderr, GREEN"HEREDOC"RESET);
 		else if (tokens->type == TOKEN_AND)
-			printf(GREEN"&&"RESET);
+			fprintf(stderr, GREEN"&&"RESET);
 		else if (tokens->type == TOKEN_OR)
-			printf(GREEN"||"RESET);
+			fprintf(stderr, GREEN"||"RESET);
 		else if (tokens->type == TOKEN_LPAREN)
-			printf(GREEN"("RESET);
+			fprintf(stderr, GREEN"("RESET);
 		else if (tokens->type == TOKEN_RPAREN)
-			printf(GREEN")"RESET);
+			fprintf(stderr, GREEN")"RESET);
 		tokens = tokens->next;
 		if (tokens && tokens->type != TOKEN_EOF)
-			printf(BLUE" → "RESET);
+			fprintf(stderr, BLUE" → "RESET);
 	}
-	printf(BLUE" → "RED"EOF\n"RESET);
+	fprintf(stderr, BLUE" → "RED"EOF\n"RESET);
 }

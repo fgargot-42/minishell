@@ -19,6 +19,7 @@ SRC=main.c \
 	parser/tree_parser.c \
 	parser/nodes.c \
 	parser/redir.c \
+	expander/expander.c \
 	builtins/echo.c \
 	builtins/cd.c \
 	builtins/pwd.c \

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 23:12:57 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/30 19:56:37 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,38 @@ int	exec_command(t_cmd *cmd, t_list **envs)
 	char	*path;
 	const char	**char_envs = reconstruct_envs(*envs);
 
+
 	if (DEBUG)
 		print_str_list(cmd->args);
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
 	// check les buitlitns ici
+	
+
+	for (int i = 0; cmd->args[i]; i++)
+	{
+
+		char *expanded = expand_var(cmd->args[i], *envs);
+		if (expanded != cmd->args[i])
+		{
+			free(cmd->args[i]);
+			cmd->args[i] = expanded;
+		}
+	}
+
 	if (is_builtin(cmd))
 		return (call_builtin(cmd, envs));
 
 	path = find_in_path(cmd->args[0]);
-	if (!path)
-	{
-		fprintf(stderr, "%s cmd not found\n", cmd->args[0]);
-		return (127);
-	}
 	pid = fork();
 	if (pid == 0) //enfant
 	{
 
+		/*if (!path)
+		{
+			fprintf(stderr, "%s cmd not found\n", cmd->args[0]);
+			exit(127);
+		}*/
 		while (cmd->redirs)
 		{
 			if (cmd->redirs->type == TOKEN_REDIR_IN)
@@ -94,6 +108,7 @@ int	exec_command(t_cmd *cmd, t_list **envs)
 			cmd->redirs = cmd->redirs->next;
 		}
 		execve(path, cmd->args, (char *const*)char_envs);
+		exit(127);
 	}
 
 	// FREE LE CHAR ENVS

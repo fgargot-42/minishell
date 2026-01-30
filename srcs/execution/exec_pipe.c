@@ -16,7 +16,7 @@ int	exec_pipeline(t_node *node, t_list **envs)
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		return (exec(node->left, envs));
+		exit(exec(node->left, envs));
 	}
 
 	pid_right = fork();
@@ -25,7 +25,7 @@ int	exec_pipeline(t_node *node, t_list **envs)
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
-		return (exec(node->right, envs));
+		exit(exec(node->right, envs));
 	}
 	close(fd[0]);
 	close(fd[1]);

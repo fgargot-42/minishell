@@ -212,16 +212,16 @@ void	print_str_list(char **str_list)
 	int	i;
 
 	i = 0;
-	printf(CYAN"\n═══════════════════════════ ARGS ════════════════════════════\n"RESET);
-	printf(BLUE"⟩ "CYAN"["RESET);
+	fprintf(stderr, CYAN"\n═══════════════════════════ ARGS ════════════════════════════\n"RESET);
+	fprintf(stderr, BLUE"⟩ "CYAN"["RESET);
 	while (str_list[i])
 	{
-		printf(MAGENTA"%s"RESET, str_list[i]);
+		fprintf(stderr, MAGENTA"%s"RESET, str_list[i]);
 		i++;
 		if (str_list[i])
-			printf(BLUE", "RESET);
+			fprintf(stderr, BLUE", "RESET);
 		else
-			printf(BLUE", "RESET);
+			fprintf(stderr, BLUE", "RESET);
 	}
-	printf(RED"NULL"CYAN"]\n"RESET);
+	fprintf(stderr, RED"NULL"CYAN"]\n"RESET);
 }
