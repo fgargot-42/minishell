@@ -13,6 +13,7 @@ SRC=main.c \
 	execution/exec_tree.c \
 	execution/exec_pipe.c \
 	env/env.c \
+	env/env_utils.c \
 	lexer/lexer.c \
 	lexer/lexer_utils.c \
 	parser/tree_parser.c \
@@ -22,6 +23,7 @@ SRC=main.c \
 	builtins/cd.c \
 	builtins/pwd.c \
 	builtins/export.c \
+	builtins/export_print.c \
 	builtins/unset.c \
 	builtins/env.c \
 	builtins/exit.c

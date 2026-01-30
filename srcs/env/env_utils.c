@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 15:34:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 22:20:13 by fgargot          ###   ########.fr       */
+/*   Created: 2026/01/29 21:43:02 by fgargot           #+#    #+#             */
+/*   Updated: 2026/01/29 21:46:47 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "minishell.h"
 
-char	*ft_strdup(const char *s)
+t_list	*get_env_node_by_key(t_list *env_list, char *key)
 {
-	char	*cpy;
-	size_t	i;
+	t_list	*node;
 
-	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i])
-		i++;
-	cpy = malloc(sizeof(char) * (i + 1));
-	if (!cpy)
-		return (NULL);
-	i = 0;
-	while (s[i])
+	node = env_list;
+	while (node)
 	{
-		cpy[i] = s[i];
-		i++;
+		if (!ft_strcmp(((t_env *)node->content)->key, key))
+			return (node);
+		node = node->next;
 	}
-	cpy[i] = '\0';
-	return (cpy);
+	return (NULL);
 }

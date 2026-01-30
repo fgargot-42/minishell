@@ -6,72 +6,113 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/29 18:23:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/30 15:30:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*env_dup_content(void *content)
+static int	check_envname_format(char *str)
 {
-	t_env	*dup;
-
-	dup = malloc(sizeof(t_env));
-	if (!dup)
-		return (NULL);
-	dup->key = ft_strdup(((t_env*)content)->key);
-	dup->value = ft_strdup(((t_env*)content)->value);
-	return (dup);
-}
-
-void	env_free(void *content)
-{
-	free(((t_env *)content)->key);
-	free(((t_env *)content)->value);
-	free(content);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] != '\0' || s2[i] != '\0')
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(*str) && *str != '_')
+		return (0);
+	str++;
+	while (*str)
 	{
-		if (s1[i] != s2[i])
+		if (!ft_isalnum(*str) && *str != '_')
 		{
-			return (s1[i] - s2[i]);
+			if (*str == '=' || (*str == '+' && *(str + 1) == '='))
+				return (1);
+			return (0);
 		}
-		i++;
+		str++;
 	}
-	return (0);
+	return (1);
 }
 
-int	env_cmp(void *a, void *b)
+static void	add_env_value_append(t_list *node, char *env)
 {
-	return (ft_strcmp(((t_env *)a)->key, ((t_env *)b)->key));
+	char	*new_str;
+	char	*append_str;
+
+	new_str = ft_strchr(env, '=');
+	if (!new_str)
+		return ;
+	new_str++;
+	append_str = ft_strjoin(((t_env *)node->content)->value, new_str);
+	if (!append_str)
+		return ;
+	free(((t_env *)node->content)->value);
+	((t_env *)node->content)->value = append_str;
+}
+
+static void	add_env_value_replace(t_list *node, char *env)
+{
+	char	*new_str;
+
+	new_str = ft_strchr(env, '=');
+	if (!new_str)
+		return ;
+	new_str = ft_strdup(&new_str[1]);
+	free(((t_env *)node->content)->value);
+	((t_env *)node->content)->value = new_str;
+}
+
+static void	add_env(char *env, t_list **env_list)
+{
+	t_list	*env_node;
+	char	*key;
+	size_t	key_len;
+	int		append;
+
+	append = 0;
+	key_len = ft_strlen(env);
+	key = ft_strchr(env, '+');
+	if (key)
+		append = 1;
+	else
+		key = ft_strchr(env, '=');
+	if (key)
+		key_len = key - env;
+	key = malloc(sizeof(char) * (key_len + 1));
+	if (!key)
+		return ;
+	ft_strlcpy(key, env, key_len + 1);
+	env_node = get_env_node_by_key(*env_list, key);
+	if (!env_node)
+		ft_lstadd_back(env_list, new_env(env));
+	else if (append)
+		add_env_value_append(env_node, env);
+	else
+		add_env_value_replace(env_node, env);
 }
 
 int	builtin_export(t_cmd *cmd, t_list **envs)
 {
-	t_list	*env_dup;
-	t_list	*current;
+	char	**args;
+	int		exit_status;
 
-	if (cmd->args[1])
-		return (1);
+	exit_status = 0;
+	args = cmd->args;
+	printf("<EXPORT>\n");
 	if (!envs || !*envs)
 		return (0);
-	env_dup = ft_lstmap(*envs, &env_dup_content, &env_free);
-	ft_lstsort(&env_dup, &env_cmp);
-	(void)cmd;
-	current = env_dup;
-	printf("<EXPORT>\n");
-	while (current)
+	if (!cmd->args[1])
 	{
-		printf("declare -x %s=\"%s\"\n", ((t_env *)current->content)->key,
-			((t_env *)current->content)->value);
-		current = current->next;
+		builtin_export_print(envs);
+		return (0);
 	}
-	ft_lstclear(&env_dup, &env_free);
-	return (0);
+	while (*(args + 1))
+	{
+		args++;
+		if (!check_envname_format(*args))
+		{
+			exit_status = 1;
+			continue ;
+		}
+		add_env(*args, envs);
+	}
+	return (exit_status);
 }
