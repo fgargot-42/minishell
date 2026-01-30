@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/30 15:30:29 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/30 16:07:05 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,10 @@ static void	add_env(char *env, t_list **env_list)
 	size_t	key_len;
 	int		append;
 
-	append = 0;
 	key_len = ft_strlen(env);
 	key = ft_strchr(env, '+');
-	if (key)
-		append = 1;
-	else
+	append = (key != NULL);
+	if (!key)
 		key = ft_strchr(env, '=');
 	if (key)
 		key_len = key - env;
@@ -87,6 +85,7 @@ static void	add_env(char *env, t_list **env_list)
 		add_env_value_append(env_node, env);
 	else
 		add_env_value_replace(env_node, env);
+	free(key);
 }
 
 int	builtin_export(t_cmd *cmd, t_list **envs)

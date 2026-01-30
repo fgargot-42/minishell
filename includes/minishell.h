@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/30 15:35:19 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/30 16:27:15 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_env
 {
 	char	*key;
 	char	*value;
-	struct s_env *next;
 }	t_env;
 
 
