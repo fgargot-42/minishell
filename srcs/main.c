@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/30 20:59:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/30 22:31:56 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -55,6 +56,16 @@ char	*build_prompt(int err)
 	free(errcode_str);
 	return (prompt);
 }
+
+static void	sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*line;
@@ -67,6 +78,8 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &sigint_handler);
 	envs = generate_env(env);
 	while (1)
 	{
