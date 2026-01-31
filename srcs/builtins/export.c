@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/30 16:07:05 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/31 21:03:32 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int	builtin_export(t_cmd *cmd, t_list **envs)
 
 	exit_status = 0;
 	args = cmd->args;
-	printf("<EXPORT>\n");
 	if (!envs || !*envs)
 		return (0);
 	if (!cmd->args[1])

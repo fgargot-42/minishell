@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/31 17:10:11 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/31 22:24:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ void	add_redirection(t_cmd *cmd, t_token **tokens);
 int		resolve_redirs(t_node *node);
 
 // execution.c
+char	*find_in_path(char *cmd);
 int		exec_command(t_node *node, t_list **envs);
 
 // exec_tree

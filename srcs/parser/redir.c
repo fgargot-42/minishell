@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/31 17:12:15 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/31 22:59:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,21 +94,23 @@ int	resolve_redirs(t_node *node)
 	{
 		new_fd = 0;
 		if (redir->type == TOKEN_REDIR_IN)
-			new_fd = open(redir->file, O_WRONLY);
+			new_fd = open(redir->file, O_RDONLY);
 		if (redir->type == TOKEN_REDIR_OUT)
-			new_fd = open(redir->file, O_RDONLY | O_CREAT | O_TRUNC, 0644);
+			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (redir->type == TOKEN_APPEND)
-			new_fd = open(redir->file, O_RDONLY | O_CREAT | O_APPEND, 0644);
+			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (new_fd == -1)
 			break ;
 		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
 		{
-			close(node->fd_out);
+			if (node->fd_out != STDOUT_FILENO)
+				close(node->fd_out);
 			node->fd_out = new_fd;
 		}
 		else
 		{
-			close(node->fd_in);
+			if (node->fd_out != STDIN_FILENO)
+				close(node->fd_in);
 			node->fd_in = new_fd;
 		}
 		redir = redir->next;

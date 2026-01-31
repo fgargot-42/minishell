@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/31 17:10:35 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/31 22:48:32 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,13 @@ int	exec_command(t_node *node, t_list **envs)
 	char	*path;
 	const char	**char_envs = reconstruct_envs(*envs);
 
-
+	resolve_redirs(node);
 	if (DEBUG)
 		print_str_list(node->cmd->args);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 		return (0);
 	// check les buitlitns ici
 	
-	resolve_redirs(node);
 	for (int i = 0; node->cmd->args[i]; i++)
 	{
 
@@ -78,13 +77,24 @@ int	exec_command(t_node *node, t_list **envs)
 	pid = fork();
 	if (pid == 0) //enfant
 	{
-		dup2(node->fd_in, 0);
-		dup2(node->fd_out, 1);
+		if (node->fd_in != STDIN_FILENO)
+		{
+			dup2(node->fd_in, 0);
+			close(node->fd_in);
+		}
+		if(node->fd_out != STDOUT_FILENO)
+		{
+			dup2(node->fd_out, 1);
+			close(node->fd_out);
+		}
 		execve(path, node->cmd->args, (char *const*)char_envs);
-		close(node->fd_in);
-		close(node->fd_out);
 		exit(127);
 	}
+	
+	if (node->fd_in != STDIN_FILENO)
+		close(node->fd_in);
+	if(node->fd_out != STDOUT_FILENO)
+		close(node->fd_out);
 	// FREE LE CHAR ENVS
 	waitpid(pid, &status, 0);
 	free(path);
