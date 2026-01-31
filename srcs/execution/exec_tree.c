@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/30 19:49:03 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/01/31 17:08:50 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	exec(t_node *root, t_list **envs)
 	{
 //		if (DEBUG)
 //			print_redirs(root->cmd->redirs);
-		code = exec_command(root->cmd, envs);
+		code = exec_command(root, envs);
 	}
 	else if (root->type == NODE_PIPE)
 		code = exec_pipeline(root, envs);
