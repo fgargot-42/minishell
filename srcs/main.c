@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:10:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 19:20:25 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	main(int ac, char **av, char **env)
 	t_node	*tree;
 	t_token	*tokens;
 	t_list	*envs;
-	t_ctx	ctx;
 	char	*p;
 	int		errcode;
 
@@ -63,7 +62,7 @@ int	main(int ac, char **av, char **env)
 		if (DEBUG)
 			print_tree(tree, 0);
 		// free_tokens(tokens);
-		errcode = exec(tree, &envs, &ctx);
+		errcode = exec(tree, &envs);
 		free(line);
 	}
 	return (0);
