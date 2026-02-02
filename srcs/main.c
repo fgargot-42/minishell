@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:04:05 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 22:11:57 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,11 @@ int	main(int ac, char **av, char **env)
 		if (DEBUG)
 			print_tree(tree, 0);
 		free_tokens(tokens);
-		free_tree(tree);
 		ctx.error_code = exec(tree, &envs, &ctx);
-		free(line);
+		free_tree(tree);
 		free(p);
+		free(line);
 	}
+	ft_lstclear(&envs, env_free);
 	return (0);
 }

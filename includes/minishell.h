@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 21:56:07 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 22:12:35 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,5 +198,6 @@ int		builtin_exit(t_cmd *cmd, t_list **envs);
 // export_utils
 void	free_env(t_list *env_list);
 
+void	env_free(void *content);
 void	free_string_array(char **array);
 #endif	//MINISHELL_H
