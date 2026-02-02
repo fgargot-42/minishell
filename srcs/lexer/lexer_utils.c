@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:48:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/30 19:48:34 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 21:56:57 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,18 @@ void	print_tokens(t_token *tokens)
 			fprintf(stderr, BLUE " → " RESET);
 	}
 	fprintf(stderr, BLUE " → " RED "EOF\n" RESET);
+}
+
+void	free_tokens(t_token *tokens)
+{
+	t_token	*tmp;
+
+	while (tokens)
+	{
+		tmp = tokens->next;
+		if (tokens->value)
+			free(tokens->value);
+		free(tokens);
+		tokens = tmp;
+	}
 }

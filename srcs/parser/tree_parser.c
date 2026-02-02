@@ -165,3 +165,33 @@ void	print_str_list(char **str_list)
 	}
 	fprintf(stderr, RED "NULL" CYAN "]\n" RESET);
 }
+
+
+void	free_string_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+void	free_tree(t_node *tree)
+{
+	if (!tree)
+		return ;
+	free_tree(tree->left);
+	free_tree(tree->right);
+	if (tree->cmd)
+	{
+		free_string_array(tree->cmd->args);
+		free(tree->cmd);
+	}
+	free(tree);
+}

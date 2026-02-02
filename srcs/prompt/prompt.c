@@ -6,14 +6,14 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/02 02:22:54 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 22:04:03 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "unistd.h"
 
-char	*build_prompt(int err)
+static	char *default_prompt(int err)
 {
 	char	*errcode_str;
 	char	*prompt;
@@ -44,4 +44,18 @@ char	*build_prompt(int err)
 	prompt = ft_strjoin("[", prompt);
 	free(errcode_str);
 	return (prompt);
+
+}
+
+static char *debug_prompt(int err)
+{
+	(void)err;
+	return strdup("minishellgdb#");
+}
+char	*build_prompt(int err)
+{
+	if (DEBUG)
+		return (debug_prompt(err));
+	else
+		return (default_prompt(err));
 }

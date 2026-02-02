@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 20:48:33 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 21:56:07 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void	print_str_list(char **str_list);
 t_node	*create_node(t_node_type type, t_node *left, t_node *right);
 t_node	*create_cmd_node(t_cmd *cmd);
 void	print_tree(t_node *node, int d);
-
+void	free_tree(t_node *root);
 // redir.c
 void	print_redirs(t_redir *redirs);
 int		is_redirection(t_token_type type);
@@ -194,4 +194,9 @@ int		builtin_unset(t_cmd *cmd, t_list **envs);
 int		builtin_env(t_cmd *cmd, t_list **envs);
 int		builtin_exit(t_cmd *cmd, t_list **envs);
 
+
+// export_utils
+void	free_env(t_list *env_list);
+
+void	free_string_array(char **array);
 #endif	//MINISHELL_H

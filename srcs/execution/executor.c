@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 20:53:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 22:05:36 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 			free(node->cmd->args[i]);
 			node->cmd->args[i] = expanded;
 		}
+		free(expanded);
 		i++;
 	}
 }
@@ -61,9 +62,10 @@ static void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 static pid_t	exec_command_fork(t_node *node, t_list **envs)
 {
 	pid_t		pid;
-	const char	**char_envs = reconstruct_envs(*envs);
+	char	**char_envs;
 	char		*path;
 
+	char_envs = (char**)reconstruct_envs(*envs);
 	path = find_in_path(node->cmd->args[0]);
 	pid = fork();
 	if (pid == 0)
@@ -83,6 +85,7 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 		free(path);
 		exit(127);
 	}
+	free_string_array(char_envs);
 	free(path);
 	return (pid);
 }
