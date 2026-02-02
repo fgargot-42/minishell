@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 17:32:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 17:48:22 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	resolve_redirs(t_node *node)
 		if (redir->type == TOKEN_APPEND)
 			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (new_fd == -1)
-			break ;
+			return (1);
 		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
 		{
 			if (node->fd_out != STDOUT_FILENO)
