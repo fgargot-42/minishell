@@ -6,65 +6,33 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/30 20:59:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 02:01:32 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
-#include <readline/readline.h>
 #include <readline/history.h>
-
-#include <unistd.h>
+#include <readline/readline.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 //#define PROMPT CYAN"🐚 "BLUE"\001minic\002oquille"CYAN" ⟩ "RESET
 
 #include "minishell.h"
-char	*build_prompt(int err)
-{
-	char	*errcode_str;
-	char	*prompt;
-	char	cwd[1024];
-	
-	getcwd(cwd, sizeof(cwd));
-	errcode_str = ft_itoa(err);
-	if (!errcode_str)
-		return (ft_strdup("🐚 "BLUE"minicoquille"CYAN" ⟩ "RESET));
-	
-	if (err == 0)
-	{
-		prompt = ft_strjoin(errcode_str, "] 🐚 "BLUE"\001minic\002oquille :");
-		prompt = ft_strjoin(prompt, cwd);
-		prompt = ft_strjoin(prompt, CYAN" ⟩ "RESET);
-	}
-	else if (err == 127)
-	{
-		prompt = ft_strjoin(errcode_str, "] 🐚 "RED"\001minic\002oquille :");
-		prompt = ft_strjoin(prompt, cwd);
-		prompt = ft_strjoin(prompt, RED" ⟩ "RESET);
-	}
-	else
-	{
-		prompt = ft_strjoin(errcode_str, "] 🐚 "RED"\001minic\002oquille :");
-		prompt = ft_strjoin(prompt, cwd);
-		prompt = ft_strjoin(prompt, RED" ⟩ "RESET);
-	}
-	
-	prompt = ft_strjoin("[", prompt);
-	free(errcode_str);
-	return (prompt);
-}
+#include "prompt.h"
+
 int	main(int ac, char **av, char **env)
 {
 	char	*line;
 	t_node	*tree;
 	t_token	*tokens;
 	t_list	*envs;
+	t_ctx	ctx;
 	char	*p;
-	int errcode;
-	errcode = 0;
+	int		errcode;
 
+	errcode = 0;
 	(void)ac;
 	(void)av;
 	envs = generate_env(env);
@@ -82,9 +50,8 @@ int	main(int ac, char **av, char **env)
 		tree = parse_tree(tokens);
 		if (DEBUG)
 			print_tree(tree, 0);
-		
-		//free_tokens(tokens);
-		errcode = exec(tree, &envs);
+		// free_tokens(tokens);
+		errcode = exec(tree, &envs, &ctx);
 		free(line);
 	}
 	return (0);

@@ -10,14 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "minishell.h"
 #include "libft.h"
+#include "minishell.h"
+#include <stdlib.h>
 
 int	builtin_exit(t_cmd *cmd, t_list **envs)
 {
+	int	err_code;
+
 	(void)envs;
-	int err_code;
 	err_code = 0;
 	printf("<EXIT>\n");
 	ft_putstr_fd("exit\n", 2);

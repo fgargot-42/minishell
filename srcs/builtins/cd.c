@@ -20,7 +20,6 @@ char	*get_cwd(void)
 	int		i;
 
 	i = 128;
-
 	res = NULL;
 	while (!res)
 	{
@@ -76,7 +75,6 @@ int	builtin_cd(t_cmd *cmd, t_list **envs)
 		}
 		else
 			chdir_status = chdir(((t_env *)path->content)->value);
-
 	}
 	else
 	{

@@ -11,9 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-//debug
+// debug
 #include <string.h>
-
 
 static size_t	count_words(t_token *tokens)
 {
@@ -56,4 +55,3 @@ t_cmd	*parser(t_token *tokens)
 		add_redirection(cmd, &tokens);
 	return (cmd);
 }*/
-

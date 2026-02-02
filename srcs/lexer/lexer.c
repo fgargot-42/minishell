@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/27 14:44:05 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/27 14:48:11 by fgargot          ###   ########.fr       */
+/*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
+/*   Updated: 2026/02/02 02:04:34 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
-//debug
 #include <string.h>
-// LEXER
-// split sur les espaces
-// reconnait  | < > >> <<
-// fait une liste chainee de token
 
 static t_lexer	*init_lexer(char *input)
 {
@@ -46,9 +41,8 @@ static void	skip_whitespace(t_lexer *lexer)
 
 static int	is_special(char c)
 {
-	return (c == '|' || c == '<' || c == '>'
-		|| c == ' ' || c == '\t' || c == '\0'
-		|| c == '&' || c == '(' || c == ')');
+	return (c == '|' || c == '<' || c == '>' || c == ' ' || c == '\t'
+		|| c == '\0' || c == '&' || c == '(' || c == ')');
 }
 
 static char	*extract_word(t_lexer *lexer)

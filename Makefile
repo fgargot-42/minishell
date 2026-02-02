@@ -14,6 +14,7 @@ SRC=main.c \
 	execution/exec_pipe.c \
 	env/env.c \
 	env/env_utils.c \
+	prompt/prompt.c \
 	lexer/lexer.c \
 	lexer/lexer_utils.c \
 	parser/tree_parser.c \

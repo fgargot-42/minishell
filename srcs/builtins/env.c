@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 int	builtin_env(t_cmd *cmd, t_list **envs)
 {
 	t_list	*current;

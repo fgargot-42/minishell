@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "minishell.h"
+#include <stdio.h>
 #include <string.h>
 
 static int	has_option(const char *arg, char option)
 {
-	if (!arg ||  arg[0] != '-')
+	if (!arg || arg[0] != '-')
 		return (0);
 	arg++;
 	while (*arg)
@@ -30,7 +30,7 @@ static int	has_option(const char *arg, char option)
 
 static int	is_valid_option_list(const char *arg, const char *option_list)
 {
-	if (!arg ||  arg[0] != '-')
+	if (!arg || arg[0] != '-')
 		return (0);
 	arg++;
 	while (*arg)
@@ -44,11 +44,11 @@ static int	is_valid_option_list(const char *arg, const char *option_list)
 
 int	builtin_echo(t_cmd *cmd, t_list **envs)
 {
-	(void)envs;
-	const char **av = (const char **)cmd->args;
-	int i;
-	char	newline;
+	const char	**av = (const char **)cmd->args;
+	int			i;
+	char		newline;
 
+	(void)envs;
 	printf("<ECHO>\n");
 	newline = '\n';
 	i = 1;

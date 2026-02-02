@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "libft.h"
+#include "minishell.h"
 
 t_list	*new_env(char *env_line)
 {
@@ -38,20 +38,20 @@ t_list	*generate_env(char **env)
 	return (head);
 }
 
-void print_env_export(t_list *env)
+void	print_env_export(t_list *env)
 {
-    t_list *current;
+	t_list	*current;
 
-    current = env;
-    while (current != NULL)
-    {
-        printf("%s=%s\n", ((t_env *)current->content)->key,
+	current = env;
+	while (current != NULL)
+	{
+		printf("%s=%s\n", ((t_env *)current->content)->key,
 			((t_env *)current->content)->value);
-        current = current->next;
-    }
+		current = current->next;
+	}
 }
 
-//key value -> KEY=VALUE char*
+// key value -> KEY=VALUE char*
 static char	*create_env_line(char *key, char *value)
 {
 	char	*temp;
@@ -67,10 +67,10 @@ static char	*create_env_line(char *key, char *value)
 
 const char	**reconstruct_envs(t_list *envs)
 {
-	char 	**array;
+	char	**array;
 	t_list	*current;
-	int 	count;
-	int 	i;
+	int		count;
+	int		i;
 
 	count = ft_lstsize(envs);
 	current = envs;
@@ -81,7 +81,7 @@ const char	**reconstruct_envs(t_list *envs)
 	while (current)
 	{
 		array[i] = create_env_line(((t_env *)current->content)->key,
-			((t_env *)current->content)->value);
+				((t_env *)current->content)->value);
 		if (!array[i])
 		{
 			while (--i >= 0)
@@ -93,5 +93,5 @@ const char	**reconstruct_envs(t_list *envs)
 		current = current->next;
 	}
 	array[i] = NULL;
-	return ((const char**)array);
+	return ((const char **)array);
 }

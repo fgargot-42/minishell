@@ -14,33 +14,35 @@
 
 void	print_tokens(t_token *tokens)
 {
-	fprintf(stderr, CYAN"\n═══════════════════════════ LEXER ═══════════════════════════\n"RESET);
-	fprintf(stderr, BLUE"⟩ "RESET);
+	fprintf(stderr,
+		CYAN "\n═══════════════════════════ LEXER ═══════════════════════════\n" RESET);
+	fprintf(stderr, BLUE "⟩ " RESET);
 	while (tokens && tokens->type != TOKEN_EOF)
 	{
 		if (tokens->type == TOKEN_WORD)
-			fprintf(stderr, MAGENTA"WORD"RESET"("CYAN"%s"RESET")", tokens->value);
+			fprintf(stderr, MAGENTA "WORD" RESET "(" CYAN "%s" RESET ")",
+				tokens->value);
 		else if (tokens->type == TOKEN_PIPE)
-			fprintf(stderr, YELLOW"PIPE"RESET);
+			fprintf(stderr, YELLOW "PIPE" RESET);
 		else if (tokens->type == TOKEN_REDIR_IN)
-			fprintf(stderr, GREEN"REDIR_IN"RESET);
+			fprintf(stderr, GREEN "REDIR_IN" RESET);
 		else if (tokens->type == TOKEN_REDIR_OUT)
-			fprintf(stderr, GREEN"REDIR_OUT"RESET);
+			fprintf(stderr, GREEN "REDIR_OUT" RESET);
 		else if (tokens->type == TOKEN_APPEND)
-			fprintf(stderr, GREEN"APPEND"RESET);
+			fprintf(stderr, GREEN "APPEND" RESET);
 		else if (tokens->type == TOKEN_HEREDOC)
-			fprintf(stderr, GREEN"HEREDOC"RESET);
+			fprintf(stderr, GREEN "HEREDOC" RESET);
 		else if (tokens->type == TOKEN_AND)
-			fprintf(stderr, GREEN"&&"RESET);
+			fprintf(stderr, GREEN "&&" RESET);
 		else if (tokens->type == TOKEN_OR)
-			fprintf(stderr, GREEN"||"RESET);
+			fprintf(stderr, GREEN "||" RESET);
 		else if (tokens->type == TOKEN_LPAREN)
-			fprintf(stderr, GREEN"("RESET);
+			fprintf(stderr, GREEN "(" RESET);
 		else if (tokens->type == TOKEN_RPAREN)
-			fprintf(stderr, GREEN")"RESET);
+			fprintf(stderr, GREEN ")" RESET);
 		tokens = tokens->next;
 		if (tokens && tokens->type != TOKEN_EOF)
-			fprintf(stderr, BLUE" → "RESET);
+			fprintf(stderr, BLUE " → " RESET);
 	}
-	fprintf(stderr, BLUE" → "RED"EOF\n"RESET);
+	fprintf(stderr, BLUE " → " RED "EOF\n" RESET);
 }

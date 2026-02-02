@@ -1,37 +1,23 @@
 #include "minishell.h"
-#include <unistd.h>
 #include <sys/wait.h>
-int	exec_pipeline(t_node *node, t_list **envs)
+#include <unistd.h>
+
+int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 {
-	int fd[2];
-	int status;
-	pid_t	pid_left;
-	pid_t	pid_right;
+	int	fd_stdin;
+	int	fd_stdout;
+	int	status;
 
-	pipe(fd);
-
-	pid_left = fork();
-	if (pid_left == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-		exit(exec(node->left, envs));
-	}
-
-	pid_right = fork();
-	if (pid_right == 0)
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		exit(exec(node->right, envs));
-	}
-	close(fd[0]);
-	close(fd[1]);
-	waitpid(pid_left, NULL, 0);
-	waitpid(pid_right, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (42);
+	fd_stdin = dup(STDIN_FILENO);
+	fd_stdout = dup(STDOUT_FILENO);
+	pipe(ctx->fd);
+	dup2(ctx->fd[1], STDOUT_FILENO);
+	exec(node->left, envs, ctx);
+	dup2(ctx->fd[0], STDIN_FILENO);
+	status = exec(node->right, envs, ctx);
+	dup2(fd_stdin, STDIN_FILENO);
+	dup2(fd_stdout, STDOUT_FILENO);
+	close(fd_stdin);
+	close(fd_stdout);
+	return (status);
 }

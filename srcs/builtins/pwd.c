@@ -12,15 +12,15 @@
 
 #include "minishell.h"
 #include <unistd.h>
+
 int	builtin_pwd(t_cmd *cmd, t_list **envs)
 {
+	char	buf[1024];
+
 	(void)cmd;
 	(void)envs;
-	char buf[1024];
-
 	printf("<PWD>\n");
 	if (getcwd(buf, sizeof(buf)))
 		printf("%s\n", buf);
-
 	return (0);
 }

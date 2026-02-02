@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 20:05:45 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 02:22:20 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,23 @@ void	print_redirs(t_redir *redirs)
 	t_redir	*current;
 
 	current = redirs;
-	printf(CYAN"\n══════════════════════════ REDIRS ═══════════════════════════\n"RESET);
-	printf(BLUE"⟩ "CYAN"["RESET);
+	printf(CYAN "\n══════════════════════════ REDIRS ═══════════════════════════\n" RESET);
+	printf(BLUE "⟩ " CYAN "[" RESET);
 	while (current)
 	{
-		printf("("YELLOW"%s"RESET": "MAGENTA"%s"RESET")",
+		printf("(" YELLOW "%s" RESET ": " MAGENTA "%s" RESET ")",
 			get_type_name(current->type), current->file);
 		current = current->next;
 		if (current)
-			printf(BLUE", "RESET);
+			printf(BLUE ", " RESET);
 	}
-	printf(CYAN"]\n"RESET);
+	printf(CYAN "]\n" RESET);
 }
 
 int	is_redirection(t_token_type type)
 {
-	return (type == TOKEN_REDIR_IN
-		|| type == TOKEN_REDIR_OUT
-		|| type == TOKEN_APPEND
-		|| type == TOKEN_HEREDOC);
+	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT
+		|| type == TOKEN_APPEND || type == TOKEN_HEREDOC);
 }
 
 void	add_redirection(t_cmd *cmd, t_token **tokens)

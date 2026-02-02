@@ -1,12 +1,15 @@
-#include "minishell.h"
 #include "libft.h"
+#include "minishell.h"
 
-
-char *expand_var(char *input, t_list *envs)
+char	*expand_var(char *input, t_list *envs)
 {
-	char *res = malloc(100000);
-	size_t len;
-	size_t i;
+	char	*res;
+	size_t	len;
+	size_t	i;
+	char	*key;
+	char	*value;
+
+	res = malloc(100000);
 	i = 0;
 	while (*input)
 	{
@@ -19,15 +22,15 @@ char *expand_var(char *input, t_list *envs)
 				input++;
 				len++;
 			}
-			char *key = ft_substr(input - len, 0, len);
-			char *value = ((t_env *)get_env_node_by_key(envs, key)->content)->value;
+			key = ft_substr(input - len, 0, len);
+			value = ((t_env *)get_env_node_by_key(envs, key)->content)->value;
 			strcat(res, value);
 			i += strlen(value);
 		}
-		else 
+		else
 		{
-				res[i++] = *input;
-				input++;
+			res[i++] = *input;
+			input++;
 		}
 	}
 	res[i] = 0;

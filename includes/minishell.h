@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/30 20:58:45 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 01:58:09 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@
 # define PROMPT_OK    " ✨ "CYAN"> "RESET
 # define PROMPT_127   " ❌ "RED"> "RESET
 # define PROMPT_ERR   " ⚠️  "RED"> "RESET
+
+typedef struct s_ctx
+{
+	int fd[2];
+	pid_t waitlist[1024];
+	int	last;
+}	t_ctx;
+
+
 typedef struct s_env
 {
 	char	*key;
@@ -148,13 +157,13 @@ int		is_redirection(t_token_type type);
 void	add_redirection(t_cmd *cmd, t_token **tokens);
 
 // execution.c
-int		exec_command(t_cmd *cmd, t_list **envs);
+int		exec_command(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 
 // exec_tree
-int		exec(t_node *root, t_list **envs);
+int		exec(t_node *root, t_list **envs, t_ctx *ctx);
 
 // exec_pipeline.c
-int		exec_pipeline(t_node *node, t_list **envs);
+int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
 
 // expander.c
 

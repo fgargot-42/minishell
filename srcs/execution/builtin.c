@@ -1,18 +1,13 @@
 #include "minishell.h"
 #include "string.h"
+
 int	is_builtin(t_cmd *cmd)
 {
-	int	i;
-	const char *c = cmd->args[0];
-	const char *cmds[] = {
-		"echo",
-		"cd",
-		"pwd",
-		"export",
-		"unset",
-		"env",
-		"exit"
-	};
+	int			i;
+	const char	*c = cmd->args[0];
+	const char	*cmds[] = {"echo", "cd", "pwd", "export", "unset", "env",
+			"exit"};
+
 	i = 0;
 	while (i < 7)
 	{
@@ -24,29 +19,14 @@ int	is_builtin(t_cmd *cmd)
 
 int	call_builtin(t_cmd *cmd, t_list **envs)
 {
-	char *c;
-	int i;
+	char			*c;
+	int				i;
+	const char		*cmds[] = {"echo", "cd", "pwd", "export", "unset", "env",
+				"exit"};
+	t_builtin_func	cmds_func[] = {builtin_echo, builtin_cd, builtin_pwd,
+			builtin_export, builtin_unset, builtin_env, builtin_exit};
+
 	c = cmd->args[0];
-
-	const char *cmds[] = {
-		"echo",
-		"cd",
-		"pwd",
-		"export",
-		"unset",
-		"env",
-		"exit"
-	};
-
-	t_builtin_func cmds_func[] = {
-		builtin_echo,
-		builtin_cd,
-		builtin_pwd,
-		builtin_export,
-		builtin_unset,
-		builtin_env,
-		builtin_exit
-	};
 	i = 0;
 	while (i < 7)
 	{
