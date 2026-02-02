@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:17:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 19:54:25 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-int	exec_pipe_command(t_node *node, t_list **envs)
+int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	char	*path;
 	const char	**char_envs = reconstruct_envs(*envs);
@@ -29,7 +29,7 @@ int	exec_pipe_command(t_node *node, t_list **envs)
 	for (int i = 0; node->cmd->args[i]; i++)
 	{
 
-		char *expanded = expand_var(node->cmd->args[i], *envs);
+		char *expanded = expand_var(node->cmd->args[i], *envs, ctx);
 		if (expanded != node->cmd->args[i])
 		{
 			free(node->cmd->args[i]);
@@ -45,7 +45,7 @@ int	exec_pipe_command(t_node *node, t_list **envs)
 	exit(127);
 }
 
-pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd)
+pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)
 {
 	pid_t	pid;
 
@@ -62,12 +62,12 @@ pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd)
 			dup2(node->fd_in, 0);
 			close(node->fd_in);
 		}
-		exec_pipe_command(node, envs);
+		exec_pipe_command(node, envs, ctx);
 	}
 	return (pid);
 }
 
-pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs)
+pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	pid_t	pid;
 
@@ -83,12 +83,12 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs)
 			dup2(node->fd_out, 1);
 			close(node->fd_out);
 		}
-		exec_pipe_command(node, envs);
+		exec_pipe_command(node, envs, ctx);
 	}
 	return (pid);
 }
 
-int	exec_pipeline(t_node *node, t_list **envs)
+int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int	status;
 	int	fd[2];
@@ -109,13 +109,13 @@ int	exec_pipeline(t_node *node, t_list **envs)
 		node->right->fd_in = fd[0];
 	if (node->right->fd_out == STDOUT_FILENO)
 		node->right->fd_out = node->fd_out;
-	pid_left = exec_left_pipe_cmd(node->left, envs, fd[0]);
+	pid_left = exec_left_pipe_cmd(node->left, envs, fd[0], ctx);
 	pid_right = 0;
 	close(fd[1]);
 	if (node->right->type == NODE_PIPE)
-		status = exec_pipeline(node->right, envs);
+		status = exec_pipeline(node->right, envs, ctx);
 	else
-		pid_right = exec_right_pipe_cmd(node->right, envs);
+		pid_right = exec_right_pipe_cmd(node->right, envs, ctx);
 	close(fd[0]);
 	waitpid(pid_left, NULL, 0);
 	if (pid_right)

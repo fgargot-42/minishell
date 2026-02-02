@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:21:35 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:51:47 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@
 # define PROMPT_127   " ❌ "RED"> "RESET
 # define PROMPT_ERR   " ⚠️  "RED"> "RESET
 
+typedef struct s_ctx
+{
+	int error_code;
+}	t_ctx;
 typedef struct s_env
 {
 	char	*key;
@@ -152,18 +156,18 @@ void	add_redirection(t_cmd *cmd, t_token **tokens);
 int		resolve_redirs(t_node *node);
 
 // execution.c
-int		exec_command(t_node *node, t_list **envs);
+int		exec_command(t_node *node, t_list **envs, t_ctx *ctx);
 char	*find_in_path(char *cmd);
 
 // exec_tree
-int		exec(t_node *root, t_list **envs);
+int		exec(t_node *root, t_list **envs, t_ctx *ctx);
 
 // exec_pipeline.c
-int		exec_pipeline(t_node *node, t_list **envs);
+int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
 
 // expander.c
 
-char *expand_var(char *input, t_list *envs);
+char *expand_var(char *input, t_list *envs, t_ctx *ctx);
 // builtin.c
 
 typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs);

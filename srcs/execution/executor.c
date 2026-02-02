@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:09:10 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 19:46:19 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*find_in_path(char *cmd)
 	return (NULL);
 }
 
-static void	expand_cmd_args(t_node *node, t_list **envs)
+static void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int		i;
 	char	*expanded;
@@ -48,7 +48,7 @@ static void	expand_cmd_args(t_node *node, t_list **envs)
 	i = 1;
 	while (node->cmd->args[i])
 	{
-		expanded = expand_var(node->cmd->args[i], *envs);
+		expanded = expand_var(node->cmd->args[i], *envs, ctx);
 		if (expanded != node->cmd->args[i])
 		{
 			free(node->cmd->args[i]);
@@ -86,7 +86,7 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 	return (pid);
 }
 
-int	exec_command(t_node *node, t_list **envs)
+int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int		status;
 	pid_t	pid;
@@ -97,7 +97,7 @@ int	exec_command(t_node *node, t_list **envs)
 		return (1);
 	if (resolve_redirs(node))
 		return (1);
-	expand_cmd_args(node, envs);
+	expand_cmd_args(node, envs, ctx);
 	if (is_builtin(node->cmd))
 		return (call_builtin(node->cmd, envs));
 	pid = exec_command_fork(node, envs);
