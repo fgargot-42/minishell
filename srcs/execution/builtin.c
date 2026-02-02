@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:40:23 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 21:20:22 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 22:06:58 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	is_builtin(t_cmd *cmd)
 	return (0);
 }
 
-int	call_builtin(t_node *node, t_list **envs)
+int	call_builtin(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	char			*c;
 	int				i;
@@ -52,7 +52,7 @@ int	call_builtin(t_node *node, t_list **envs)
 	{
 		if (strcmp(c, cmds[i]) == 0)
 		{
-			err_code = cmds_func[i](node->cmd, envs);
+			err_code = cmds_func[i](node->cmd, envs, ctx);
 			break ;
 		}
 		i++;

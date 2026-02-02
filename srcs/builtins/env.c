@@ -6,17 +6,18 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:55 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/31 21:03:16 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 21:56:22 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_env(t_cmd *cmd, t_list **envs)
+int	builtin_env(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	t_list	*current;
 	t_env	*curr_env;
 
+	(void)ctx;
 	if (!cmd || !envs || !*envs)
 		return (1);
 	current = *envs;
