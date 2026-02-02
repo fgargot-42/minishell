@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 21:58:21 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 22:21:52 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ static char	*create_env_line(char *key, char *value)
 	temp = ft_strjoin(key, "=");
 	if (!temp)
 		return (NULL);
-	result = ft_strjoin(temp, value ? value : "");
+	if (!value)
+		value = "";
+	result = ft_strjoin(temp, value);
 	free(temp);
 	return (result);
 }
@@ -83,13 +85,6 @@ const char	**reconstruct_envs(t_list *envs)
 	{
 		array[i] = create_env_line(((t_env *)current->content)->key,
 				((t_env *)current->content)->value);
-		if (!array[i])
-		{
-			while (--i >= 0)
-				free(array[i]);
-			free(array);
-			return (NULL);
-		}
 		i++;
 		current = current->next;
 	}
