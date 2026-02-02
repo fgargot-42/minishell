@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/31 22:48:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 17:39:17 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ int	exec_command(t_node *node, t_list **envs)
 	char	*path;
 	const char	**char_envs = reconstruct_envs(*envs);
 
-	resolve_redirs(node);
 	if (DEBUG)
 		print_str_list(node->cmd->args);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 		return (0);
+	resolve_redirs(node);
 	// check les buitlitns ici
 	
-	for (int i = 0; node->cmd->args[i]; i++)
+	for (int i = 1; node->cmd->args[i]; i++)
 	{
 
 		char *expanded = expand_var(node->cmd->args[i], *envs);

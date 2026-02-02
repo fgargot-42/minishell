@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/31 22:59:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 17:32:36 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	resolve_redirs(t_node *node)
 		}
 		else
 		{
-			if (node->fd_out != STDIN_FILENO)
+			if (node->fd_in != STDIN_FILENO)
 				close(node->fd_in);
 			node->fd_in = new_fd;
 		}
