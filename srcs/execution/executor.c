@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 18:27:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 18:39:44 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,51 +63,54 @@ static void	expand_cmd_args(t_node *node, t_list **envs)
 	}
 }
 
-int	exec_command(t_node *node, t_list **envs)
+static pid_t	exec_command_fork(t_node *node, t_list **envs)
 {
-	pid_t	pid;
-	int		status;
-	char	*path;
+	pid_t		pid;
 	const char	**char_envs = reconstruct_envs(*envs);
-
-	if (DEBUG)
-		print_str_list(node->cmd->args);
-	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
-		return (0);
-	if (resolve_redirs(node))
-		return (1);
-	// check les buitlitns ici
-	expand_cmd_args(node, envs);
-
-	if (is_builtin(node->cmd))
-		return (call_builtin(node->cmd, envs));
+	char		*path;
 
 	path = find_in_path(node->cmd->args[0]);
 	pid = fork();
-	if (pid == 0) //enfant
+	if (pid == 0)
 	{
 		if (node->fd_in != STDIN_FILENO)
 		{
 			dup2(node->fd_in, 0);
 			close(node->fd_in);
 		}
-		if(node->fd_out != STDOUT_FILENO)
+		if (node->fd_out != STDOUT_FILENO)
 		{
 			dup2(node->fd_out, 1);
 			close(node->fd_out);
 		}
-		execve(path, node->cmd->args, (char *const*)char_envs);
+		execve(path, node->cmd->args, (char *const *)char_envs);
+		free(path);
 		exit(127);
 	}
-	
+	free(path);
+	return (pid);
+}
+
+int	exec_command(t_node *node, t_list **envs)
+{
+	int		status;
+	pid_t	pid;
+
+	if (DEBUG)
+		print_str_list(node->cmd->args);
+	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
+		return (1);
+	if (resolve_redirs(node))
+		return (1);
+	expand_cmd_args(node, envs);
+	if (is_builtin(node->cmd))
+		return (call_builtin(node->cmd, envs));
+	pid = exec_command_fork(node, envs);
 	if (node->fd_in != STDIN_FILENO)
 		close(node->fd_in);
-	if(node->fd_out != STDOUT_FILENO)
+	if (node->fd_out != STDOUT_FILENO)
 		close(node->fd_out);
-	// FREE LE CHAR ENVS
 	waitpid(pid, &status, 0);
-	free(path);
-
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (-1);

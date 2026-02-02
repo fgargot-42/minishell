@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/02 18:40:23 by fgargot           #+#    #+#             */
+/*   Updated: 2026/02/02 18:42:09 by fgargot          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "string.h"
+
 int	is_builtin(t_cmd *cmd)
 {
-	int	i;
-	const char *c = cmd->args[0];
-	const char *cmds[] = {
+	int			i;
+	const char	*c = cmd->args[0];
+	const char	*cmds[] = {
 		"echo",
 		"cd",
 		"pwd",
@@ -13,6 +26,7 @@ int	is_builtin(t_cmd *cmd)
 		"env",
 		"exit"
 	};
+
 	i = 0;
 	while (i < 7)
 	{
@@ -24,10 +38,8 @@ int	is_builtin(t_cmd *cmd)
 
 int	call_builtin(t_cmd *cmd, t_list **envs)
 {
-	char *c;
-	int i;
-	c = cmd->args[0];
-
+	char	*c;
+	int		i;
 	const char *cmds[] = {
 		"echo",
 		"cd",
@@ -38,6 +50,7 @@ int	call_builtin(t_cmd *cmd, t_list **envs)
 		"exit"
 	};
 
+	c = cmd->args[0];
 	t_builtin_func cmds_func[] = {
 		builtin_echo,
 		builtin_cd,
