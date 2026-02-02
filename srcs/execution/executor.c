@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 17:49:04 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 18:27:32 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,24 @@ char	*find_in_path(char *cmd)
 	return (NULL);
 }
 
+static void	expand_cmd_args(t_node *node, t_list **envs)
+{
+	int		i;
+	char	*expanded;
+
+	i = 1;
+	while (node->cmd->args[i])
+	{
+		expanded = expand_var(node->cmd->args[i], *envs);
+		if (expanded != node->cmd->args[i])
+		{
+			free(node->cmd->args[i]);
+			node->cmd->args[i] = expanded;
+		}
+		i++;
+	}
+}
+
 int	exec_command(t_node *node, t_list **envs)
 {
 	pid_t	pid;
@@ -59,17 +77,7 @@ int	exec_command(t_node *node, t_list **envs)
 	if (resolve_redirs(node))
 		return (1);
 	// check les buitlitns ici
-	
-	for (int i = 1; node->cmd->args[i]; i++)
-	{
-
-		char *expanded = expand_var(node->cmd->args[i], *envs);
-		if (expanded != node->cmd->args[i])
-		{
-			free(node->cmd->args[i]);
-			node->cmd->args[i] = expanded;
-		}
-	}
+	expand_cmd_args(node, envs);
 
 	if (is_builtin(node->cmd))
 		return (call_builtin(node->cmd, envs));
