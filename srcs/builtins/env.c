@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:55 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/28 22:43:29 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/01/31 21:03:16 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	builtin_env(t_cmd *cmd, t_list **envs)
 	t_list	*current;
 	t_env	*curr_env;
 
-	printf("<ENV>\n");
 	if (!cmd || !envs || !*envs)
 		return (1);
 	current = *envs;

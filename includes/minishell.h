@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 01:58:09 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:07:06 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ typedef struct s_node
 	t_node_type		type;
 	struct s_node	*left;
 	struct s_node	*right;
+	int				fd_in;
+	int				fd_out;
 	struct s_cmd	*cmd; // set as null si pas fin de branche
 }	t_node;
 
@@ -155,9 +157,11 @@ void	print_tree(t_node *node, int d);
 void	print_redirs(t_redir *redirs);
 int		is_redirection(t_token_type type);
 void	add_redirection(t_cmd *cmd, t_token **tokens);
+int		resolve_redirs(t_node *node);
 
 // execution.c
-int		exec_command(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int		exec_command(t_cmd *cmd, t_list **envs);
+char	*find_in_path(char *cmd);
 
 // exec_tree
 int		exec(t_node *root, t_list **envs, t_ctx *ctx);

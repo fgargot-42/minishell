@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 01:58:47 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:09:10 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,68 +40,71 @@ char	*find_in_path(char *cmd)
 	return (NULL);
 }
 
-int	exec_command(t_cmd *cmd, t_list **envs, t_ctx *ctx)
+static void	expand_cmd_args(t_node *node, t_list **envs)
 {
-	int			fd_in;
-	int			fd_out;
-	char		*path;
-	const char	**char_envs = reconstruct_envs(*envs);
-	int			pid;
-	char		*expanded;
-	int			status;
+	int		i;
+	char	*expanded;
 
-	fd_in = -1;
-	fd_out = -1;
-	if (DEBUG)
-		print_str_list(cmd->args);
-	if (!cmd || !cmd->args || !cmd->args[0])
-		return (-1);
-	// check les buitlitns ici
+	i = 1;
+	while (node->cmd->args[i])
+	{
+		expanded = expand_var(node->cmd->args[i], *envs);
+		if (expanded != node->cmd->args[i])
+		{
+			free(node->cmd->args[i]);
+			node->cmd->args[i] = expanded;
+		}
+		i++;
+	}
+}
+
+static pid_t	exec_command_fork(t_node *node, t_list **envs)
+{
+	pid_t		pid;
+	const char	**char_envs = reconstruct_envs(*envs);
+	char		*path;
+
+	path = find_in_path(node->cmd->args[0]);
 	pid = fork();
-	ctx->waitlist[ctx->last++] = pid;
 	if (pid == 0)
 	{
-		for (int i = 0; cmd->args[i]; i++)
+		if (node->fd_in != STDIN_FILENO)
 		{
-			expanded = expand_var(cmd->args[i], *envs);
-			if (expanded != cmd->args[i])
-			{
-				free(cmd->args[i]);
-				cmd->args[i] = expanded;
-			}
+			dup2(node->fd_in, 0);
+			close(node->fd_in);
 		}
-		if (is_builtin(cmd))
-			return (call_builtin(cmd, envs));
-		path = find_in_path(cmd->args[0]);
-		if (!path)
+		if (node->fd_out != STDOUT_FILENO)
 		{
-			fprintf(stderr, "%s : command not found\n", cmd->args[0]);
-			return (127);
+			dup2(node->fd_out, 1);
+			close(node->fd_out);
 		}
-		while (cmd->redirs)
-		{
-			if (cmd->redirs->type == TOKEN_REDIR_IN)
-			{
-				fd_in = open(cmd->redirs->file, O_RDONLY);
-				dup2(fd_in, STDIN_FILENO);
-			}
-			if (cmd->redirs->type == TOKEN_REDIR_OUT)
-			{
-				fd_out = open(cmd->redirs->file, O_WRONLY | O_CREAT | O_TRUNC,
-						0644);
-				dup2(fd_out, STDOUT_FILENO);
-			}
-			if (cmd->redirs->type == TOKEN_APPEND)
-			{
-				fd_out = open(cmd->redirs->file, O_WRONLY | O_CREAT | O_APPEND,
-						0644);
-				dup2(fd_out, STDOUT_FILENO);
-			}
-			cmd->redirs = cmd->redirs->next;
-		}
-		execve(path, cmd->args, (char *const *)char_envs);
-		exit(42);
+		execve(path, node->cmd->args, (char *const *)char_envs);
+		free(path);
+		exit(127);
 	}
+	free(path);
+	return (pid);
+}
+
+int	exec_command(t_node *node, t_list **envs)
+{
+	int		status;
+	pid_t	pid;
+
+	if (DEBUG)
+		print_str_list(node->cmd->args);
+	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
+		return (1);
+	if (resolve_redirs(node))
+		return (1);
+	expand_cmd_args(node, envs);
+	if (is_builtin(node->cmd))
+		return (call_builtin(node->cmd, envs));
+	pid = exec_command_fork(node, envs);
+	if (node->fd_in != STDIN_FILENO)
+		close(node->fd_in);
+	if (node->fd_out != STDOUT_FILENO)
+		close(node->fd_out);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));

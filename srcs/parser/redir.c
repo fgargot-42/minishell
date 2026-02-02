@@ -6,12 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 02:22:20 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:10:55 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 static char	*get_type_name(t_token_type type)
 {
@@ -76,4 +78,40 @@ void	add_redirection(t_cmd *cmd, t_token **tokens)
 			tmp = tmp->next;
 		tmp->next = redir;
 	}
+}
+
+int	resolve_redirs(t_node *node)
+{
+	t_redir	*redir;
+	int		new_fd;
+
+	if (!node->cmd)
+		return (1);
+	redir = node->cmd->redirs;
+	while (redir)
+	{
+		new_fd = 0;
+		if (redir->type == TOKEN_REDIR_IN)
+			new_fd = open(redir->file, O_RDONLY);
+		if (redir->type == TOKEN_REDIR_OUT)
+			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (redir->type == TOKEN_APPEND)
+			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (new_fd == -1)
+			return (1);
+		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
+		{
+			if (node->fd_out != STDOUT_FILENO)
+				close(node->fd_out);
+			node->fd_out = new_fd;
+		}
+		else
+		{
+			if (node->fd_in != STDIN_FILENO)
+				close(node->fd_in);
+			node->fd_in = new_fd;
+		}
+		redir = redir->next;
+	}
+	return (0);
 }
