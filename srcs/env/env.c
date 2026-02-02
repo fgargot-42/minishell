@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:21:52 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 22:36:19 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ t_list	*new_env(char *env_line)
 
 	new = (t_env *)malloc(sizeof(t_env));
 	splitted = ft_split(env_line, '=');
-	new->key = splitted[0];
-	new->value = splitted[1];
+	new->key = ft_strdup(splitted[0]);
+	new->value = ft_strdup(splitted[1]);
 	free_string_array(splitted);
 	return (ft_lstnew(new));
 }
