@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:54:25 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 20:52:59 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	}
 
 	if (is_builtin(node->cmd))
-		exit(call_builtin(node->cmd, envs));
+		exit(call_builtin(node, envs));
 
 	path = find_in_path(node->cmd->args[0]);
 	execve(path, node->cmd->args, (char *const *)char_envs);
@@ -54,6 +54,7 @@ pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)
 		return (-1);
 	if (pid == 0)
 	{
+		printf("%p\n", node);
 		close(read_fd);
 		dup2(node->fd_out, STDOUT_FILENO);
 		close(node->fd_out);
@@ -76,6 +77,7 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 		return (-1);
 	if (pid == 0)
 	{
+		printf("%p\n", node);
 		dup2(node->fd_in, STDIN_FILENO);
 		close(node->fd_in);
 		if (node->fd_out != STDOUT_FILENO)

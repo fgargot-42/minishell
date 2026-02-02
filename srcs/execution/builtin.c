@@ -6,12 +6,13 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 18:40:23 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:01:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 21:20:22 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "string.h"
+#include <unistd.h>
 
 int	is_builtin(t_cmd *cmd)
 {
@@ -29,22 +30,36 @@ int	is_builtin(t_cmd *cmd)
 	return (0);
 }
 
-int	call_builtin(t_cmd *cmd, t_list **envs)
+int	call_builtin(t_node *node, t_list **envs)
 {
 	char			*c;
 	int				i;
+	int				err_code;
+	int				stdio_fd[2];
 	const char		*cmds[] = {"echo", "cd", "pwd", "export", "unset", "env",
 				"exit"};
 	t_builtin_func	cmds_func[] = {builtin_echo, builtin_cd, builtin_pwd,
 			builtin_export, builtin_unset, builtin_env, builtin_exit};
 
-	c = cmd->args[0];
+	c = node->cmd->args[0];
 	i = 0;
+	err_code = 0;
+	stdio_fd[0] = dup(0);
+	stdio_fd[1] = dup(1);
+	dup2(node->fd_out, STDOUT_FILENO);
+	dup2(node->fd_in, STDIN_FILENO);
 	while (i < 7)
 	{
 		if (strcmp(c, cmds[i]) == 0)
-			return (cmds_func[i](cmd, envs));
+		{
+			err_code = cmds_func[i](node->cmd, envs);
+			break ;
+		}
 		i++;
 	}
-	return (43);
+	dup2(stdio_fd[0], STDIN_FILENO);
+	dup2(stdio_fd[1], STDOUT_FILENO);
+	close(stdio_fd[0]);
+	close(stdio_fd[1]);
+	return (err_code);
 }

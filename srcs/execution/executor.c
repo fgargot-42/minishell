@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:46:19 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 20:53:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 	pid = fork();
 	if (pid == 0)
 	{
+		printf("%p\n", node);
 		if (node->fd_in != STDIN_FILENO)
 		{
 			dup2(node->fd_in, 0);
@@ -99,7 +100,7 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 		return (1);
 	expand_cmd_args(node, envs, ctx);
 	if (is_builtin(node->cmd))
-		return (call_builtin(node->cmd, envs));
+		return (call_builtin(node, envs));
 	pid = exec_command_fork(node, envs);
 	if (node->fd_in != STDIN_FILENO)
 		close(node->fd_in);
