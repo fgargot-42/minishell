@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:05:36 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/02 22:19:34 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,9 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 			dup2(node->fd_out, 1);
 			close(node->fd_out);
 		}
-		execve(path, node->cmd->args, (char *const *)char_envs);
+		execve(path, node->cmd->args, char_envs);
 		free(path);
+		free_string_array(char_envs);
 		exit(127);
 	}
 	free_string_array(char_envs);
