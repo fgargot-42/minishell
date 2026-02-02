@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:04:38 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 19:17:36 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,10 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs)
 
 int	exec_pipeline(t_node *node, t_list **envs)
 {
-	int	fd_stdin;
-	int	fd_stdout;
 	int	status;
+	int	fd[2];
+	pid_t	pid_left;
+	pid_t	pid_right;
 
 	pipe(fd);
 	resolve_redirs(node->left);

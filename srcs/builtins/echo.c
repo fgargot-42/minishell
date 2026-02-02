@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 18:58:46 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 19:18:16 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	builtin_echo(t_cmd *cmd, t_list **envs)
 	int			i;
 	char		newline;
 
+	(void)envs;
 	newline = '\n';
 	i = 1;
 	if (is_valid_option_list(av[1], "npc"))
