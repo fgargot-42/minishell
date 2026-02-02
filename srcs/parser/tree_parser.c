@@ -98,10 +98,10 @@ static size_t	count_args(t_token *tokens)
 	}
 	return (count);
 }
-static void init_cmd(t_cmd *cmd, size_t count)
+static void init_cmd(t_cmd **cmd, size_t count)
 {
-	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	cmd->args = malloc(sizeof(char *) * (count + 1));
+	*cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	(*cmd)->args = malloc(sizeof(char *) * (count + 1));
 }
 
 static int is_stop_token(t_token_type type)
@@ -125,7 +125,7 @@ t_cmd	*parse_command(t_token **tokens)
 
 	cmd = NULL;
 	count = count_args(*tokens);
-	init_cmd(cmd, count);
+	init_cmd(&cmd, count);
 	cmd->redirs = NULL;
 	i = 0;
 	while (*tokens)
