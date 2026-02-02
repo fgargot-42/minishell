@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 20:48:33 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 22:19:19 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,9 +170,9 @@ int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
 char *expand_var(char *input, t_list *envs, t_ctx *ctx);
 // builtin.c
 
-typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs);
+typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 int		is_builtin(t_cmd *cmd);
-int		call_builtin(t_node *node, t_list **envs);
+int		call_builtin(t_node *node, t_list **envs, t_ctx *ctx);
 void	builtin_export_print(t_list **envs);
 
 // env.c
@@ -186,12 +186,12 @@ const char	**reconstruct_envs(t_list *envs);
 t_list	*get_env_node_by_key(t_list *env_list, char *key);
 
 // builtins;
-int		builtin_echo(t_cmd *cmd, t_list **envs);
-int		builtin_cd(t_cmd *cmd, t_list **envs);
-int		builtin_pwd(t_cmd *cmd, t_list **envs);
-int		builtin_export(t_cmd *cmd, t_list **envs);
-int		builtin_unset(t_cmd *cmd, t_list **envs);
-int		builtin_env(t_cmd *cmd, t_list **envs);
-int		builtin_exit(t_cmd *cmd, t_list **envs);
+int		builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int		builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int		builtin_pwd(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int		builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int		builtin_unset(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int		builtin_env(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int		builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 
 #endif	//MINISHELL_H

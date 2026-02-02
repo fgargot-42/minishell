@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:22:56 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/31 21:03:51 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 21:59:05 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -29,12 +29,13 @@ static void	env_delete(t_list **envs, t_list *to_delete, t_list *prev)
 	ft_lstdelone(to_delete, &del_envlist_content);
 }
 
-int	builtin_unset(t_cmd *cmd, t_list **envs)
+int	builtin_unset(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	char	**args;
 	t_list	*current;
 	t_list	*prev;
 
+	(void)ctx;
 	if (!envs)
 		return (0);
 	args = cmd->args + 1;

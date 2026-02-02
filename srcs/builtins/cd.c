@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/01/31 21:03:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/02 21:55:25 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,13 @@ static void	update_new_pwd(t_list **envs)
 	}
 }
 
-int	builtin_cd(t_cmd *cmd, t_list **envs)
+int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	t_list	*path;
 	char	*str_path;
 	int		chdir_status;
 
+	(void)ctx;
 	if (!cmd->args[1])
 	{
 		path = get_env_node_by_key(*envs, "HOME");
