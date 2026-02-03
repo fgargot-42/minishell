@@ -6,26 +6,22 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 18:29:06 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/03 20:16:22 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static void	replace_env(char **input, t_env *env, size_t *pos)
+static void	replace_env(char **input, t_env *env, char *key, size_t *pos)
 {
-	char	*key;
 	char	*value;
 	char	*new_input;
 	size_t	value_end_pos;
 
-	key = env->key;
-	if (!key)
-		return ;
-	value = env->value;
-	if (!value)
-		value = "";
+	value = "";
+	if (env && env->value)
+		value = env->value;
 	new_input = malloc(sizeof(char) * (ft_strlen(*input) + ft_strlen(value)
 		- ft_strlen(key)));
 	if (!new_input)
@@ -63,15 +59,27 @@ static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
 	*input = new_input;
 }
 
+static t_env	*get_env(t_list *envs, char *key)
+{
+	t_list	*node;
+	t_env	*env;
+
+	env = NULL;
+	node = get_env_node_by_key(envs, key); 
+	if (node)
+		env = (t_env *)node->content;
+	return (env);
+}
+
 void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 {
 	size_t	len;
 	size_t	i;
-	t_env	env;
+	t_env	*env;
 	char	*key;
 
 	i = 0;
-	while ((*input)[i])
+	while (i < ft_strlen(*input))
 	{
 		if ((*input)[i] == '$')
 		{
@@ -83,8 +91,9 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 				while (ft_isalnum((*input)[len]) || (*input)[len] == '_')
 					len++;
 				key = ft_substr(&(*input)[i + 1], 0, len);
-				env = *((t_env *)get_env_node_by_key(envs, key)->content);
-				replace_env(input, &env, &i);
+				env = get_env(envs, key);
+				replace_env(input, env, key, &i);
+				free(key);
 			}
 		}
 		i++;
