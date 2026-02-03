@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 22:12:21 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/03 22:30:53 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 	char	**char_envs;
 	char		*path;
 
-	char_envs = (char**)reconstruct_envs(*envs);
-	path = find_in_path(node->cmd->args[0]);
 	pid = fork();
 	if (pid == 0)
 	{
+		path = find_in_path(node->cmd->args[0]);
+		char_envs = (char**)reconstruct_envs(*envs);
 		printf("%p\n", node);
 		if (node->fd_in != STDIN_FILENO)
 		{
@@ -80,8 +80,6 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 		free_string_array(char_envs);
 		exit(127);
 	}
-	free_string_array(char_envs);
-	free(path);
 	return (pid);
 }
 

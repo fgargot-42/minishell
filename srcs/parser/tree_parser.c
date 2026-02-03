@@ -195,6 +195,7 @@ void	free_tree(t_node *tree)
 	if (tree->cmd)
 	{
 		free_string_array(tree->cmd->args);
+		free(tree->cmd->quote_type);
 		redir = tree->cmd->redirs;
 		while (redir)
 		{
