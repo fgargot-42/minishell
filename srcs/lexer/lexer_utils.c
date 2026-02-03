@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:48:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 21:56:57 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/03 19:35:04 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	free_tokens(t_token *tokens)
 	while (tokens)
 	{
 		tmp = tokens->next;
-		if (tokens->value)
+		if (tokens->type == TOKEN_WORD && tokens->value)
 			free(tokens->value);
 		free(tokens);
 		tokens = tmp;

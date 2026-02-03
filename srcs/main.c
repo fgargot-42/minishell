@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:19:02 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/03 19:25:44 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ int	main(int ac, char **av, char **env)
 		free(p);
 		free(line);
 	}
-//	ft_lstclear(&envs, env_free);
+	ft_lstclear(&envs, env_free);
 	return (0);
 }

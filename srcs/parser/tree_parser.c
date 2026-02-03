@@ -184,6 +184,8 @@ void	free_string_array(char **array)
 
 void	free_tree(t_node *tree)
 {
+	t_redir *redir;
+	t_redir *next;
 	if (!tree)
 		return ;
 	free_tree(tree->left);
@@ -191,6 +193,14 @@ void	free_tree(t_node *tree)
 	if (tree->cmd)
 	{
 		free_string_array(tree->cmd->args);
+		redir = tree->cmd->redirs;
+		while (redir)
+		{
+			next = redir->next;
+			free(redir->file);
+			free(redir);
+			redir = next;
+		}
 		free(tree->cmd);
 	}
 	free(tree);
