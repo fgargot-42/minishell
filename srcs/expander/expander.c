@@ -1,48 +1,92 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
+/*   Updated: 2026/02/03 18:29:06 by fgargot          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "minishell.h"
 
-char	*expand_var(char *input, t_list *envs, t_ctx *ctx)
+static void	replace_env(char **input, t_env *env, size_t *pos)
 {
-	char	*res;
-	size_t	len;
-	size_t	i;
 	char	*key;
 	char	*value;
+	char	*new_input;
+	size_t	value_end_pos;
 
-	res = malloc(100000);
+	key = env->key;
+	if (!key)
+		return ;
+	value = env->value;
+	if (!value)
+		value = "";
+	new_input = malloc(sizeof(char) * (ft_strlen(*input) + ft_strlen(value)
+		- ft_strlen(key)));
+	if (!new_input)
+		return ;
+	ft_strlcpy(new_input, *input, *pos);
+	ft_strlcpy(&new_input[(*pos)], value, ft_strlen(value) + 1);
+	value_end_pos = *pos + ft_strlen(value);
+	*pos += ft_strlen(key) + 1;
+	ft_strlcpy(&new_input[value_end_pos], &((*input)[*pos]),
+		ft_strlen(&((*input)[*pos])) + 1);
+	free(*input);
+	*input = new_input;
+}
+
+static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
+{
+	char	*new_input;
+	char	*error_str;
+	size_t	new_pos;
+	
+	error_str = ft_itoa(ctx->error_code);
+	if (!error_str)
+		return ;
+	new_input = malloc(sizeof(char) * (ft_strlen(*input)
+		+ ft_strlen(error_str) - 1));
+	if (!new_input)
+		return ;
+	ft_strlcpy(new_input, *input, *pos);
+	ft_strlcpy(&new_input[(*pos)], error_str, ft_strlen(error_str) + 1);
+	new_pos = *pos + ft_strlen(error_str);
+	pos += 2;
+	ft_strlcpy(&new_input[new_pos], &((*input)[*pos]),
+		ft_strlen(&((*input)[*pos])) + 1);
+	free(*input);
+	*input = new_input;
+}
+
+void	expand_var(char **input, t_list *envs, t_ctx *ctx)
+{
+	size_t	len;
+	size_t	i;
+	t_env	env;
+	char	*key;
+
 	i = 0;
-	while (*input)
+	while ((*input)[i])
 	{
-		if (*input == '$')
+		if ((*input)[i] == '$')
 		{
-			input++;
-			if (*input == '?')
-			{
-				input++;
-				const char *strerrcode = ft_itoa(ctx->error_code);
-				strcat(res, strerrcode);
-				i += strlen(strerrcode);
-			}
+			if ((*input)[i + 1] == '?')
+				replace_errorcode_env(input, &i, ctx); 
 			else
 			{
-				len = 0;
-				while (ft_isalnum(*input) || *input == '_')
-				{
-					input++;
+				len = i + 1;
+				while (ft_isalnum((*input)[len]) || (*input)[len] == '_')
 					len++;
-				}
-				key = ft_substr(input - len, 0, len);
-				value = ((t_env *)get_env_node_by_key(envs, key)->content)->value;
-				strcat(res, value);
-				i += strlen(value);
+				key = ft_substr(&(*input)[i + 1], 0, len);
+				env = *((t_env *)get_env_node_by_key(envs, key)->content);
+				replace_env(input, &env, &i);
 			}
 		}
-		else
-		{
-			res[i++] = *input;
-			input++;
-		}
+		i++;
 	}
-	res[i] = 0;
-	return (res);
 }

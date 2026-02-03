@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:19:53 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/03 18:22:54 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,7 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	
 	for (int i = 0; node->cmd->args[i]; i++)
 	{
-
-		char *expanded = expand_var(node->cmd->args[i], *envs, ctx);
-		if (expanded != node->cmd->args[i])
-		{
-			free(node->cmd->args[i]);
-			node->cmd->args[i] = expanded;
-		}
+		expand_var(&node->cmd->args[i], *envs, ctx);
 	}
 
 	if (is_builtin(node->cmd))

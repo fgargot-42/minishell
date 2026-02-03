@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:26:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/03 18:23:24 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
 
 // expander.c
 
-char *expand_var(char *input, t_list *envs, t_ctx *ctx);
+void	expand_var(char **input, t_list *envs, t_ctx *ctx);
 // builtin.c
 
 typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
