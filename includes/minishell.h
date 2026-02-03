@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 20:25:11 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/03 22:13:07 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "libft.h"
 
 
-#define DEBUG 0
+#define DEBUG 1
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -40,6 +40,7 @@ typedef enum e_quote_type
 	QUOTE_SINGLE,
 	QUOTE_DOUBLE
 }	t_quote_type;
+
 typedef struct s_prompt_parts
 {
     char    *errcode;
@@ -55,12 +56,12 @@ typedef struct s_ctx
 {
 	int error_code;
 }	t_ctx;
+
 typedef struct s_env
 {
 	char	*key;
 	char	*value;
 }	t_env;
-
 
 typedef enum e_node_type
 {
@@ -123,9 +124,10 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char		**args; // ["ls", "-la", NULL]
-	t_redir		*redirs;
-	t_list		*envs;
+	char			**args; // ["ls", "-la", NULL]
+	t_quote_type	*quote_type;
+	t_redir			*redirs;
+	t_list			*envs;
 }	t_cmd;
 
 typedef struct s_lexer

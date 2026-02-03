@@ -102,6 +102,7 @@ static void init_cmd(t_cmd **cmd, size_t count)
 {
 	*cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	(*cmd)->args = malloc(sizeof(char *) * (count + 1));
+	(*cmd)->quote_type = malloc(sizeof(t_quote_type *) * (count + 1));
 }
 
 static int is_stop_token(t_token_type type)
@@ -113,6 +114,7 @@ static int is_stop_token(t_token_type type)
 static void handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 {
 	cmd->args[*i] = strdup((*tokens)->value);
+	cmd->quote_type[*i] = (*tokens)->quote;
 	(*i)++;
 	*tokens = (*tokens)->next;
 }

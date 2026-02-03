@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 18:20:13 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/03 22:12:21 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ static void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 	i = 1;
 	while (node->cmd->args[i])
 	{
-		expand_var(&node->cmd->args[i], *envs, ctx);
+		if (!(node->cmd->quote_type[i] == QUOTE_SINGLE))
+			expand_var(&node->cmd->args[i], *envs, ctx);
 		i++;
 	}
 }
