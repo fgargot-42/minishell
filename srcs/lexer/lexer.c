@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/03 19:34:18 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/03 20:23:24 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,47 @@ static int	is_special(char c)
 		|| c == '\0' || c == '&' || c == '(' || c == ')');
 }
 
+static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *quote_type)
+{
+	int start;
+	int len;
+	char *word;
+	lexer->pos++;
+	start = lexer->pos;
+	len = 0;
+
+	while (lexer->pos < lexer->len && current_char(lexer) != quote_char)
+	{
+		if (quote_char == '"' && current_char(lexer) == '\\')
+		{
+			lexer->pos++;
+			if (lexer->pos < lexer->len)
+				lexer->pos++;
+			len += 2;
+			continue ;
+		}
+		lexer->pos++;
+		len++;
+	}
+	if (current_char(lexer) != quote_char)
+	{
+		fprintf(stderr, "Error: unclosed quote\n");
+		return (NULL);
+	}
+	word = (char *)malloc(sizeof(char) * (len + 1));
+	if (!word)
+		return (NULL);
+	strncpy(word, &lexer->input[start], len);
+	word[len] = '\0';
+	lexer->pos++;
+	
+	if (quote_char == '\'')
+		*quote_type = QUOTE_SINGLE;
+	else
+		*quote_type = QUOTE_DOUBLE;
+	
+	return (word);
+}
 static char	*extract_word(t_lexer *lexer)
 {
 	const int	start = lexer->pos;
@@ -63,7 +104,7 @@ static char	*extract_word(t_lexer *lexer)
 	return (word);
 }
 
-t_token	*create_token(t_token_type type, char *value)
+t_token	*create_token(t_token_type type, char *value, t_quote_type quote)
 {
 	t_token	*tok;
 
@@ -71,26 +112,28 @@ t_token	*create_token(t_token_type type, char *value)
 	tok->type = type;
 	tok->value = value;
 	tok->next = NULL;
+	tok->quote = quote;
 	return (tok);
 }
 
 t_token	*get_next_token(t_lexer *lexer)
 {
 	char	c;
-
+	t_quote_type quote;
 	skip_whitespace(lexer);
 	c = current_char(lexer);
+	quote = QUOTE_NONE;
 	if (c == '\0')
-		return (create_token(TOKEN_EOF, NULL));
+		return (create_token(TOKEN_EOF, NULL, QUOTE_NONE));
 	else if (c == '|')
 	{
 		lexer->pos++;
 		if (current_char(lexer) == '|')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_OR, "||"));
+			return (create_token(TOKEN_OR, "||", QUOTE_NONE));
 		}
-		return (create_token(TOKEN_PIPE, "|"));
+		return (create_token(TOKEN_PIPE, "|", QUOTE_NONE));
 	}
 	else if (c == '<')
 	{
@@ -98,9 +141,9 @@ t_token	*get_next_token(t_lexer *lexer)
 		if (current_char(lexer) == '<')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_HEREDOC, "<<"));
+			return (create_token(TOKEN_HEREDOC, "<<", QUOTE_NONE));
 		}
-		return (create_token(TOKEN_REDIR_IN, "<"));
+		return (create_token(TOKEN_REDIR_IN, "<", QUOTE_NONE));
 	}
 	else if (c == '>')
 	{
@@ -108,9 +151,9 @@ t_token	*get_next_token(t_lexer *lexer)
 		if (current_char(lexer) == '>')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_APPEND, ">>"));
+			return (create_token(TOKEN_APPEND, ">>", QUOTE_NONE));
 		}
-		return (create_token(TOKEN_REDIR_OUT, ">"));
+		return (create_token(TOKEN_REDIR_OUT, ">", QUOTE_NONE));
 	}
 	else if (c == '&')
 	{
@@ -118,23 +161,27 @@ t_token	*get_next_token(t_lexer *lexer)
 		if (current_char(lexer) == '&')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_AND, "&&"));
+			return (create_token(TOKEN_AND, "&&", QUOTE_NONE));
 		}
 		fprintf(stderr, "single & error\n");
-		return (create_token(TOKEN_EOF, NULL)); // temporaire
+		return (create_token(TOKEN_EOF, NULL, QUOTE_NONE)); // temporaire
 	}
 	else if (c == '(')
 	{
 		lexer->pos++;
-		return (create_token(TOKEN_LPAREN, "("));
+		return (create_token(TOKEN_LPAREN, "(", QUOTE_NONE));
 	}
 	else if (c == ')')
 	{
 		lexer->pos++;
-		return (create_token(TOKEN_RPAREN, ")"));
+		return (create_token(TOKEN_RPAREN, ")", QUOTE_NONE));
 	}
+	else if (c == '"')
+		return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '"', &quote), quote));
+	else if (c == '\'')
+		return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '\'', &quote), quote));
 	else
-		return (create_token(TOKEN_WORD, extract_word(lexer)));
+		return (create_token(TOKEN_WORD, extract_word(lexer), quote));
 }
 
 t_token	*lexer(char *input)

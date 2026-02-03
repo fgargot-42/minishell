@@ -6,16 +6,17 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:22:56 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/02 21:59:05 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/03 21:22:20 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
 #include <string.h>
 
-static void	del_envlist_content(void *to_delete)
+void	env_free(void *to_delete)
 {
 	free(((t_env *)to_delete)->key);
 	free(((t_env *)to_delete)->value);
+	free(to_delete);
 }
 
 static void	env_delete(t_list **envs, t_list *to_delete, t_list *prev)
@@ -26,7 +27,7 @@ static void	env_delete(t_list **envs, t_list *to_delete, t_list *prev)
 		*envs = (*envs)->next;
 	else
 		prev->next = to_delete->next;
-	ft_lstdelone(to_delete, &del_envlist_content);
+	ft_lstdelone(to_delete, env_free);
 }
 
 int	builtin_unset(t_cmd *cmd, t_list **envs, t_ctx *ctx)

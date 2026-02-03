@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 19:48:35 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:11:32 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/03 21:22:42 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,6 @@ void	*env_dup_content(void *content)
 	return (dup);
 }
 
-void	env_free(void *content)
-{
-	free(((t_env *)content)->key);
-	free(((t_env *)content)->value);
-	free(content);
-}
 
 int	ft_strcmp(char *s1, char *s2)
 {
