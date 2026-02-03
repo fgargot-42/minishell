@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 18:23:24 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/03 19:47:37 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "libft.h"
 
 
-#define DEBUG 1
+#define DEBUG 0
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -33,6 +33,16 @@
 # define PROMPT_OK    " ✨ "CYAN"> "RESET
 # define PROMPT_127   " ❌ "RED"> "RESET
 # define PROMPT_ERR   " ⚠️  "RED"> "RESET
+typedef struct s_prompt_parts
+{
+    char    *errcode;
+    char    *icon;
+    char    *name;
+    char    *cwd;
+    char    *sep;
+    char    *color;
+}   t_prompt_parts;
+
 
 typedef struct s_ctx
 {
