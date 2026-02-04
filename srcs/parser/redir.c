@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 19:10:55 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/04 21:33:51 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,51 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/wait.h>
+#include <readline/readline.h>
+static int handle_heredoc(char *delimiter)
+{
+	int pipe_fd[2];
+	char *line;
+	pid_t pid;
+	if (pipe(pipe_fd) == -1)
+		return (-1);
 
+	pid = fork();
+	if (pid == -1)
+	{
+		close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		return (-1);
+	}
+
+	if (pid == 0)
+	{
+		close(pipe_fd[0]);
+
+		while (1)
+		{
+			line = readline(">");
+			if (!line)
+				break;
+
+			if (strcmp(line,delimiter) == 0)
+			{
+				free(line);
+				break;
+			}
+			write(pipe_fd[1], line, strlen(line));
+			write(pipe_fd[1], "\n", 1);
+			free(line);
+		}
+		close(pipe_fd[1]);
+		exit(0);
+	}
+
+	close(pipe_fd[1]);
+	waitpid(pid, NULL, 0);
+	return (pipe_fd[0]);
+}
 static char	*get_type_name(t_token_type type)
 {
 	if (type == TOKEN_REDIR_IN)
@@ -97,6 +141,8 @@ int	resolve_redirs(t_node *node)
 			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (redir->type == TOKEN_APPEND)
 			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (redir->type == TOKEN_HEREDOC)
+			new_fd = handle_heredoc(redir->file);
 		if (new_fd == -1)
 			return (1);
 		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
