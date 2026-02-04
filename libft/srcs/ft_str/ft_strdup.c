@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:34:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/01/29 22:20:13 by fgargot          ###   ########.fr       */
+/*   Updated: 2025/10/15 15:47:42 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ char	*ft_strdup(const char *s)
 	size_t	i;
 
 	i = 0;
-	if (!s)
-		return (NULL);
 	while (s[i])
 		i++;
 	cpy = malloc(sizeof(char) * (i + 1));
