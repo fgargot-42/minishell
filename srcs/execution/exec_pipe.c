@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/04 20:03:19 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/04 20:29:58 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	if (DEBUG)
 		print_str_list(node->cmd->args);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
-		return (-1);
+		exit(1);
 	// check les buitlitns ici
 	
 	for (int i = 0; node->cmd->args[i]; i++)
@@ -34,9 +34,9 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 
 	if (is_builtin(node->cmd))
 		exit(call_builtin(node, envs, ctx));
-	free(char_envs);
 	path = find_in_path(node->cmd->args[0]);
 	execve(path, node->cmd->args, (char *const *)char_envs);
+	free(char_envs);
 	exit(127);
 }
 
@@ -98,6 +98,7 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	pid_t	pid_right;
 
 	pipe(fd);
+	pid_left = -1;
 	resolve_redirs(node->left);
 
 	if (node->left->fd_out == STDOUT_FILENO)
