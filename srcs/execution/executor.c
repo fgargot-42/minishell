@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 22:30:53 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/04 19:33:16 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 	{
 		path = find_in_path(node->cmd->args[0]);
 		char_envs = (char**)reconstruct_envs(*envs);
-		printf("%p\n", node);
+		if (DEBUG)
+			printf("%p\n", node);
 		if (node->fd_in != STDIN_FILENO)
 		{
 			dup2(node->fd_in, 0);

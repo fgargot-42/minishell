@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 19:23:48 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/04 20:01:37 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 		return (-1);
 	if (pid == 0)
 	{
-		printf("%p\n", node);
+		if (DEBUG)
+			printf("%p\n", node);
 		dup2(node->fd_in, STDIN_FILENO);
 		close(node->fd_in);
 		if (node->fd_out != STDOUT_FILENO)
