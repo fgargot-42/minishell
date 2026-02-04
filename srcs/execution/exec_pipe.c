@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 19:23:48 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/04 19:58:54 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)
 {
 	pid_t	pid;
 
+	if (DEBUG)
+		print_redirs(node->cmd->redirs);
 	pid = fork();
 	if (pid < 0)
 		return (-1);
@@ -67,6 +69,8 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	pid_t	pid;
 
+	if (DEBUG)
+		print_redirs(node->cmd->redirs);
 	pid = fork();
 	if (pid < 0)
 		return (-1);
