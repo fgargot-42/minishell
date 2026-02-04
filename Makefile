@@ -41,7 +41,7 @@ $(OBJDIR)/%.o:$(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -I$(INCDIR) -c $? -o $@
 
 $(LIBFT):
-	make bonus -C $(LIBFTDIR)
+	make -C $(LIBFTDIR)
 
 clean:
 	rm -rf $(OBJDIR)
