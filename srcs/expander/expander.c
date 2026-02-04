@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 20:16:22 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/04 17:13:19 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	replace_env(char **input, t_env *env, char *key, size_t *pos)
 		- ft_strlen(key)));
 	if (!new_input)
 		return ;
-	ft_strlcpy(new_input, *input, *pos);
+	ft_strlcpy(new_input, *input, *pos + 1);
 	ft_strlcpy(&new_input[(*pos)], value, ft_strlen(value) + 1);
 	value_end_pos = *pos + ft_strlen(value);
 	*pos += ft_strlen(key) + 1;
