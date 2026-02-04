@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/04 20:29:58 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/04 22:20:09 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)
 		return (-1);
 	if (pid == 0)
 	{
-		printf("%p\n", node);
+		if (DEBUG)
+			printf("%p\n", node);
 		close(read_fd);
 		dup2(node->fd_out, STDOUT_FILENO);
 		close(node->fd_out);
@@ -96,23 +97,22 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	int	fd[2];
 	pid_t	pid_left;
 	pid_t	pid_right;
+	int		redir_invalid;
 
 	pipe(fd);
 	pid_left = -1;
-	resolve_redirs(node->left);
-
+	redir_invalid = resolve_redirs(node->left);
 	if (node->left->fd_out == STDOUT_FILENO)
 		node->left->fd_out = fd[1];
 	if (node->left->fd_in == STDIN_FILENO)
 		node->left->fd_in = node->fd_in;
 
-	resolve_redirs(node->right);
-
 	if (node->right->fd_in == STDIN_FILENO)
 		node->right->fd_in = fd[0];
 	if (node->right->fd_out == STDOUT_FILENO)
 		node->right->fd_out = node->fd_out;
-	pid_left = exec_left_pipe_cmd(node->left, envs, fd[0], ctx);
+	if (!redir_invalid)
+		pid_left = exec_left_pipe_cmd(node->left, envs, fd[0], ctx);
 	pid_right = 0;
 	close(fd[1]);
 	if (node->right->type == NODE_PIPE)
