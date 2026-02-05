@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/02 22:36:19 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/05 17:33:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,33 @@
 t_list	*new_env(char *env_line)
 {
 	t_env	*new;
-	char	**splitted;
+	size_t	key_len;
 
 	new = (t_env *)malloc(sizeof(t_env));
-	splitted = ft_split(env_line, '=');
-	new->key = ft_strdup(splitted[0]);
-	new->value = ft_strdup(splitted[1]);
-	free_string_array(splitted);
+	if (!new)
+		return (NULL);
+	key_len = 0;
+	while (env_line[key_len] && env_line[key_len] != '=')
+		key_len++;
+	new->key = malloc(sizeof(char) * (key_len + 1));
+	if (!new->key)
+	{
+		free(new);
+		return (NULL);
+	}
+	ft_strlcpy(new->key, env_line, key_len + 1);
+	new->value = NULL;
+	if (env_line[key_len])
+	{
+		new->value = malloc(sizeof(char) * (ft_strlen(env_line) - key_len));
+		if (!new->value)
+		{
+			free(new->key);
+			free(new);
+			return (NULL);
+		}
+		ft_strlcpy(new->value, &env_line[key_len + 1], ft_strlen(&env_line[key_len]));
+	}
 	return (ft_lstnew(new));
 }
 
