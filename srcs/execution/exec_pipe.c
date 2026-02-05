@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/04 22:20:09 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 20:42:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	if (node->left->fd_in == STDIN_FILENO)
 		node->left->fd_in = node->fd_in;
 
+	resolve_redirs(node->right);
 	if (node->right->fd_in == STDIN_FILENO)
 		node->right->fd_in = fd[0];
 	if (node->right->fd_out == STDOUT_FILENO)
