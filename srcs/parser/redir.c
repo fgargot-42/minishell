@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/04 21:33:51 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 19:22:39 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,10 @@ int	resolve_redirs(t_node *node)
 		if (redir->type == TOKEN_HEREDOC)
 			new_fd = handle_heredoc(redir->file);
 		if (new_fd == -1)
+		{
+			fprintf(stderr, "no such file or directeory: %s\n", redir->file);
 			return (1);
+		}
 		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
 		{
 			if (node->fd_out != STDOUT_FILENO)

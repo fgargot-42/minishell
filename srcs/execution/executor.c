@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/04 19:33:16 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 19:19:19 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 		execve(path, node->cmd->args, char_envs);
 		free(path);
 		free_string_array(char_envs);
+		fprintf(stderr, "minishell: command not found : %s", node->cmd->args[0]);
 		exit(127);
 	}
 	return (pid);

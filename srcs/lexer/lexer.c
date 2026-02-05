@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/03 20:23:24 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 19:54:25 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	current_char(t_lexer *lexer)
 
 static void	skip_whitespace(t_lexer *lexer)
 {
-	while (current_char(lexer) == ' ' || current_char(lexer) == '\t')
+	while (current_char(lexer) == ' ' || current_char(lexer) == '\t' || current_char(lexer) == '\n')
 		lexer->pos++;
 }
 
@@ -93,7 +93,7 @@ static char	*extract_word(t_lexer *lexer)
 	char		*word;
 
 	len = 0;
-	while (!is_special(current_char(lexer)))
+	while (!is_special(current_char(lexer)) && current_char(lexer) != '\n')
 	{
 		lexer->pos++;
 		len++;
