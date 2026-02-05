@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/05 19:17:39 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 20:34:01 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ int		builtin_unset(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 int		builtin_env(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 int		builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 
+void	remove_args_quotes(char **args);
 
 // export_utils
 void	free_env(t_list *env_list);
