@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/02 21:56:50 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/05 19:53:21 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		builtin_export_print(envs);
 		return (0);
 	}
+	remove_args_quotes(&args[1]);
 	while (*(args + 1))
 	{
 		args++;
