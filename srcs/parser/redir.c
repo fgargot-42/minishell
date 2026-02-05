@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/05 19:22:39 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 20:29:54 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int	resolve_redirs(t_node *node)
 			new_fd = handle_heredoc(redir->file);
 		if (new_fd == -1)
 		{
-			fprintf(stderr, "no such file or directeory: %s\n", redir->file);
+			fprintf(stderr, "minishell: %s: No such file or directory\n", redir->file);
 			return (1);
 		}
 		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
