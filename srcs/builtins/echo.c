@@ -6,13 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/03 20:26:10 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 21:51:04 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 static int	has_option(const char *arg, char option)
 {
@@ -60,11 +61,12 @@ int	builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	}
 	while (av[i])
 	{
-		printf("%s", av[i]);
+		write(1, av[i], ft_strlen(av[i]));
 		i++;
 		if (av[i])
-			printf("%c", ' ');
+			write(1, " ", 1);
 	}
-	printf("%c", newline);
+	if (newline)
+		write(1, "\n", 1);
 	return (0);
 }
