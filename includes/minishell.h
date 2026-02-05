@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/05 20:56:07 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/05 22:10:06 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "libft.h"
 
 
-#define DEBUG 0
+#define DEBUG 1
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
