@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/06 18:28:12 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/06 20:37:38 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,19 @@
 #include "minishell.h"
 #include <stdlib.h>
 
-static int	ft_is_long(char *str)
+static int	check_is_long(char *str, int sign)
 {
-	int	i;
-	int	sign;
-	int	is_long;
+	size_t		i;
+	int			is_long;
 	const char	*long_max = "9223372036854775807";
 
-	i = 0;
 	is_long = 1;
-	sign = 0;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '+' || *str == '-')
-	{
-		if (*str == '-')
-			sign = 1;
-		str++;
-	}
+	i = 0;
 	while (*str)
 	{
 		if (ft_isdigit(*str))
 		{
-			if (sign && (i == (int)ft_strlen(long_max) - 1))
+			if (sign && (i == ft_strlen(long_max) - 1))
 				is_long &= (*str <= (long_max[i] + 1));
 			else
 				is_long &= (*str <= long_max[i]);
@@ -46,7 +36,24 @@ static int	ft_is_long(char *str)
 			return (0);
 		str++;
 	}
-	return ((i < (int)ft_strlen(long_max)) || is_long);
+	if (i < ft_strlen(long_max))
+		return (1);
+	return (is_long);
+}
+
+static int	ft_is_long(char *str)
+{
+	int	sign;
+	int	is_long;
+
+	sign = 0;
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	sign = *str == '-';
+	if (*str == '+' || *str == '-')
+		str++;
+	is_long = check_is_long(str, sign);
+	return (is_long);
 }
 
 static	long	ft_atol(char *str)
@@ -64,14 +71,12 @@ static	long	ft_atol(char *str)
 			sign = -1;
 		str++;
 	}
-	while ((*str >= '0' && *str <= '9' && (nb * 10 + *str - '0') >= nb) || *str == '\"')
+	while ((*str >= '0' && *str <= '9') || *str == '\"')
 	{
 		if (*str != '\"')
 			nb = nb * 10 + *str - '0';
 		str++;
 	}
-	if ((*str >= '0' && *str <= '9'))
-		return (2);
 	return (nb * sign);
 }
 
