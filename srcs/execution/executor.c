@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/05 21:52:07 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/06 19:23:41 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 		print_str_list(node->cmd->args);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 		return (1);
-	if (resolve_redirs(node))
+	if (resolve_redirs(node, *envs, ctx))
 		return (1);
 	if (DEBUG)
 		fprintf(stderr, "debug: fd_in=%d, fd_out=%d\n", node->fd_in, node->fd_out);
