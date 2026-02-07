@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/06 20:37:38 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/07 18:29:39 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,13 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	(void)envs;
 	err_code = ctx->error_code;
 	ft_putstr_fd("exit\n", 2);
-	if (cmd->args[1])
-		err_code = ft_atol(cmd->args[1]);
-	if (cmd->args[2])
+	if (cmd->args[1] && cmd->args[2])
 		exit(1);
-	if (!ft_is_long(cmd->args[1]))
-		exit(2);
+	if (cmd->args[1])
+	{
+		if (!ft_is_long(cmd->args[1]))
+			exit(2);
+		err_code = ft_atol(cmd->args[1]);
+	}
 	exit(err_code & 0xff);
 }
