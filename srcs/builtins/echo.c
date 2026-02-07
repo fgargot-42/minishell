@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/07 18:34:08 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/07 21:16:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ int	builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	const char	**av = (const char **)cmd->args;
 	int			i;
-	char		newline;
+	int		newline;
 
 	(void)envs;
 	(void)ctx;
-	newline = '\n';
+	newline = 1;
 	i = 1;
 	if (is_valid_option_list(av[1], "n"))
 	{
@@ -66,6 +66,7 @@ int	builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		if (av[i])
 			write(1, " ", 1);
 	}
-	write(1, &newline, 1);
+	if (newline)
+	write(1, "\n", 1);
 	return (0);
 }
