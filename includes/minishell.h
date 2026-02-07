@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/06 20:58:07 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/07 20:20:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 # include <stdlib.h>
 # include "libft.h"
 
-
-#define DEBUG 0
+# define DEBUG 1
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -151,6 +150,7 @@ void	free_tokens(t_token *tokens);
 
 // lexer.c
 t_token	*lexer(char *input);
+int	check_lexer_errors(t_token *lexer);
 
 // parser.c
 //t_cmd	*parser(t_token *tokens);

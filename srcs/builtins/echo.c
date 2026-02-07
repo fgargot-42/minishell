@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/05 21:51:04 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/07 18:34:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		if (av[i])
 			write(1, " ", 1);
 	}
-	if (newline)
-		write(1, "\n", 1);
+	write(1, &newline, 1);
 	return (0);
 }

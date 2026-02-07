@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/05 19:54:25 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/07 19:58:01 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *
 		*quote_type = QUOTE_SINGLE;
 	else
 		*quote_type = QUOTE_DOUBLE;
-	
 	return (word);
 }
 static char	*extract_word(t_lexer *lexer)
@@ -182,6 +181,37 @@ t_token	*get_next_token(t_lexer *lexer)
 		return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '\'', &quote), quote));
 	else
 		return (create_token(TOKEN_WORD, extract_word(lexer), quote));
+}
+
+static int	is_redir_token(t_token *token)
+{
+	return (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
+		|| token->type == TOKEN_HEREDOC || token->type == TOKEN_APPEND);
+}
+
+int	check_lexer_errors(t_token *lexer)
+{
+	t_token	*current;
+
+	current = lexer;
+	while (current && current->next)
+	{
+		if (current->type == TOKEN_RPAREN)
+			if (current->next->type == TOKEN_LPAREN || current->next->type == TOKEN_WORD)
+				return (1);
+		if (is_redir_token(current) || current->type == TOKEN_LPAREN)
+			if (current->next->type != TOKEN_WORD)
+				return (1);
+		if (current->type == TOKEN_WORD && current->next->type == TOKEN_LPAREN)
+			return (1);
+		if (current->type == TOKEN_AND || current->type == TOKEN_OR
+			|| current->type == TOKEN_PIPE)
+			if (!is_redir_token(current->next) && current->next->type != TOKEN_WORD
+				&& current->next->type != TOKEN_LPAREN)
+				return (1);
+		current = current->next;
+	}
+	return (0);
 }
 
 t_token	*lexer(char *input)
