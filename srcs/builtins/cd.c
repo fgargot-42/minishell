@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/02 21:55:25 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/07 21:53:26 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,5 @@ int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		chdir_status = chdir(str_path);
 		update_new_pwd(envs);
 	}
-	return (chdir_status);
+	return (-chdir_status);
 }

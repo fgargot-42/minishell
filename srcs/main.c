@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/07 19:59:58 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/07 21:48:13 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,9 @@ int	main(int ac, char **av, char **env)
 		if (DEBUG)
 			print_tree(tree, 0);
 		free_tokens(tokens);
-		ctx.error_code = exec(tree, &envs, &ctx);
+		exec(tree, &envs, &ctx);
+		if (DEBUG)
+			printf("\nExit code: %i\n", ctx.error_code);
 		free_tree(tree);
 	}
 	

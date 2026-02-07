@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/07 20:20:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/07 21:56:51 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include "libft.h"
 
-# define DEBUG 1
+# define DEBUG 0
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -180,7 +180,7 @@ int		exec_command(t_node *node, t_list **envs, t_ctx *ctx);
 char	*find_in_path(char *cmd);
 
 // exec_tree
-int		exec(t_node *root, t_list **envs, t_ctx *ctx);
+void		exec(t_node *root, t_list **envs, t_ctx *ctx);
 
 // exec_pipeline.c
 int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
