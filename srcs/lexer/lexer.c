@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/07 20:43:05 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/07 23:21:05 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,9 @@ int	check_lexer_errors(t_token *lexer)
 	t_token	*current;
 
 	current = lexer;
+	if (lexer->type == TOKEN_PIPE || lexer->type == TOKEN_AND
+		|| lexer->type == TOKEN_OR)
+		return (1);
 	while (current && current->next)
 	{
 		if (current->type == TOKEN_RPAREN)
