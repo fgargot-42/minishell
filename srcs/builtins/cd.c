@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/07 21:53:26 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/07 22:37:50 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	int		chdir_status;
 
 	(void)ctx;
+	if (cmd->args[2])
+	{
+		printf("cd: too many argssss!\n");
+		return (1);
+	}
 	if (!cmd->args[1])
 	{
 		path = get_env_node_by_key(*envs, "HOME");
