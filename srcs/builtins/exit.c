@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/07 21:05:18 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/09 21:16:57 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,11 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	{
 		if (!ft_is_long(cmd->args[1]))
 		{
-			fprintf(stdout, "exit\n");
 			fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]);
 			exit(2);
 		}
 		err_code = ft_atol(cmd->args[1]);
 	}
+	fprintf(stdout, "exit\n");
 	exit(err_code & 0xff);
 }
