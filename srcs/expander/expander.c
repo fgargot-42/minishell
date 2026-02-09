@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 16:57:47 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:10:12 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ static char	*extract_var_name(char *input, size_t start_pos, size_t *end_pos)
 	return (var_name);
 }
 
-static void	expand_regular_var(t_cmd *cmd, int index, size_t *i, t_list *envs)
+/*static void	expand_regular_var(t_cmd *cmd, int index, size_t *i, t_list *envs)
 {
 	char	*var_name;
 	t_env	*env;
@@ -247,10 +247,10 @@ void	expand_var(t_cmd *cmd, int index, t_list *envs, t_ctx *ctx)
 		}
 		i++;
 	}
-}
+}*/
 
 
-static void	expand_regular_var_redir(char **input, size_t *i, t_list *envs)
+static void	expand_regular_var(char **input, size_t *i, t_list *envs)
 {
 	char	*var_name;
 	t_env	*env;
@@ -267,7 +267,7 @@ static void	expand_regular_var_redir(char **input, size_t *i, t_list *envs)
 	free(var_name);
 }
 
-void	expand_var_redir(char **input, t_list *envs, t_ctx *ctx)
+void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 {
 	size_t	i;
 	char	*str;
@@ -289,10 +289,49 @@ void	expand_var_redir(char **input, t_list *envs, t_ctx *ctx)
 		else if (is_error_code_var(str, i))
 			replace_errorcode_env(input, &i, ctx);
 		else
-			expand_regular_var_redir(input, &i, envs);
+			expand_regular_var(input, &i, envs);
 		
 		// Update pointer since input may have been reallocated
 		str = *input;
 		i++;
 	}
+}
+
+static char	*strjoin_all(char **str_array)
+{
+	int		i;
+	int 	res_len;
+	char	*res;
+
+	i = 0;
+	res_len = 0;
+	while (str_array[i])
+	{
+		res_len += ft_strlen(str_array[i]);
+		i++;
+	}
+	res = malloc(sizeof(char) * (res_len + i + 1));\
+	if (!res)
+		return (NULL);
+	i = 0;
+	res_len = 0;
+	while (str_array[i])
+	{
+		ft_strlcpy(res + res_len, str_array[i], ft_strlen(str_array[i]) + 1);
+		res_len += ft_strlen(str_array[i]) + 1;
+		res[res_len - 1] = ' ';
+		i++;
+	}
+	res[res_len - 1] = '\0';
+	return (res);
+}
+
+void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
+{
+	char	*cmd_str;
+
+	cmd_str = strjoin_all(node->cmd->args);
+	expand_var(&cmd_str, *envs, ctx);
+	free_string_array(node->cmd->args);
+	node->cmd->args = ft_split(cmd_str, ' ');
 }
