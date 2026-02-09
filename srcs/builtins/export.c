@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/05 19:53:21 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/09 20:50:15 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,8 @@ static void	add_env(char *env, t_list **env_list)
 int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	char	**args;
-	int		exit_status;
 
 	(void)ctx;
-	exit_status = 0;
 	args = cmd->args;
 	if (!envs || !*envs)
 		return (0);
@@ -108,11 +106,8 @@ int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	{
 		args++;
 		if (!check_envname_format(*args))
-		{
-			exit_status = 1;
 			continue ;
-		}
 		add_env(*args, envs);
 	}
-	return (exit_status);
+	return (0);
 }
