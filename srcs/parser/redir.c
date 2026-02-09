@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/06 19:29:20 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/09 19:58:15 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 	redir = node->cmd->redirs;
 	while (redir)
 	{
-		expand_var(&redir->file, envs, ctx);
+		expand_var_redir(&redir->file, envs, ctx);
 		new_fd = 0;
 		if (redir->type == TOKEN_REDIR_IN)
 			new_fd = open(redir->file, O_RDONLY);

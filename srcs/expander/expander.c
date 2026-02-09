@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/06 20:21:33 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/09 20:42:48 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,70 @@ static char	*extract_var_name(char *input, size_t start_pos, size_t *end_pos)
 	return (var_name);
 }
 
-static void	expand_regular_var(char **input, size_t *i, t_list *envs)
+static void	expand_regular_var(t_cmd *cmd, int index, size_t *i, t_list *envs)
+{
+	char	*var_name;
+	t_env	*env;
+	size_t	name_start;
+	size_t	name_end;
+	
+	name_start = *i + 1;  // Position after '$'
+	var_name = extract_var_name(cmd->args[index], name_start, &name_end);
+	if (!var_name)
+		return ;
+	env = get_env(envs, var_name);
+	if (!env && cmd->quote_type[index] == QUOTE_NONE)
+	{
+		free(cmd->args[index]);
+		cmd->args[index] = NULL;
+		return ;
+	}
+	replace_env(&cmd->args[index], env, var_name, i);
+	free(var_name);
+}
+
+void	expand_var(t_cmd *cmd, int index, t_list *envs, t_ctx *ctx)
+{
+	size_t	i;
+	char	*str;
+	
+	i = 0;
+	str = cmd->args[index];
+	
+	while (i < ft_strlen(str))
+	{
+		if (str[i] != '$')
+		{
+			i++;
+			continue ;
+		}
+		
+		// Handle different types of $ expansion
+		if (is_special_dollar(str, i))
+			i++;
+		else if (is_error_code_var(str, i))
+			replace_errorcode_env(&cmd->args[index], &i, ctx);
+		else
+			expand_regular_var(cmd, index, &i, envs);
+		
+		// Update pointer since input may have been reallocated
+		str = cmd->args[index];
+		if (!str)
+		{
+			while (cmd->args[index + 1])
+			{
+				cmd->args[index] = cmd->args[index + 1];
+				index++;
+			}
+			cmd->args[index] = NULL;
+			return ;
+		}
+		i++;
+	}
+}
+
+
+static void	expand_regular_var_redir(char **input, size_t *i, t_list *envs)
 {
 	char	*var_name;
 	t_env	*env;
@@ -203,7 +266,7 @@ static void	expand_regular_var(char **input, size_t *i, t_list *envs)
 	free(var_name);
 }
 
-void	expand_var(char **input, t_list *envs, t_ctx *ctx)
+void	expand_var_redir(char **input, t_list *envs, t_ctx *ctx)
 {
 	size_t	i;
 	char	*str;
@@ -225,7 +288,7 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 		else if (is_error_code_var(str, i))
 			replace_errorcode_env(input, &i, ctx);
 		else
-			expand_regular_var(input, &i, envs);
+			expand_regular_var_redir(input, &i, envs);
 		
 		// Update pointer since input may have been reallocated
 		str = *input;

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/07 21:56:51 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/09 20:56:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include "libft.h"
 
-# define DEBUG 0
+# define DEBUG 1
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -187,7 +187,8 @@ int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
 
 // expander.c
 
-void	expand_var(char **input, t_list *envs, t_ctx *ctx);
+void	expand_var(t_cmd *cmd, int index, t_list *envs, t_ctx *ctx);
+void	expand_var_redir(char **input, t_list *envs, t_ctx *ctx);
 // builtin.c
 
 typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
