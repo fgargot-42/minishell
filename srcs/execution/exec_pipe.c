@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:08:50 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:14:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 		exit(1);
 	// check les buitlitns ici
 	expand_cmd_args(node, envs, ctx);
+	if (DEBUG)
+		print_str_list(node->cmd->args);
 	if (is_builtin(node->cmd))
 		exit(call_builtin(node, envs, ctx));
 	path = find_in_path(node->cmd->args[0]);

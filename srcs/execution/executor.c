@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:09:18 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:14:39 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	if (DEBUG)
 		fprintf(stderr, "debug: fd_in=%d, fd_out=%d\n", node->fd_in, node->fd_out);
 	expand_cmd_args(node, envs, ctx);
+	if (DEBUG)
+		print_str_list(node->cmd->args);
 	if (is_builtin(node->cmd))
 	{
 		if (DEBUG)

@@ -6,30 +6,31 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 17:12:24 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:14:02 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <unistd.h>
 
 static int	check_envname_format(char *str)
 {
 	if (!str || !*str)
-		return (0);
+		return (1);
 	if (!ft_isalpha(*str) && *str != '_')
-		return (0);
+		return (1);
 	str++;
 	while (*str)
 	{
 		if (!ft_isalnum(*str) && *str != '_')
 		{
 			if (*str == '=' || (*str == '+' && *(str + 1) == '='))
-				return (1);
-			return (0);
+				return (0);
+			return (1);
 		}
 		str++;
 	}
-	return (1);
+	return (0);
 }
 
 static int	add_quoted_arg_value(char **arg, char **env)
@@ -81,25 +82,27 @@ static int	add_env_value_append(t_list *node, char **env)
 	((t_env *)node->content)->value = append_str;
 	if (ft_strchr(new_str, '\"'))
 		i = add_quoted_arg_value(&((t_env *)node->content)->value, env);
-	remove_args_quotes(&((t_env *)node->content)->value);
+	if (((t_env *)node->content)->value)
+		remove_args_quotes(&((t_env *)node->content)->value);
 	return (i);
 }
 
 static int	add_env_value_replace(t_list *node, char **env)
 {
-	char	*new_str;
+	char	*new_str;;
 	int		i;
 
 	i = 1;
 	new_str = ft_strchr(*env, '=');
 	if (!new_str)
-		return (0);
+		return (1);
 	new_str = ft_strdup(&new_str[1]);
 	free(((t_env *)node->content)->value);
 	((t_env *)node->content)->value = new_str;
 	if (ft_strchr(new_str, '\"'))
 		i = add_quoted_arg_value(&((t_env *)node->content)->value, env);
-	remove_args_quotes(&((t_env *)node->content)->value);
+	if (((t_env *)node->content)->value)
+		remove_args_quotes(&((t_env *)node->content)->value);
 	return (i);
 }
 
@@ -115,7 +118,8 @@ static	int add_new_env_value(t_list **env_list, char **env)
 	new_str = strchr(*env, '=');
 	if (new_str && ft_strchr(new_str, '\"'))
 		i = add_quoted_arg_value(&((t_env *)node->content)->value, env);
-	remove_args_quotes(&((t_env *)node->content)->value);
+	if (((t_env *)node->content)->value)
+		remove_args_quotes(&((t_env *)node->content)->value);
 	return (i);
 }
 
@@ -127,7 +131,7 @@ static int	add_env(char **env, t_list **env_list)
 	int		append;
 	int		arg_count;
 
-	arg_count = 1;
+	arg_count = 1;;
 	key_len = ft_strlen(*env);
 	key = ft_strchr(*env, '+');
 	append = (key != NULL);
@@ -154,8 +158,10 @@ int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	char	**args;
 	int		i;
+	int		status;
 
 	(void)ctx;
+	status = 0;
 	args = cmd->args;
 	if (!envs || !*envs)
 		return (0);
@@ -168,12 +174,14 @@ int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	while (*(args + i))
 	{
 		args += i;
-		if (!check_envname_format(*args))
+		status = check_envname_format(*args);
+		if (status)
 		{
-			i = 1;
+			i += 1;
+			dprintf(2, "minishell: export: `%s': not a valid identifier\n", *args);
 			continue ;
 		}
 		i = add_env(args, envs);
 	}
-	return (0);
+	return (status);
 }

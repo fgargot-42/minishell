@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:10:12 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:15:16 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ static char	*extract_var_name(char *input, size_t start_pos, size_t *end_pos)
 	len = start_pos;
 	while (ft_isalnum(input[len]) || input[len] == '_')
 		len++;
-	
 	*end_pos = len;
 	var_name = ft_substr(&input[start_pos], 0, len - start_pos);
 	return (var_name);
@@ -261,7 +260,6 @@ static void	expand_regular_var(char **input, size_t *i, t_list *envs)
 	var_name = extract_var_name(*input, name_start, &name_end);
 	if (!var_name)
 		return ;
-	
 	env = get_env(envs, var_name);
 	replace_env(input, env, var_name, i);
 	free(var_name);
@@ -297,7 +295,21 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	}
 }
 
-static char	*strjoin_all(char **str_array)
+static int	count_spaces(char *s)
+{
+	int	res;
+
+	res = 0;
+	while (*s)
+	{
+		if (*s ==  ' ')
+			res++;
+		s++;
+	}
+	return (res);
+}
+
+/*static char	*strjoin_all(char **str_array)
 {
 	int		i;
 	int 	res_len;
@@ -324,14 +336,172 @@ static char	*strjoin_all(char **str_array)
 	}
 	res[res_len - 1] = '\0';
 	return (res);
+}*/
+
+/*static char	**split_args(char *cmd_str)
+{
+	char	**args;
+	size_t	count;
+	int		is_inquote;
+
+	count = 0;
+	is_inquote = 0;
+	while (*cmd_str)
+	{
+		if (*cmd_str == ' ' || !is_inquote)
+			count++;
+		if (*cmd_str == '\"' || is_inquote)
+			is_inquote = 0;
+		if (*cmd_str == ' ' && *(cmd_str + 1) == '\"')
+			is_inquote = 1;
+		cmd_str++;
+	}
+	args = malloc(sizeof(char *) * (count + 1));
+	if (!args)
+		return (NULL);
+	
+}*/
+
+/*static char	**split_args(char *cmd_str, int *arg_nb_words)
+{
+	char	**args;
+	int		i;
+	int		j;
+	int		len;
+	int		pos;
+	
+	i = 0;
+	len = 0;
+	while (arg_nb_words[len])
+		len++;
+	args = malloc(sizeof(char *) * (len + 1));
+	if (!args)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		j = 0;
+		pos = 0;
+		while (j < arg_nb_words[i])
+		{
+			while (cmd_str[pos] && cmd_str[pos] != ' ')
+				pos++;
+			pos++;
+			j++;
+		}
+		args[i] = malloc(sizeof(char) * pos);
+		if (!args[i])
+		{
+			free_string_array(args);
+			return (NULL);
+		}
+		ft_strlcpy(args[i], cmd_str, pos);
+		cmd_str = &cmd_str[pos];
+		i++;
+	}
+	return (args);
+}*/
+
+static int	split_add(char ***split_str, char *new_string, int pos)
+{
+	char	**new_split;
+	char	**split_res;
+	int		split_count;
+	int		new_count;
+	int		i;
+
+	split_count = 0;
+	new_count =  0;
+	while (*split_str[split_count])
+		split_count++;
+	new_split = ft_split(new_string, ' ');
+	if (!new_split)
+		return (0);
+	while (new_split[new_count])
+		new_count++;
+	split_count += new_count;
+	split_res = malloc(sizeof(char *) * (split_count + 1));
+	if (!split_res)
+	{
+		free_string_array(new_split);
+		return (0);
+	}
+	i = 0;
+	while (i < pos)
+	{
+		split_res[i] = (*split_str)[i];
+		i++;
+	}
+	while (i < pos + new_count)
+	{
+		split_res[i] = new_split[i - pos];
+		i++;
+	}
+	while (i < split_count + new_count)
+	{
+		split_res[i] = (*split_str)[i - new_count];
+		i++;
+	}
+	split_res[i] = NULL;
+	free(*split_str);
+	*split_str = split_res;
+	return (new_count);
+}
+
+static void	quote_type_add(t_quote_type **quotes, int pos, int count)
+{
+	int				initial_count;
+	int				i;
+	t_quote_type	*new_quotes;
+
+	initial_count = 0;
+	while (quotes[initial_count])
+		initial_count++;
+	new_quotes = malloc(sizeof(t_quote_type) * (count + initial_count));
+	if (!new_quotes)
+		return ;
+	i = 0;
+	while (i < initial_count + count)
+	{
+		if (i < pos)
+			new_quotes[i] = (*quotes)[i];
+		else if (i < pos + count)
+			new_quotes[i] = new_quotes[i - 1];
+		else
+			new_quotes[i] = (*quotes)[i - count];
+		i++;
+	}
+	free(*quotes);
+	*quotes = new_quotes;
 }
 
 void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
-	char	*cmd_str;
+	int		i;
+	int		new_arg_len;
 
-	cmd_str = strjoin_all(node->cmd->args);
-	expand_var(&cmd_str, *envs, ctx);
-	free_string_array(node->cmd->args);
-	node->cmd->args = ft_split(cmd_str, ' ');
+	i = 0;
+	new_arg_len = 0;
+	while (node->cmd->args[i])
+	{
+		expand_var(&node->cmd->args[i], *envs, ctx);
+		if (node->cmd->quote_type[i] == QUOTE_NONE)
+			new_arg_len += count_spaces(node->cmd->args[i]);
+		i++;
+		new_arg_len++;
+	}
+	i = 0;
+	while (node->cmd->args[i])
+	{
+		new_arg_len = 0;
+		if (node->cmd->quote_type == QUOTE_NONE && count_spaces(node->cmd->args[i]))
+		{
+			new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
+			quote_type_add(&node->cmd->quote_type, i, new_arg_len);
+		}
+		i += new_arg_len + 1;
+	}
+	//cmd_str = strjoin_all(node->cmd->args);
+	//free_string_array(node->cmd->args);
+	//node->cmd->args = split_args(cmd_str, arg_nb_words);
 }
