@@ -6,9 +6,9 @@ t_node	*parse_tree(t_token *tokens)
 	t_token	*current;
 
 	current = tokens;
-	return (parse_or(&current));
+	return (parse_and_or(&current));
 }
-
+/*
 t_node	*parse_or(t_token **tokens)
 {
 	t_node	*left;
@@ -19,23 +19,27 @@ t_node	*parse_or(t_token **tokens)
 	{
 		*tokens = (*tokens)->next; // skip les ||
 		right = parse_and(tokens);
-		;
 		left = create_node(NODE_OR, left, right);
 	}
 	return (left);
-}
+}*/
 
-t_node	*parse_and(t_token **tokens)
+t_node	*parse_and_or(t_token **tokens)
 {
 	t_node	*left;
 	t_node	*right;
-
+	t_token_type type;
 	left = parse_pipe(tokens);
-	while (*tokens && (*tokens)->type == TOKEN_AND)
+	while (*tokens 
+		&& ((*tokens)->type == TOKEN_AND || (*tokens)->type == TOKEN_OR))
 	{
-		*tokens = (*tokens)->next; // skip les &&
+		type = (*tokens)->type;
+		*tokens = (*tokens)->next; // skip les && et ||
 		right = parse_pipe(tokens);
-		left = create_node(NODE_AND, left, right);
+		if (type == TOKEN_AND)
+			left = create_node(NODE_AND, left, right);
+		else
+			left = create_node(NODE_OR, left, right);
 	}
 	return (left);
 }
@@ -65,7 +69,7 @@ t_node	*parse_primary(t_token **tokens)
 	if (*tokens && (*tokens)->type == TOKEN_LPAREN)
 	{
 		*tokens = (*tokens)->next; // skip (
-		node = parse_or(tokens);
+		node = parse_and_or(tokens);
 		// il faut une parenthese fermante )
 		if (*tokens && (*tokens)->type == TOKEN_RPAREN)
 			*tokens = (*tokens)->next; // skip )
@@ -102,7 +106,7 @@ static void init_cmd(t_cmd **cmd, size_t count)
 {
 	*cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	(*cmd)->args = malloc(sizeof(char *) * (count + 1));
-	(*cmd)->quote_type = malloc(sizeof(t_quote_type *) * (count + 1));
+	(*cmd)->quote_type = malloc(sizeof(t_quote_type) * (count + 1));
 }
 
 static int is_stop_token(t_token_type type)

@@ -28,7 +28,8 @@ SRC=main.c \
 	builtins/export_print.c \
 	builtins/unset.c \
 	builtins/env.c \
-	builtins/exit.c
+	builtins/exit.c \
+	debug/debug.c
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(addprefix $(OBJDIR)/,$(OBJ)) $(LIBFT)

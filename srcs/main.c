@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/07 22:28:36 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/11 20:27:42 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	main(int ac, char **av, char **env)
 		}
 		tree = parse_tree(tokens);
 		if (DEBUG)
-			print_tree(tree, 0);
+			print_tree_clean(tree);
 		free_tokens(tokens);
 		exec(tree, &envs, &ctx);
 		if (DEBUG)
