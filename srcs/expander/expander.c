@@ -6,14 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:15:16 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:16:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
-
 #include <stdbool.h>
+
 static void	replace_env(char **input, t_env *env, char *key, size_t *pos)
 {
 	char	*value;
@@ -484,7 +484,8 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 	new_arg_len = 0;
 	while (node->cmd->args[i])
 	{
-		expand_var(&node->cmd->args[i], *envs, ctx);
+		if (node->cmd->quote_type[i] != QUOTE_SINGLE)
+			expand_var(&node->cmd->args[i], *envs, ctx);
 		if (node->cmd->quote_type[i] == QUOTE_NONE)
 			new_arg_len += count_spaces(node->cmd->args[i]);
 		i++;
