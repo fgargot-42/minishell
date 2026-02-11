@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/07 23:21:05 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/11 21:14:43 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static t_lexer	*init_lexer(char *input)
 	t_lexer	*lexer;
 
 	lexer = malloc(sizeof(t_lexer));
+	if (!lexer)
+		return (NULL);
 	lexer->input = input;
 	lexer->pos = 0;
 	lexer->len = strlen(input);

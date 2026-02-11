@@ -133,6 +133,7 @@ t_cmd	*parse_command(t_token **tokens)
 	count = count_args(*tokens);
 	init_cmd(&cmd, count);
 	cmd->redirs = NULL;
+	cmd->envs = NULL;
 	i = 0;
 	while (*tokens)
 	{

@@ -54,4 +54,7 @@ fclean: clean
 
 re: fclean all
 
+test: re
+	cd minishell_tester/src/ && bash ./tester all
+
 .PHONY: all clean fclean re

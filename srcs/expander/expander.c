@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/09 20:42:48 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/11 21:14:21 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,6 +202,7 @@ static void	expand_regular_var(t_cmd *cmd, int index, size_t *i, t_list *envs)
 	{
 		free(cmd->args[index]);
 		cmd->args[index] = NULL;
+		free(var_name);
 		return ;
 	}
 	replace_env(&cmd->args[index], env, var_name, i);
