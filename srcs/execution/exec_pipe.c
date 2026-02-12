@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:14:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 21:14:45 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	pid_t	pid_left;
 	pid_t	pid_right;
 	int		redir_invalid;
+	int		redir_invalid_right;
 
 	pipe(fd);
 	pid_left = -1;
@@ -104,7 +105,7 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	if (node->left->fd_in == STDIN_FILENO)
 		node->left->fd_in = node->fd_in;
 
-	resolve_redirs(node->right, *envs, ctx);
+	redir_invalid_right = resolve_redirs(node->right, *envs, ctx);
 	if (node->right->fd_in == STDIN_FILENO)
 		node->right->fd_in = fd[0];
 	if (node->right->fd_out == STDOUT_FILENO)
@@ -116,7 +117,10 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	if (node->right->type == NODE_PIPE)
 		status = exec_pipeline(node->right, envs, ctx);
 	else
-		pid_right = exec_right_pipe_cmd(node->right, envs, ctx);
+	{
+		if (!redir_invalid_right)
+			pid_right = exec_right_pipe_cmd(node->right, envs, ctx);
+	}
 	close(fd[0]);
 	waitpid(pid_left, NULL, 0);
 	if (pid_right)

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 20:42:51 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 21:07:22 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
+#include <errno.h>
 void cleanup_node_fds(t_node *node)
 {
 	if (!node)
@@ -156,18 +157,22 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 	while (redir)
 	{
 		expand_var(&redir->file, envs, ctx);
-		new_fd = 0;
 		if (redir->type == TOKEN_REDIR_IN)
 			new_fd = open(redir->file, O_RDONLY);
-		if (redir->type == TOKEN_REDIR_OUT)
+		else if (redir->type == TOKEN_REDIR_OUT)
 			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (redir->type == TOKEN_APPEND)
+		else if (redir->type == TOKEN_APPEND)
 			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (redir->type == TOKEN_HEREDOC)
+		else if (redir->type == TOKEN_HEREDOC)
 			new_fd = handle_heredoc(redir->file);
+		else
+			new_fd = -1;
 		if (new_fd == -1)
 		{
-			fprintf(stderr, "minishell: %s: No such file or directory\n", redir->file);
+			if (errno == EACCES)
+				fprintf(stderr, "minishell: %s: Permission denied\n", redir->file);
+			else
+				fprintf(stderr, "minishell: %s: %s\n", redir->file, strerror(errno));
 			cleanup_node_fds(node);
 			return (1);
 		}

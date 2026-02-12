@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:37:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 16:54:41 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 20:53:37 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ int	builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 			write(1, " ", 1);
 	}
 	if (newline)
-	write(1, "\n", 1);
+		write(1, "\n", 1);
 	return (0);
 }
