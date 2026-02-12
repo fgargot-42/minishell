@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/11 21:14:43 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 16:58:09 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *
 	strncpy(word, &lexer->input[start], len);
 	word[len] = '\0';
 	lexer->pos++;
-	
+
 	if (quote_char == '\'')
 		*quote_type = QUOTE_SINGLE;
 	else
@@ -100,6 +100,8 @@ static char	*extract_word(t_lexer *lexer)
 		len++;
 	}
 	word = (char *)malloc(sizeof(char) * (len + 1));
+	if (!word)
+	    return (NULL);
 	strncpy(word, &lexer->input[start], len);
 	word[len] = '\0';
 	return (word);

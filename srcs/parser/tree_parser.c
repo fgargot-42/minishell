@@ -30,7 +30,7 @@ t_node	*parse_and_or(t_token **tokens)
 	t_node	*right;
 	t_token_type type;
 	left = parse_pipe(tokens);
-	while (*tokens 
+	while (*tokens
 		&& ((*tokens)->type == TOKEN_AND || (*tokens)->type == TOKEN_OR))
 	{
 		type = (*tokens)->type;
@@ -89,14 +89,14 @@ static size_t	count_args(t_token *tokens)
 {
 	size_t count;
 	t_token *tmp;
-	
+
 	count = 0;
 	tmp = tokens;
 	while (tmp)
 	{
 		if (tmp->type == TOKEN_WORD)
 			count++;
-		if (is_redirection(tmp->type))
+		else if (is_redirection(tmp->type))
 			tmp = tmp->next;
 		tmp = tmp->next;
 	}
@@ -105,8 +105,21 @@ static size_t	count_args(t_token *tokens)
 static void init_cmd(t_cmd **cmd, size_t count)
 {
 	*cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!*cmd)
+	    return ;
 	(*cmd)->args = malloc(sizeof(char *) * (count + 1));
+	if (!(*cmd)->args))
+	{
+	    free(*cmd);
+		return ;
+	}
 	(*cmd)->quote_type = malloc(sizeof(t_quote_type) * (count + 1));
+	if (!(*cmd)->quote_type)
+	{
+	    free(*cmd);
+		free((*cmd)->args);
+        return ;
+	}
 }
 
 static int is_stop_token(t_token_type type)
@@ -118,6 +131,8 @@ static int is_stop_token(t_token_type type)
 static void handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 {
 	cmd->args[*i] = strdup((*tokens)->value);
+	if (!cmds->args[*i])
+	    return ;
 	cmd->quote_type[*i] = (*tokens)->quote;
 	(*i)++;
 	*tokens = (*tokens)->next;
@@ -132,6 +147,8 @@ t_cmd	*parse_command(t_token **tokens)
 	cmd = NULL;
 	count = count_args(*tokens);
 	init_cmd(&cmd, count);
+	if (!cmd)
+	    return (NULL);
 	cmd->redirs = NULL;
 	cmd->envs = NULL;
 	i = 0;

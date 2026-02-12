@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/11 21:18:30 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 16:58:38 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ void	add_redirection(t_cmd *cmd, t_token **tokens)
 	t_redir	*tmp;
 
 	redir = (t_redir *)malloc(sizeof(t_redir));
+	if (!redir)
+	    return ;
 	redir->type = (*tokens)->type;
 	*tokens = (*tokens)->next;
 	if (!*tokens || (*tokens)->type != TOKEN_WORD)
