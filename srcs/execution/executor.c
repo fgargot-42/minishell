@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 21:10:02 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 21:25:07 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 		cleanup_node_fds(node);
 		return (1);
 	}
-	int ret = resolve_redirs(node, *envs, ctx);
-	fprintf(stderr,"ret redir=%d\n", ret);
-	if (ret)
+	if (resolve_redirs(node, *envs, ctx))
 		return (1);
 	if (DEBUG)
 		fprintf(stderr, "debug: fd_in=%d, fd_out=%d\n", node->fd_in, node->fd_out);
