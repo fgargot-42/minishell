@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/11 21:18:30 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/11 21:24:29 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,23 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
+void cleanup_node_fds(t_node *node)
+{
+	if (!node)
+		return ;
+
+	if (node->fd_in != STDIN_FILENO)
+	{
+		close(node->fd_in);
+		node->fd_in = STDIN_FILENO;
+	}
+
+	if (node->fd_out != STDOUT_FILENO)
+	{
+		close(node->fd_out);
+		node->fd_out = STDOUT_FILENO;
+	}
+}
 static int handle_heredoc(char *delimiter)
 {
 	int pipe_fd[2];
@@ -149,6 +166,7 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 		if (new_fd == -1)
 		{
 			fprintf(stderr, "minishell: %s: No such file or directory\n", redir->file);
+			cleanup_node_fds(node);
 			return (1);
 		}
 		if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)

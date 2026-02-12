@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/09 21:35:26 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/11 21:25:58 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	if (DEBUG)
 		print_str_list(node->cmd->args);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
+	{
+		cleanup_node_fds(node);
 		return (1);
+	}
 	if (resolve_redirs(node, *envs, ctx))
 		return (1);
 	if (DEBUG)
@@ -106,7 +109,9 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	{
 		if (DEBUG)
 			fprintf(stderr, "DEBUG: RUNNING %s as BUILTIN\n", node->cmd->args[0]);
-		return (call_builtin(node, envs, ctx));
+		status = call_builtin(node, envs, ctx);
+		cleanup_node_fds(node);
+		return (status);
 	}
 	if (DEBUG)
 		fprintf(stderr, "DEBUG: RUNNING %s as EXTERNAL\n", node->cmd->args[0]);
