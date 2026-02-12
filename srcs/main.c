@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/11 21:15:02 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 16:59:07 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ char *handle_input(t_ctx *ctx)
 {
 	char	*prompt;
 	char *line;
-	line = NULL;	
+	line = NULL;
 	if (isatty(STDIN_FILENO))
 	{
 		prompt = build_prompt(ctx->error_code);
 		line = readline(prompt);
 		free(prompt);
-		add_history(line);
+		if (line)
+		    add_history(line);
 	}
 	else
 		line = get_next_line(STDIN_FILENO);
@@ -60,14 +61,14 @@ int	main(int ac, char **av, char **env)
 	t_token	*tokens;
 	t_list	*envs;
 	t_ctx	ctx;
-	
+
 	ctx.error_code = 0;
 	(void)ac;
 	(void)av;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &sigint_handler);
 	envs = generate_env(env);
-	
+
 	while (1)
 	{
 		line = handle_input(&ctx);
@@ -98,7 +99,7 @@ int	main(int ac, char **av, char **env)
 			printf("\nExit code: %i\n", ctx.error_code);
 		free_tree(tree);
 	}
-	
+
 	ft_lstclear(&envs, env_free);
 	rl_clear_history();
 	return (ctx.error_code);

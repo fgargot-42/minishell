@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 19:48:35 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/05 20:01:47 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:12:47 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,13 @@ static char	*remove_quotes(char *str)
 
 void	remove_args_quotes(char **args)
 {
-	int		i;
 	char	*new_arg;
 
-	i = 0;
-	while (args[i])
-	{
-		new_arg = remove_quotes(args[i]);
-		if (!new_arg)
-			return ;
-		free(args[i]);
-		args[i] = new_arg;
-		i++;
-	}
+	new_arg = remove_quotes(*args);
+	if (!new_arg)
+		return ;
+	free(*args);
+	*args = new_arg;
 }
 
 void	*env_dup_content(void *content)

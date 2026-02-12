@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/11 21:24:29 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 20:42:51 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void	add_redirection(t_cmd *cmd, t_token **tokens)
 	t_redir	*tmp;
 
 	redir = (t_redir *)malloc(sizeof(t_redir));
+	if (!redir)
+	    return ;
 	redir->type = (*tokens)->type;
 	*tokens = (*tokens)->next;
 	if (!*tokens || (*tokens)->type != TOKEN_WORD)
@@ -153,7 +155,7 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 	redir = node->cmd->redirs;
 	while (redir)
 	{
-		expand_var_redir(&redir->file, envs, ctx);
+		expand_var(&redir->file, envs, ctx);
 		new_fd = 0;
 		if (redir->type == TOKEN_REDIR_IN)
 			new_fd = open(redir->file, O_RDONLY);

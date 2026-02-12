@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/03 19:50:32 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 17:16:49 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static char *default_prompt(int err)
     prompt = join_free(prompt, p.icon, 1, 0);
     prompt = join_free(prompt, p.color, 1, 0);
     prompt = join_free(prompt, p.name, 1, 0);
-    prompt = join_free(prompt, " :", 1, 0);
+    prompt = join_free(prompt, ": ", 1, 0);
     prompt = join_free(prompt, p.cwd, 1, 0);
     prompt = join_free(prompt, " ", 1, 0);
     prompt = join_free(prompt, p.color, 1, 0);

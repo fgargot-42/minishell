@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/11 21:25:58 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 20:42:39 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,6 @@ char	*find_in_path(char *cmd)
 		i++;
 	}
 	return (NULL);
-}
-
-static void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
-{
-	int		i;
-	char	*current;
-
-	i = 1;
-	while (node->cmd->args[i])
-	{
-		current = node->cmd->args[i];
-		if (!(node->cmd->quote_type[i] == QUOTE_SINGLE))
-			expand_var(node->cmd, i, *envs, ctx);
-		if (node->cmd->args[i] == current)
-			i++;
-	}
 }
 
 static pid_t	exec_command_fork(t_node *node, t_list **envs)
@@ -105,6 +89,8 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	if (DEBUG)
 		fprintf(stderr, "debug: fd_in=%d, fd_out=%d\n", node->fd_in, node->fd_out);
 	expand_cmd_args(node, envs, ctx);
+	if (DEBUG)
+		print_str_list(node->cmd->args);
 	if (is_builtin(node->cmd))
 	{
 		if (DEBUG)
