@@ -113,13 +113,10 @@ static void init_cmd(t_cmd **cmd, size_t count)
 	    free(*cmd);
 		return ;
 	}
-	(*cmd)->quote_type = malloc(sizeof(t_quote_type) * (count + 1));
-	if (!(*cmd)->quote_type)
-	{
-	    free(*cmd);
-		free((*cmd)->args);
-        return ;
-	}
+	(*cmd)->cmd = NULL;
+	(*cmd)->args = NULL;
+	(*cmd)->redirs = NULL;
+	(*cmd)->envs = NULL;
 }
 
 static int is_stop_token(t_token_type type)
@@ -130,12 +127,25 @@ static int is_stop_token(t_token_type type)
 
 static void handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 {
-	cmd->args[*i] = strdup((*tokens)->value);
-	if (!cmd->args[*i])
-	    return ;
-	cmd->quote_type[*i] = (*tokens)->quote;
-	(*i)++;
+	size_t	pos;
+	char	*newstr;
+
+	pos = 0;
+	if (cmd->cmd)
+		pos = ft_strlen(cmd->cmd);
+	else
+	{
+		cmd->cmd = malloc(sizeof(char));
+		cmd->cmd[0] = '\0';
+	}
+	newstr = ft_strjoin(cmd->cmd, (*tokens)->value);
+	if (!newstr)
+		return ;
+	free(cmd->cmd);
+	cmd->cmd = ft_strjoin(newstr, " ");
+	free(newstr);
 	*tokens = (*tokens)->next;
+	(*i)++;
 }
 
 t_cmd	*parse_command(t_token **tokens)
@@ -149,8 +159,6 @@ t_cmd	*parse_command(t_token **tokens)
 	init_cmd(&cmd, count);
 	if (!cmd)
 	    return (NULL);
-	cmd->redirs = NULL;
-	cmd->envs = NULL;
 	i = 0;
 	while (*tokens)
 	{
@@ -166,7 +174,6 @@ t_cmd	*parse_command(t_token **tokens)
 		else
 			*tokens = (*tokens)->next;
 	}
-	cmd->args[i] = NULL;
 	return (cmd);
 }
 
@@ -217,7 +224,6 @@ void	free_tree(t_node *tree)
 	if (tree->cmd)
 	{
 		free_string_array(tree->cmd->args);
-		free(tree->cmd->quote_type);
 		redir = tree->cmd->redirs;
 		while (redir)
 		{

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 16:58:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 23:36:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *
 		*quote_type = QUOTE_DOUBLE;
 	return (word);
 }
+
 static char	*extract_word(t_lexer *lexer)
 {
 	const int	start = lexer->pos;
@@ -235,6 +236,11 @@ t_token	*lexer(char *input)
 	while (1)
 	{
 		new_token = get_next_token(l);
+		if (!new_token)
+		{
+			free(l);
+			return (NULL);
+		}
 		if (!head)
 		{
 			head = new_token;

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 20:42:39 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 22:41:37 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	int		status;
 	pid_t	pid;
 
-	if (DEBUG)
-		print_str_list(node->cmd->args);
-	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
+	//if (DEBUG)
+	//	print_str_list(node->cmd->args);
+	if (!node->cmd || !node->cmd->cmd)
 	{
 		cleanup_node_fds(node);
 		return (1);

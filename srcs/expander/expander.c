@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:48:21 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 23:01:58 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,7 +295,7 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	}
 }
 
-static int	count_spaces(char *s)
+/*static int	count_spaces(char *s)
 {
 	int	res;
 
@@ -307,7 +307,7 @@ static int	count_spaces(char *s)
 		s++;
 	}
 	return (res);
-}
+}*/
 
 /*static char	*strjoin_all(char **str_array)
 {
@@ -338,47 +338,83 @@ static int	count_spaces(char *s)
 	return (res);
 }*/
 
-/*static char	**split_args(char *cmd_str)
+static void	split_add(char ***split_str, char *newstr, int index)
+{
+	static int	pos = 0;
+	int			len;
+	int		single_open;
+	int		double_open;
+
+	if (index == 0)
+		pos = 0;
+	len = 0;
+	single_open = 0;
+	double_open = 0;
+	while (newstr[pos + len])
+	{
+		if (newstr[pos + len] == '\"')
+			double_open = !double_open;
+		if (newstr[pos + len] == '\'')
+			single_open = !single_open;
+		if (newstr[pos + len] == ' ' && !single_open && !double_open)
+			break ;
+		len++;
+	}
+	(*split_str)[index] = malloc(sizeof(char) * (len + 1));
+	if (!(*split_str[index]))
+		return ;
+	ft_strlcpy((*split_str)[index], &newstr[pos], len + 1);
+	pos += len + 1;
+}
+
+static char	**split_args(char *cmd_str)
 {
 	char	**args;
-	size_t	count;
-	int		is_inquote;
+	int		count;
+	int		single_open;
+	int		double_open;
+	int		i;
 
 	count = 0;
-	is_inquote = 0;
-	while (*cmd_str)
+	single_open = 0;
+	double_open = 0;
+	i = 0;
+	while (cmd_str[i])
 	{
-		if (*cmd_str == ' ' || !is_inquote)
+		if (cmd_str[i] == ' ' && !single_open && !double_open)
 			count++;
-		if (*cmd_str == '\"' || is_inquote)
-			is_inquote = 0;
-		if (*cmd_str == ' ' && *(cmd_str + 1) == '\"')
-			is_inquote = 1;
-		cmd_str++;
+		if (cmd_str[i] == '\"')
+			double_open = !double_open;
+		if (cmd_str[i] == '\'')
+			single_open = !single_open;
+		i++;
 	}
 	args = malloc(sizeof(char *) * (count + 1));
 	if (!args)
 		return (NULL);
-	
-}*/
+	i = 0;
+	while (i < count)
+	{
+		split_add(&args, cmd_str, i);
+		i++;
+	}
+	args[i] = NULL;
+	return (args);
+}
 
-/*static char	**split_args(char *cmd_str, int *arg_nb_words)
+/*static char	**split_args(char *cmd_str, int nb_args)
 {
 	char	**args;
 	int		i;
 	int		j;
-	int		len;
 	int		pos;
 	
 	i = 0;
-	len = 0;
-	while (arg_nb_words[len])
-		len++;
-	args = malloc(sizeof(char *) * (len + 1));
+	args = malloc(sizeof(char *) * (nb_args + 1));
 	if (!args)
 		return (NULL);
 	i = 0;
-	while (i < len)
+	while (i < nb_args)
 	{
 		j = 0;
 		pos = 0;
@@ -402,7 +438,7 @@ static int	count_spaces(char *s)
 	return (args);
 }*/
 
-static int	split_add(char ***split_str, char *new_string, int pos)
+/*static int	split_add(char ***split_str, char *new_string, int pos)
 {
 	char	**new_split;
 	char	**split_res;
@@ -447,9 +483,9 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 	free(*split_str);
 	*split_str = split_res;
 	return (new_count);
-}
+}*/
 
-static void	quote_type_add(t_quote_type **quotes, int pos, int count)
+/*static void	quote_type_add(t_quote_type **quotes, int pos, int count)
 {
 	int				initial_count;
 	int				i;
@@ -474,32 +510,30 @@ static void	quote_type_add(t_quote_type **quotes, int pos, int count)
 	}
 	free(*quotes);
 	*quotes = new_quotes;
-}
+}*/
 
 void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
-	int		i;
-	int		new_arg_len;
+	int	nb_args;
+	int	i;
+	int	single_open;
+	int	double_open;
 
+	nb_args = 1;
 	i = 0;
-	while (node->cmd->args[i])
+	single_open = 0;
+	double_open = 0;
+	while (node->cmd->cmd[i])
 	{
-		if (node->cmd->quote_type[i] != QUOTE_SINGLE)
-			expand_var(&node->cmd->args[i], *envs, ctx);
+		if (node->cmd->cmd[i] == '\'')
+			single_open = !single_open;
+		if (node->cmd->cmd[i] == '\"')
+			double_open = !double_open;
+		if (node->cmd->cmd[i] == ' ')
+			if (!single_open && !double_open)
+				nb_args++;
 		i++;
 	}
-	i = 0;
-	while (node->cmd->args[i])
-	{
-		new_arg_len = 0;
-		if (node->cmd->quote_type[i] == QUOTE_NONE && count_spaces(node->cmd->args[i]))
-		{
-			new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
-			quote_type_add(&node->cmd->quote_type, i, new_arg_len);
-		}
-		i += new_arg_len + 1;
-	}
-	//cmd_str = strjoin_all(node->cmd->args);
-	//free_string_array(node->cmd->args);
-	//node->cmd->args = split_args(cmd_str, arg_nb_words);
+	expand_var(&node->cmd->cmd, *envs, ctx);
+	node->cmd->args = split_args(node->cmd->cmd);
 }

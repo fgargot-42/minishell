@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 16:59:07 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 23:21:27 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,14 @@ int	main(int ac, char **av, char **env)
 		}
 		tokens = lexer(line);
 		free(line);
+		if (!tokens)
+		{
+			ctx.error_code = 2;
+			continue ;
+		}
 		if (DEBUG)
 			print_tokens(tokens);
-		if (tokens && check_lexer_errors(tokens))
+		if (check_lexer_errors(tokens))
 		{
 			free_tokens(tokens);
 			ctx.error_code = 2;

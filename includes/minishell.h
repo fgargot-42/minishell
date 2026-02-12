@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 20:42:16 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/12 22:39:47 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,10 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char			**args; // ["ls", "-la", NULL]
-	t_quote_type	*quote_type;
-	t_redir			*redirs;
-	t_list			*envs;
+	char	*cmd;
+	char	**args; // ["ls", "-la", NULL]
+	t_redir	*redirs;
+	t_list	*envs;
 }	t_cmd;
 
 typedef struct s_lexer
