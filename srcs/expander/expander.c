@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:16:29 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/12 17:48:21 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -437,9 +437,10 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 		split_res[i] = new_split[i - pos];
 		i++;
 	}
+	free((*split_str)[i - new_count]);
 	while (i < split_count + new_count)
 	{
-		split_res[i] = (*split_str)[i - new_count];
+		split_res[i] = (*split_str)[i - new_count + 1];
 		i++;
 	}
 	split_res[i] = NULL;
@@ -481,21 +482,17 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 	int		new_arg_len;
 
 	i = 0;
-	new_arg_len = 0;
 	while (node->cmd->args[i])
 	{
 		if (node->cmd->quote_type[i] != QUOTE_SINGLE)
 			expand_var(&node->cmd->args[i], *envs, ctx);
-		if (node->cmd->quote_type[i] == QUOTE_NONE)
-			new_arg_len += count_spaces(node->cmd->args[i]);
 		i++;
-		new_arg_len++;
 	}
 	i = 0;
 	while (node->cmd->args[i])
 	{
 		new_arg_len = 0;
-		if (node->cmd->quote_type == QUOTE_NONE && count_spaces(node->cmd->args[i]))
+		if (node->cmd->quote_type[i] == QUOTE_NONE && count_spaces(node->cmd->args[i]))
 		{
 			new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
 			quote_type_add(&node->cmd->quote_type, i, new_arg_len);
