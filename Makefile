@@ -29,6 +29,7 @@ SRC=main.c \
 	builtins/unset.c \
 	builtins/env.c \
 	builtins/exit.c \
+	utils/file_utils.c \
 	debug/debug.c
 OBJ=$(SRC:.c=.o)
 

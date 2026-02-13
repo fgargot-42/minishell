@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 21:07:22 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/13 21:10:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,21 +158,17 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 	{
 		expand_var(&redir->file, envs, ctx);
 		if (redir->type == TOKEN_REDIR_IN)
-			new_fd = open(redir->file, O_RDONLY);
+			new_fd = file_open_read(redir->file);
 		else if (redir->type == TOKEN_REDIR_OUT)
-			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			new_fd = file_open_write(redir->file);
 		else if (redir->type == TOKEN_APPEND)
-			new_fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			new_fd = file_open_append(redir->file);
 		else if (redir->type == TOKEN_HEREDOC)
 			new_fd = handle_heredoc(redir->file);
 		else
 			new_fd = -1;
 		if (new_fd == -1)
 		{
-			if (errno == EACCES)
-				fprintf(stderr, "minishell: %s: Permission denied\n", redir->file);
-			else
-				fprintf(stderr, "minishell: %s: %s\n", redir->file, strerror(errno));
 			cleanup_node_fds(node);
 			return (1);
 		}
