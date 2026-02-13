@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/13 21:08:29 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/13 22:46:17 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,9 +226,9 @@ void	free_string_array(char **array);
 
 // file utils
 
-int		file_open_read(char *filepath);
-int		file_open_write(char *filepath);
-int		file_open_append(char *filepath);
+int		file_open_read(char *filepath, t_ctx *ctx);
+int		file_open_write(char *filepath, t_ctx *ctx);
+int		file_open_append(char *filepath, t_ctx *ctx);
 
 // debug
 void	print_tree_clean(t_node *node);

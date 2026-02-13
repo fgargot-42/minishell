@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/13 21:10:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/13 22:46:35 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
-#include <errno.h>
 void cleanup_node_fds(t_node *node)
 {
 	if (!node)
@@ -158,11 +157,11 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 	{
 		expand_var(&redir->file, envs, ctx);
 		if (redir->type == TOKEN_REDIR_IN)
-			new_fd = file_open_read(redir->file);
+			new_fd = file_open_read(redir->file, ctx);
 		else if (redir->type == TOKEN_REDIR_OUT)
-			new_fd = file_open_write(redir->file);
+			new_fd = file_open_write(redir->file, ctx);
 		else if (redir->type == TOKEN_APPEND)
-			new_fd = file_open_append(redir->file);
+			new_fd = file_open_append(redir->file, ctx);
 		else if (redir->type == TOKEN_HEREDOC)
 			new_fd = handle_heredoc(redir->file);
 		else
