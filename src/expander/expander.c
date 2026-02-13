@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:48:21 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/13 20:27:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,11 +298,19 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 static int	count_spaces(char *s)
 {
 	int	res;
+	int	open_single;
+	int	open_double;
 
 	res = 0;
+	open_single = 0;
+	open_double = 0;
 	while (*s)
 	{
-		if (*s ==  ' ')
+		if (*s == '\'' && !open_double)
+			open_single = !open_single;
+		if (*s == '\"' && !open_single)
+			open_double = !open_double;
+		if (*s ==  ' ' && !open_single && !open_double)
 			res++;
 		s++;
 	}
@@ -402,6 +410,64 @@ static int	count_spaces(char *s)
 	return (args);
 }*/
 
+static char *get_next_split_noquote(char *str)
+{
+	static int	pos = 0;
+	int			open_squote;
+	int			open_dquote;
+	int			start;
+	char		*res;
+	
+	open_squote = 0;
+	open_dquote = 0;
+	while (str[pos] &&  str[pos] == ' ')
+		pos++;
+	start = pos;
+	while (str[pos])
+	{
+		open_squote = !open_squote && !open_dquote && *str == '\'';
+		open_dquote = !open_squote && !open_dquote && *str == '\"';
+		if (*str == ' ' && !open_squote && !open_dquote)
+			break ;
+		pos++;
+	}
+	res = malloc(sizeof(char) * (pos - start + 1));
+	if (!res)
+		return (NULL);
+	ft_strlcat(res, &str[start], pos - start + 1);
+	pos++;
+	return (res);
+}
+
+static char	**ft_split_noquote(char *str)
+{
+	int		count;
+	char	**split;
+	int		index;
+	int		open_squote;
+	int		open_dquote;
+
+	index = 0;
+	open_squote = 0;
+	open_dquote = 0;
+	count = count_spaces(str);
+	split = malloc(sizeof(char *) * (count + 1));
+	if (!split)
+		return (NULL);
+	split[count] = NULL;
+	while (index < count)
+	{
+		split[index] = get_next_split_noquote(str);
+		if (!split[index])
+		{
+			free_string_array(split);
+			return (NULL);
+		}
+		index++;
+	}
+	return (split);
+}
+
 static int	split_add(char ***split_str, char *new_string, int pos)
 {
 	char	**new_split;
@@ -414,11 +480,10 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 	new_count =  0;
 	while (*split_str[split_count])
 		split_count++;
-	new_split = ft_split(new_string, ' ');
+	new_split = ft_split_noquote(new_string);
 	if (!new_split)
 		return (0);
-	while (new_split[new_count])
-		new_count++;
+	new_count = count_spaces(new_string);
 	split_count += new_count;
 	split_res = malloc(sizeof(char *) * (split_count + 1));
 	if (!split_res)
