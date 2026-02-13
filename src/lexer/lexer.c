@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 16:58:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/13 18:59:25 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,19 @@ static char	*extract_word(t_lexer *lexer)
 	const int	start = lexer->pos;
 	int			len;
 	char		*word;
+	int			open_single;
+	int			open_double;
 
 	len = 0;
-	while (!is_special(current_char(lexer)) && current_char(lexer) != '\n')
+	open_single = 0;
+	open_double = 0;
+	while (!(is_special(current_char(lexer)) && !open_single && !open_double) 
+		&& current_char(lexer) != '\n')
 	{
+		if (!open_double && current_char(lexer) == '\'')
+			open_single = !open_single;
+		if (!open_single && current_char(lexer) == '\"')
+			open_double = !open_double;
 		lexer->pos++;
 		len++;
 	}
