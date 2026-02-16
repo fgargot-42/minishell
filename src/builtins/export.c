@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 17:14:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 19:10:50 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ static int	add_env(char **env, t_list **env_list)
 	return (arg_count);
 }
 
-int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
+/*int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	char	**args;
 	int		i;
@@ -184,4 +184,37 @@ int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		i = add_env(args, envs);
 	}
 	return (status);
+}*/
+
+int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
+{
+	int		i;
+	int		status;
+	int		had_error;
+
+	(void)ctx;
+	had_error = 0;
+	if (!envs || !*envs)
+		return (0);
+	if (!cmd->args[1])
+	{
+		builtin_export_print(envs);
+		return (0);
+	}
+	i = 1;
+	while (cmd->args[i])
+	{
+		status = check_envname_format(cmd->args[i]);
+		if (status)
+		{
+			dprintf(2, "minishell: export: `%s': not a valid identifier\n", 
+					cmd->args[i]);
+			had_error = 1;
+			i++;
+			continue;
+		}
+		add_env(&cmd->args[i], envs);
+		i++;
+	}
+	return (had_error);
 }
