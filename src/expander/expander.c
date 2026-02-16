@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 19:35:53 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 20:01:12 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,10 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 		
 		// Handle different types of $ expansion
 		if (is_special_dollar(str, i))
+		{
 			i++;
+			continue ;
+		}
 		else if (is_error_code_var(str, i))
 			replace_errorcode_env(input, &i, ctx);
 		else
@@ -148,7 +151,7 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 		
 		// Update pointer since input may have been reallocated
 		str = *input;
-		i++;
+		i = 0;
 	}
 }
 
