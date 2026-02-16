@@ -132,7 +132,11 @@ static void handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 {
 	cmd->args[*i] = strdup((*tokens)->value);
 	if (!cmd->args[*i])
-	    return ;
+	{
+		cmd->args[*i] = strdup("");
+		if (!cmd->args[*i])
+			return ;
+	}
 	cmd->quote_type[*i] = (*tokens)->quote;
 	(*i)++;
 	*tokens = (*tokens)->next;
@@ -226,6 +230,9 @@ void	free_tree(t_node *tree)
 			free(redir);
 			redir = next;
 		}
+		if (tree->cmd->envs)
+			ft_lstclear(&tree->cmd->envs, env_free);
+
 		free(tree->cmd);
 	}
 	free(tree);
