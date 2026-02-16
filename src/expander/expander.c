@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/13 20:27:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 18:54:00 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -425,16 +425,16 @@ static char *get_next_split_noquote(char *str)
 	start = pos;
 	while (str[pos])
 	{
-		open_squote = !open_squote && !open_dquote && *str == '\'';
-		open_dquote = !open_squote && !open_dquote && *str == '\"';
-		if (*str == ' ' && !open_squote && !open_dquote)
+		open_squote = !open_squote && !open_dquote && str[pos] == '\'';
+		open_dquote = !open_squote && !open_dquote && str[pos] == '\"';
+		if (str[pos] == ' ' && !open_squote && !open_dquote)
 			break ;
 		pos++;
 	}
 	res = malloc(sizeof(char) * (pos - start + 1));
 	if (!res)
 		return (NULL);
-	ft_strlcat(res, &str[start], pos - start + 1);
+	ft_strlcpy(res, &str[start], pos - start + 1);
 	pos++;
 	return (res);
 }
@@ -450,7 +450,7 @@ static char	**ft_split_noquote(char *str)
 	index = 0;
 	open_squote = 0;
 	open_dquote = 0;
-	count = count_spaces(str);
+	count = count_spaces(str) + 1;
 	split = malloc(sizeof(char *) * (count + 1));
 	if (!split)
 		return (NULL);
@@ -478,14 +478,14 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 
 	split_count = 0;
 	new_count =  0;
-	while (*split_str[split_count])
+	while (split_str[split_count])
 		split_count++;
 	new_split = ft_split_noquote(new_string);
 	if (!new_split)
 		return (0);
-	new_count = count_spaces(new_string);
+	new_count = count_spaces(new_string) + 1;
 	split_count += new_count;
-	split_res = malloc(sizeof(char *) * (split_count + 1));
+	split_res = malloc(sizeof(char *) * split_count);
 	if (!split_res)
 	{
 		free_string_array(new_split);
@@ -503,7 +503,7 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 		i++;
 	}
 	free((*split_str)[i - new_count]);
-	while (i < split_count + new_count)
+	while (i < split_count - 1)
 	{
 		split_res[i] = (*split_str)[i - new_count + 1];
 		i++;
