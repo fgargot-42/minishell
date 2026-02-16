@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 19:22:15 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 19:35:53 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,6 +325,46 @@ static void	expand_wildcards_in_cmd(t_cmd *cmd)
 		i++;
 	}
 }
+
+static void	remove_empty_quotes(char **str)
+{
+	char	*src;
+	char	*dst;
+	char	quote_char;
+	int		i;
+	int		j;
+
+	if (!str || !*str)
+		return;
+	src = *str;
+	dst = malloc(ft_strlen(src) + 1);
+	if (!dst)
+		return;
+	i = 0;
+	j = 0;
+	while (src[i])
+	{
+		if (src[i] == '\'' || src[i] == '"')
+		{
+			quote_char = src[i];
+			i++;
+			if (src[i] == quote_char)
+			{
+				i++;
+				continue;
+			}
+			while (src[i] && src[i] != quote_char)
+				dst[j++] = src[i++];
+			if (src[i] == quote_char)
+				i++;
+		}
+		else
+			dst[j++] = src[i++];
+	}
+	dst[j] = '\0';
+	free(*str);
+	*str = dst;
+}
 void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int		i;
@@ -334,7 +374,10 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 	while (node->cmd->args[i])
 	{
 		if (node->cmd->quote_type[i] != QUOTE_SINGLE)
+		{
 			expand_var(&node->cmd->args[i], *envs, ctx);
+			remove_empty_quotes(&node->cmd->args[i]);
+		}
 		i++;
 	}
 	i = 0;
