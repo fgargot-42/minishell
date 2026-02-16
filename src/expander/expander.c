@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 19:16:53 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 19:22:15 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,8 @@ static void	quote_type_add(t_quote_type **quotes, int pos, int count)
 	*quotes = new_quotes;
 }
 
-static void expand_wildcards_simple(t_cmd *cmd)
+
+static void	expand_wildcards_in_cmd(t_cmd *cmd)
 {
 	int		i;
 	char	**expanded;
@@ -324,7 +325,6 @@ static void expand_wildcards_simple(t_cmd *cmd)
 		i++;
 	}
 }
-
 void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int		i;
@@ -348,7 +348,6 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 		}
 		i += new_arg_len + 1;
 	}
-	expand_wildcards_simple(node->cmd);
+	expand_wildcards_in_cmd(node->cmd);
 }
-
 
