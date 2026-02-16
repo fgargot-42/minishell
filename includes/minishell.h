@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/13 22:46:17 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 19:04:27 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,5 +232,8 @@ int		file_open_append(char *filepath, t_ctx *ctx);
 
 // debug
 void	print_tree_clean(t_node *node);
-
+// wildcards
+//
+int     has_wildcards(char *str);
+char    **expand_wildcards(char *pattern);
 #endif	//MINISHELL_H

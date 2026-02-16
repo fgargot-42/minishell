@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 18:54:00 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 19:07:59 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,6 @@ static void	replace_env(char **input, t_env *env, char *key, size_t *pos)
 	free(*input);
 	*input = new_input;
 }
-
-/*static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
-{
-	char	*new_input;
-	char	*error_str;
-	size_t	new_pos;
-	
-	error_str = ft_itoa(ctx->error_code);
-	if (!error_str)
-		return ;
-	new_input = malloc(sizeof(char) * (ft_strlen(*input)
-		+ ft_strlen(error_str) - 1));
-	if (!new_input)
-		return ;
-	ft_strlcpy(new_input, *input, *pos);
-	ft_strlcpy(&new_input[(*pos)], error_str, ft_strlen(error_str) + 1);
-	new_pos = *pos + ft_strlen(error_str);
-	pos += 2;
-	ft_strlcpy(&new_input[new_pos], &((*input)[*pos]),
-		ft_strlen(((*input)[*pos])) + 1);
-	free(*input);
-	*input = new_input;
-}*/
-
-
 
 static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
 {
@@ -94,18 +69,6 @@ static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
 	free(error_str);
 	*input = new_input;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 static t_env	*get_env(t_list *envs, char *key)
 {
 	t_list	*node;
@@ -117,48 +80,6 @@ static t_env	*get_env(t_list *envs, char *key)
 		env = (t_env *)node->content;
 	return (env);
 }
-
-/*void	expand_var(char **input, t_list *envs, t_ctx *ctx)
-{
-	size_t	len;
-	size_t	i;
-	t_env	*env;
-	char	*key;
-
-	i = 0;
-	while (i < ft_strlen(*input))
-	{
-		if ((*input)[i] == '$')
-		{
-			if ((*input)[i + 1] == ' ' || (*input)[i+1] == '\0')
-				i++;
-			else if ((*input)[i + 1] == '?')
-				replace_errorcode_env(input, &i, ctx); 
-			else
-			{
-				len = i + 1;
-				while (ft_isalnum((*input)[len]) || (*input)[len] == '_')
-					len++;
-				key = ft_substr(&(*input)[i + 1], 0, len);
-				env = get_env(envs, key);
-				replace_env(input, env, key, &i);
-				free(key);
-			}
-		}
-		i++;
-	}
-}*/
-
-
-
-
-
-
-
-
-
-
-
 static bool	is_special_dollar(char *input, size_t i)
 {
 	char next_char;
@@ -184,70 +105,6 @@ static char	*extract_var_name(char *input, size_t start_pos, size_t *end_pos)
 	var_name = ft_substr(&input[start_pos], 0, len - start_pos);
 	return (var_name);
 }
-
-/*static void	expand_regular_var(t_cmd *cmd, int index, size_t *i, t_list *envs)
-{
-	char	*var_name;
-	t_env	*env;
-	size_t	name_start;
-	size_t	name_end;
-	
-	name_start = *i + 1;  // Position after '$'
-	var_name = extract_var_name(cmd->args[index], name_start, &name_end);
-	if (!var_name)
-		return ;
-	env = get_env(envs, var_name);
-	if (!env && cmd->quote_type[index] == QUOTE_NONE)
-	{
-		free(cmd->args[index]);
-		cmd->args[index] = NULL;
-		free(var_name);
-		return ;
-	}
-	replace_env(&cmd->args[index], env, var_name, i);
-	free(var_name);
-}
-
-void	expand_var(t_cmd *cmd, int index, t_list *envs, t_ctx *ctx)
-{
-	size_t	i;
-	char	*str;
-	
-	i = 0;
-	str = cmd->args[index];
-	
-	while (i < ft_strlen(str))
-	{
-		if (str[i] != '$')
-		{
-			i++;
-			continue ;
-		}
-		
-		// Handle different types of $ expansion
-		if (is_special_dollar(str, i))
-			i++;
-		else if (is_error_code_var(str, i))
-			replace_errorcode_env(&cmd->args[index], &i, ctx);
-		else
-			expand_regular_var(cmd, index, &i, envs);
-		
-		// Update pointer since input may have been reallocated
-		str = cmd->args[index];
-		if (!str)
-		{
-			while (cmd->args[index + 1])
-			{
-				cmd->args[index] = cmd->args[index + 1];
-				index++;
-			}
-			cmd->args[index] = NULL;
-			return ;
-		}
-		i++;
-	}
-}*/
-
 
 static void	expand_regular_var(char **input, size_t *i, t_list *envs)
 {
@@ -317,99 +174,6 @@ static int	count_spaces(char *s)
 	return (res);
 }
 
-/*static char	*strjoin_all(char **str_array)
-{
-	int		i;
-	int 	res_len;
-	char	*res;
-
-	i = 0;
-	res_len = 0;
-	while (str_array[i])
-	{
-		res_len += ft_strlen(str_array[i]);
-		i++;
-	}
-	res = malloc(sizeof(char) * (res_len + i + 1));\
-	if (!res)
-		return (NULL);
-	i = 0;
-	res_len = 0;
-	while (str_array[i])
-	{
-		ft_strlcpy(res + res_len, str_array[i], ft_strlen(str_array[i]) + 1);
-		res_len += ft_strlen(str_array[i]) + 1;
-		res[res_len - 1] = ' ';
-		i++;
-	}
-	res[res_len - 1] = '\0';
-	return (res);
-}*/
-
-/*static char	**split_args(char *cmd_str)
-{
-	char	**args;
-	size_t	count;
-	int		is_inquote;
-
-	count = 0;
-	is_inquote = 0;
-	while (*cmd_str)
-	{
-		if (*cmd_str == ' ' || !is_inquote)
-			count++;
-		if (*cmd_str == '\"' || is_inquote)
-			is_inquote = 0;
-		if (*cmd_str == ' ' && *(cmd_str + 1) == '\"')
-			is_inquote = 1;
-		cmd_str++;
-	}
-	args = malloc(sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-	
-}*/
-
-/*static char	**split_args(char *cmd_str, int *arg_nb_words)
-{
-	char	**args;
-	int		i;
-	int		j;
-	int		len;
-	int		pos;
-	
-	i = 0;
-	len = 0;
-	while (arg_nb_words[len])
-		len++;
-	args = malloc(sizeof(char *) * (len + 1));
-	if (!args)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		j = 0;
-		pos = 0;
-		while (j < arg_nb_words[i])
-		{
-			while (cmd_str[pos] && cmd_str[pos] != ' ')
-				pos++;
-			pos++;
-			j++;
-		}
-		args[i] = malloc(sizeof(char) * pos);
-		if (!args[i])
-		{
-			free_string_array(args);
-			return (NULL);
-		}
-		ft_strlcpy(args[i], cmd_str, pos);
-		cmd_str = &cmd_str[pos];
-		i++;
-	}
-	return (args);
-}*/
-
 static char *get_next_split_noquote(char *str)
 {
 	static int	pos = 0;
@@ -444,12 +208,8 @@ static char	**ft_split_noquote(char *str)
 	int		count;
 	char	**split;
 	int		index;
-	int		open_squote;
-	int		open_dquote;
 
 	index = 0;
-	open_squote = 0;
-	open_dquote = 0;
 	count = count_spaces(str) + 1;
 	split = malloc(sizeof(char *) * (count + 1));
 	if (!split)
@@ -564,7 +324,4 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 		}
 		i += new_arg_len + 1;
 	}
-	//cmd_str = strjoin_all(node->cmd->args);
-	//free_string_array(node->cmd->args);
-	//node->cmd->args = split_args(cmd_str, arg_nb_words);
 }
