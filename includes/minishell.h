@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 19:23:16 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 22:45:48 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,10 @@ void	free_string_array(char **array);
 int		file_open_read(char *filepath, t_ctx *ctx);
 int		file_open_write(char *filepath, t_ctx *ctx);
 int		file_open_append(char *filepath, t_ctx *ctx);
+
+// quotes utils
+
+char	*remove_quotes(char *str);
 
 // debug
 void	print_tree_clean(t_node *node);

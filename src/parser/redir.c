@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/13 22:46:35 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 20:52:01 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	add_redirection(t_cmd *cmd, t_token **tokens)
 		free(redir);
 		return ;
 	}
-	redir->file = strdup((*tokens)->value);
+	redir->file = remove_quotes((*tokens)->value);
 	//if ((*tokens)->quote != QUOTE_SINGLE)
 	//	expand_var(&redir->file, envs, ctx);
 	*tokens = (*tokens)->next;

@@ -6,13 +6,13 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 19:48:35 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 17:12:47 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 20:52:30 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*remove_quotes(char *str)
+/*static char	*remove_quotes(char *str)
 {
 	int		i;
 	int		j;
@@ -42,7 +42,7 @@ static char	*remove_quotes(char *str)
 		i++;
 	}
 	return (new_str);
-}
+}*/
 
 void	remove_args_quotes(char **args)
 {

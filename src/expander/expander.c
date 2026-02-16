@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 20:01:12 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 22:39:40 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,13 +126,17 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 {
 	size_t	i;
 	char	*str;
+	int		open_squote;
 	
 	i = 0;
+	open_squote = 0;
 	str = *input;
 	
 	while (i < ft_strlen(str))
 	{
-		if (str[i] != '$')
+		if (str[i] == '\'')
+			open_squote = !open_squote;
+		if (str[i] != '$' || open_squote)
 		{
 			i++;
 			continue ;
@@ -177,9 +181,8 @@ static int	count_spaces(char *s)
 	return (res);
 }
 
-static char *get_next_split_noquote(char *str)
+static char *get_next_split_noquote(char *str, int *pos)
 {
-	static int	pos = 0;
 	int			open_squote;
 	int			open_dquote;
 	int			start;
@@ -187,21 +190,21 @@ static char *get_next_split_noquote(char *str)
 	
 	open_squote = 0;
 	open_dquote = 0;
-	while (str[pos] &&  str[pos] == ' ')
-		pos++;
-	start = pos;
-	while (str[pos])
+	while (str[*pos] &&  str[*pos] == ' ')
+		(*pos)++;
+	start = *pos;
+	while (str[*pos])
 	{
-		open_squote = !open_squote && !open_dquote && str[pos] == '\'';
-		open_dquote = !open_squote && !open_dquote && str[pos] == '\"';
-		if (str[pos] == ' ' && !open_squote && !open_dquote)
+		open_squote = !open_squote && !open_dquote && str[*pos] == '\'';
+		open_dquote = !open_squote && !open_dquote && str[*pos] == '\"';
+		if (str[*pos] == ' ' && !open_squote && !open_dquote)
 			break ;
-		pos++;
+		(*pos)++;
 	}
-	res = malloc(sizeof(char) * (pos - start + 1));
+	res = malloc(sizeof(char) * (*pos - start + 1));
 	if (!res)
 		return (NULL);
-	ft_strlcpy(res, &str[start], pos - start + 1);
+	ft_strlcpy(res, &str[start], *pos - start + 1);
 	pos++;
 	return (res);
 }
@@ -211,8 +214,10 @@ static char	**ft_split_noquote(char *str)
 	int		count;
 	char	**split;
 	int		index;
+	int		pos;
 
 	index = 0;
+	pos = 0;
 	count = count_spaces(str) + 1;
 	split = malloc(sizeof(char *) * (count + 1));
 	if (!split)
@@ -220,7 +225,7 @@ static char	**ft_split_noquote(char *str)
 	split[count] = NULL;
 	while (index < count)
 	{
-		split[index] = get_next_split_noquote(str);
+		split[index] = get_next_split_noquote(str, &pos);
 		if (!split[index])
 		{
 			free_string_array(split);
@@ -254,6 +259,7 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 		free_string_array(new_split);
 		return (0);
 	}
+	split_res[split_count - 1] = NULL;
 	i = 0;
 	while (i < pos)
 	{
@@ -271,13 +277,12 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 		split_res[i] = (*split_str)[i - new_count + 1];
 		i++;
 	}
-	split_res[i] = NULL;
 	free(*split_str);
 	*split_str = split_res;
 	return (new_count);
 }
 
-static void	quote_type_add(t_quote_type **quotes, int pos, int count)
+/*static void	quote_type_add(t_quote_type **quotes, int pos, int count)
 {
 	int				initial_count;
 	int				i;
@@ -302,7 +307,7 @@ static void	quote_type_add(t_quote_type **quotes, int pos, int count)
 	}
 	free(*quotes);
 	*quotes = new_quotes;
-}
+}*/
 
 
 static void	expand_wildcards_in_cmd(t_cmd *cmd)
@@ -329,7 +334,7 @@ static void	expand_wildcards_in_cmd(t_cmd *cmd)
 	}
 }
 
-static void	remove_empty_quotes(char **str)
+/*static void	remove_empty_quotes(char **str)
 {
 	char	*src;
 	char	*dst;
@@ -367,11 +372,12 @@ static void	remove_empty_quotes(char **str)
 	dst[j] = '\0';
 	free(*str);
 	*str = dst;
-}
+}*/
 void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int		i;
 	int		new_arg_len;
+	char	*tmp;
 
 	i = 0;
 	while (node->cmd->args[i])
@@ -379,21 +385,35 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 		if (node->cmd->quote_type[i] != QUOTE_SINGLE)
 		{
 			expand_var(&node->cmd->args[i], *envs, ctx);
-			remove_empty_quotes(&node->cmd->args[i]);
+			//remove_empty_quotes(&node->cmd->args[i]);
 		}
 		i++;
 	}
 	i = 0;
 	while (node->cmd->args[i])
 	{
+	//	new_arg_len = 0;
+	//	if (node->cmd->quote_type[i] == QUOTE_NONE && count_spaces(node->cmd->args[i]))
+	//	{
+	//		new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
+	//		quote_type_add(&node->cmd->quote_type, i, new_arg_len);
+	//	}
+	//	i += new_arg_len + 1;
 		new_arg_len = 0;
-		if (node->cmd->quote_type[i] == QUOTE_NONE && count_spaces(node->cmd->args[i]))
+		if (count_spaces(node->cmd->args[i]))
 		{
 			new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
-			quote_type_add(&node->cmd->quote_type, i, new_arg_len);
+			//quote_type_add(&node->cmd->quote_type, i, new_arg_len);
 		}
 		i += new_arg_len + 1;
 	}
+	i = 0;
 	expand_wildcards_in_cmd(node->cmd);
+	while (node->cmd->args[i])
+	{
+		tmp = remove_quotes(node->cmd->args[i]);
+		free(node->cmd->args[i]);
+		node->cmd->args[i] = tmp;
+		i++;
+	}
 }
-

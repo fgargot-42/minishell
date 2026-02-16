@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/13 18:59:25 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 22:19:42 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	is_special(char c)
 		|| c == '\0' || c == '&' || c == '(' || c == ')');
 }
 
-static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *quote_type)
+/*static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *quote_type)
 {
 	int start;
 	int len;
@@ -86,7 +86,7 @@ static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *
 	else
 		*quote_type = QUOTE_DOUBLE;
 	return (word);
-}
+}*/
 static char	*extract_word(t_lexer *lexer)
 {
 	const int	start = lexer->pos;
@@ -188,12 +188,12 @@ t_token	*get_next_token(t_lexer *lexer)
 		lexer->pos++;
 		return (create_token(TOKEN_RPAREN, ")", QUOTE_NONE));
 	}
-	else if (c == '"')
-		return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '"', &quote), quote));
-	else if (c == '\'')
-		return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '\'', &quote), quote));
+	//else if (c == '"')
+	//	return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '"', &quote), quote));
+	//else if (c == '\'')
+	//	return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '\'', &quote), quote));
 	else
-		return (create_token(TOKEN_WORD, extract_word(lexer), quote));
+		return (create_token(TOKEN_WORD, extract_word(lexer), QUOTE_NONE));
 }
 
 static int	is_redir_token(t_token *token)
