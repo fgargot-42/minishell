@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 19:07:59 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/16 19:16:53 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,6 +301,30 @@ static void	quote_type_add(t_quote_type **quotes, int pos, int count)
 	*quotes = new_quotes;
 }
 
+static void expand_wildcards_simple(t_cmd *cmd)
+{
+	int		i;
+	char	**expanded;
+
+	if (!cmd || !cmd->args)
+		return;
+	i = 0;
+	while (cmd->args[i])
+	{
+		if (cmd->quote_type[i] == QUOTE_NONE && has_wildcards(cmd->args[i]))
+		{
+			expanded = expand_wildcards(cmd->args[i]);
+			if (expanded && expanded[0])
+			{
+				free(cmd->args[i]);
+				cmd->args[i] = ft_strdup(expanded[0]);
+				free_string_array(expanded);
+			}
+		}
+		i++;
+	}
+}
+
 void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int		i;
@@ -324,4 +348,7 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 		}
 		i += new_arg_len + 1;
 	}
+	expand_wildcards_simple(node->cmd);
 }
+
+
