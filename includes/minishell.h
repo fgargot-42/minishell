@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 22:45:48 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 23:00:31 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,6 @@
 # define PROMPT_OK    " ✨ "CYAN"> "RESET
 # define PROMPT_127   " ❌ "RED"> "RESET
 # define PROMPT_ERR   " ⚠️  "RED"> "RESET
-
-typedef enum e_quote_type
-{
-	QUOTE_NONE,
-	QUOTE_SINGLE,
-	QUOTE_DOUBLE
-}	t_quote_type;
 
 typedef struct s_prompt_parts
 {
@@ -124,7 +117,6 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	char			**args; // ["ls", "-la", NULL]
-	t_quote_type	*quote_type;
 	t_redir			*redirs;
 	t_list			*envs;
 }	t_cmd;
@@ -140,7 +132,6 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
-	t_quote_type	quote;
 	struct s_token	*next;
 }	t_token;
 

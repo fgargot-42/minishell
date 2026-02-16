@@ -113,13 +113,6 @@ static void init_cmd(t_cmd **cmd, size_t count)
 	    free(*cmd);
 		return ;
 	}
-	(*cmd)->quote_type = malloc(sizeof(t_quote_type) * (count + 1));
-	if (!(*cmd)->quote_type)
-	{
-	    free(*cmd);
-		free((*cmd)->args);
-        return ;
-	}
 }
 
 static int is_stop_token(t_token_type type)
@@ -137,7 +130,6 @@ static void handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 		if (!cmd->args[*i])
 			return ;
 	}
-	cmd->quote_type[*i] = (*tokens)->quote;
 	(*i)++;
 	*tokens = (*tokens)->next;
 }
@@ -221,7 +213,6 @@ void	free_tree(t_node *tree)
 	if (tree->cmd)
 	{
 		free_string_array(tree->cmd->args);
-		free(tree->cmd->quote_type);
 		redir = tree->cmd->redirs;
 		while (redir)
 		{

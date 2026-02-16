@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 22:39:40 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 23:25:07 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,38 +277,11 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 		split_res[i] = (*split_str)[i - new_count + 1];
 		i++;
 	}
+	free(new_split);
 	free(*split_str);
 	*split_str = split_res;
 	return (new_count);
 }
-
-/*static void	quote_type_add(t_quote_type **quotes, int pos, int count)
-{
-	int				initial_count;
-	int				i;
-	t_quote_type	*new_quotes;
-
-	initial_count = 0;
-	while (quotes[initial_count])
-		initial_count++;
-	new_quotes = malloc(sizeof(t_quote_type) * (count + initial_count));
-	if (!new_quotes)
-		return ;
-	i = 0;
-	while (i < initial_count + count)
-	{
-		if (i < pos)
-			new_quotes[i] = (*quotes)[i];
-		else if (i < pos + count)
-			new_quotes[i] = new_quotes[i - 1];
-		else
-			new_quotes[i] = (*quotes)[i - count];
-		i++;
-	}
-	free(*quotes);
-	*quotes = new_quotes;
-}*/
-
 
 static void	expand_wildcards_in_cmd(t_cmd *cmd)
 {
@@ -320,7 +293,7 @@ static void	expand_wildcards_in_cmd(t_cmd *cmd)
 	i = 0;
 	while (cmd->args[i])
 	{
-		if (cmd->quote_type[i] == QUOTE_NONE && has_wildcards(cmd->args[i]))
+		if (has_wildcards(cmd->args[i]))
 		{
 			expanded = expand_wildcards(cmd->args[i]);
 			if (expanded && expanded[0])
@@ -334,45 +307,6 @@ static void	expand_wildcards_in_cmd(t_cmd *cmd)
 	}
 }
 
-/*static void	remove_empty_quotes(char **str)
-{
-	char	*src;
-	char	*dst;
-	char	quote_char;
-	int		i;
-	int		j;
-
-	if (!str || !*str)
-		return;
-	src = *str;
-	dst = malloc(ft_strlen(src) + 1);
-	if (!dst)
-		return;
-	i = 0;
-	j = 0;
-	while (src[i])
-	{
-		if (src[i] == '\'' || src[i] == '"')
-		{
-			quote_char = src[i];
-			i++;
-			if (src[i] == quote_char)
-			{
-				i++;
-				continue;
-			}
-			while (src[i] && src[i] != quote_char)
-				dst[j++] = src[i++];
-			if (src[i] == quote_char)
-				i++;
-		}
-		else
-			dst[j++] = src[i++];
-	}
-	dst[j] = '\0';
-	free(*str);
-	*str = dst;
-}*/
 void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	int		i;
@@ -382,30 +316,16 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 	i = 0;
 	while (node->cmd->args[i])
 	{
-		if (node->cmd->quote_type[i] != QUOTE_SINGLE)
-		{
-			expand_var(&node->cmd->args[i], *envs, ctx);
-			//remove_empty_quotes(&node->cmd->args[i]);
-		}
+		expand_var(&node->cmd->args[i], *envs, ctx);
 		i++;
 	}
 	i = 0;
 	while (node->cmd->args[i])
 	{
-	//	new_arg_len = 0;
-	//	if (node->cmd->quote_type[i] == QUOTE_NONE && count_spaces(node->cmd->args[i]))
-	//	{
-	//		new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
-	//		quote_type_add(&node->cmd->quote_type, i, new_arg_len);
-	//	}
-	//	i += new_arg_len + 1;
-		new_arg_len = 0;
+		new_arg_len = 1;
 		if (count_spaces(node->cmd->args[i]))
-		{
 			new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
-			//quote_type_add(&node->cmd->quote_type, i, new_arg_len);
-		}
-		i += new_arg_len + 1;
+		i += new_arg_len;
 	}
 	i = 0;
 	expand_wildcards_in_cmd(node->cmd);

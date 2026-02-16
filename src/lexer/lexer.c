@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/16 22:19:42 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/16 23:02:19 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ static char	*extract_word(t_lexer *lexer)
 	return (word);
 }
 
-t_token	*create_token(t_token_type type, char *value, t_quote_type quote)
+t_token	*create_token(t_token_type type, char *value)
 {
 	t_token	*tok;
 
@@ -124,28 +124,25 @@ t_token	*create_token(t_token_type type, char *value, t_quote_type quote)
 	tok->type = type;
 	tok->value = value;
 	tok->next = NULL;
-	tok->quote = quote;
 	return (tok);
 }
 
 t_token	*get_next_token(t_lexer *lexer)
 {
 	char	c;
-	t_quote_type quote;
 	skip_whitespace(lexer);
 	c = current_char(lexer);
-	quote = QUOTE_NONE;
 	if (c == '\0')
-		return (create_token(TOKEN_EOF, NULL, QUOTE_NONE));
+		return (create_token(TOKEN_EOF, NULL));
 	else if (c == '|')
 	{
 		lexer->pos++;
 		if (current_char(lexer) == '|')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_OR, "||", QUOTE_NONE));
+			return (create_token(TOKEN_OR, "||"));
 		}
-		return (create_token(TOKEN_PIPE, "|", QUOTE_NONE));
+		return (create_token(TOKEN_PIPE, "|"));
 	}
 	else if (c == '<')
 	{
@@ -153,9 +150,9 @@ t_token	*get_next_token(t_lexer *lexer)
 		if (current_char(lexer) == '<')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_HEREDOC, "<<", QUOTE_NONE));
+			return (create_token(TOKEN_HEREDOC, "<<"));
 		}
-		return (create_token(TOKEN_REDIR_IN, "<", QUOTE_NONE));
+		return (create_token(TOKEN_REDIR_IN, "<"));
 	}
 	else if (c == '>')
 	{
@@ -163,9 +160,9 @@ t_token	*get_next_token(t_lexer *lexer)
 		if (current_char(lexer) == '>')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_APPEND, ">>", QUOTE_NONE));
+			return (create_token(TOKEN_APPEND, ">>"));
 		}
-		return (create_token(TOKEN_REDIR_OUT, ">", QUOTE_NONE));
+		return (create_token(TOKEN_REDIR_OUT, ">"));
 	}
 	else if (c == '&')
 	{
@@ -173,27 +170,27 @@ t_token	*get_next_token(t_lexer *lexer)
 		if (current_char(lexer) == '&')
 		{
 			lexer->pos++;
-			return (create_token(TOKEN_AND, "&&", QUOTE_NONE));
+			return (create_token(TOKEN_AND, "&&"));
 		}
 		fprintf(stderr, "single & error\n");
-		return (create_token(TOKEN_EOF, NULL, QUOTE_NONE)); // temporaire
+		return (create_token(TOKEN_EOF, NULL)); // temporaire
 	}
 	else if (c == '(')
 	{
 		lexer->pos++;
-		return (create_token(TOKEN_LPAREN, "(", QUOTE_NONE));
+		return (create_token(TOKEN_LPAREN, "("));
 	}
 	else if (c == ')')
 	{
 		lexer->pos++;
-		return (create_token(TOKEN_RPAREN, ")", QUOTE_NONE));
+		return (create_token(TOKEN_RPAREN, ")"));
 	}
 	//else if (c == '"')
 	//	return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '"', &quote), quote));
 	//else if (c == '\'')
 	//	return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '\'', &quote), quote));
 	else
-		return (create_token(TOKEN_WORD, extract_word(lexer), QUOTE_NONE));
+		return (create_token(TOKEN_WORD, extract_word(lexer)));
 }
 
 static int	is_redir_token(t_token *token)
