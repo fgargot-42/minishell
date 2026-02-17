@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 20:34:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 23:17:37 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	}
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 		exit(1);
-	// check les buitlitns ici
 	expand_cmd_args(node, envs, ctx);
 	if (DEBUG)
 		print_str_list(node->cmd->args);
@@ -121,8 +120,8 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	pipe(fd);
 	pid[0] = -1;
 	pid[1] = 0;
-	status = 0;
 	redir_invalid = resolve_pipe_redirs(node, envs, ctx, fd);
+	status = redir_invalid == 2;
 	if (!(redir_invalid & 1))
 		pid[0] = exec_left_pipe_cmd(node->left, envs, fd[0], ctx);
 	close(fd[1]);
