@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 23:17:37 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 23:41:09 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
+void	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	char	*path;
 	char	**char_envs;
@@ -36,8 +36,7 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 		exit(call_builtin(node, envs, ctx));
 	path = get_command_path(node->cmd->args[0], *envs);
 	execve(path, node->cmd->args, (char *const *)char_envs);
-	free(char_envs);
-	exit(127);
+	exit_fork_clean(node, char_envs, path);
 }
 
 pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)

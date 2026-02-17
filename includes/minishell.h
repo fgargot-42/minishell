@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 20:26:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 23:37:44 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ int		resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx);
 // execution.c
 int		exec_command(t_node *node, t_list **envs, t_ctx *ctx);
 char	*find_in_path(char *cmd);
+void	exit_fork_clean(t_node *node, char **char_envs, char *path);
 
 // exec_tree
 void		exec(t_node *root, t_list **envs, t_ctx *ctx);

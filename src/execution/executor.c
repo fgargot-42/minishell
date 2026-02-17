@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 20:35:08 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 23:37:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,30 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+void	exit_fork_clean(t_node *node, char **char_envs, char *path)
+{
+	int	is_path;
+
+	is_path = ft_strchr(node->cmd->args[0], '/') != NULL;
+	free(path);
+	free_string_array(char_envs);
+	if (is_path)
+	{
+		if (access(node->cmd->args[0], F_OK) == -1)
+		{
+			fprintf(stderr, "minishell: %s: No such file or directory\n",
+					node->cmd->args[0]);
+			exit(127);
+		}
+		fprintf(stderr, "minishell: %s: Permission denied\n",
+				node->cmd->args[0]);
+		exit(126);
+	}
+	fprintf(stderr, "minishell: %s: command not found\n",
+			node->cmd->args[0]);
+	exit(127);
+}
 
 static pid_t	exec_command_fork(t_node *node, t_list **envs)
 {
@@ -42,11 +66,7 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 			close(node->fd_out);
 		}
 		execve(path, node->cmd->args, char_envs);
-		free(path);
-		free_string_array(char_envs);
-		fprintf(stderr, "minishell: %s: command not found\n",
-			node->cmd->args[0]);
-		exit(127);
+		exit_fork_clean(node, char_envs, path);
 	}
 	return (pid);
 }
