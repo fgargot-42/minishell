@@ -12,6 +12,7 @@ SRC=main.c \
 	execution/builtin.c \
 	execution/exec_tree.c \
 	execution/exec_pipe.c \
+	execution/exec_path.c \
 	env/env.c \
 	env/env_utils.c \
 	prompt/prompt.c \

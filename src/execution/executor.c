@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 21:25:07 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/17 20:35:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-char	*find_in_path(char *cmd)
-{
-	const char	*paths[] = {"/bin/", "/usr/bin/", "/usr/local/bin/", NULL};
-	char		*full_path;
-	int			i;
-
-	i = 0;
-	if (access(cmd, X_OK) == 0)
-		return (strdup(cmd));
-	while (paths[i])
-	{
-		full_path = malloc(strlen(paths[i]) + strlen(cmd) + 1);
-		strcpy(full_path, paths[i]);
-		strcat(full_path, cmd);
-		if (access(full_path, X_OK) == 0)
-			return (full_path);
-		free(full_path);
-		i++;
-	}
-	return (NULL);
-}
-
 static pid_t	exec_command_fork(t_node *node, t_list **envs)
 {
 	pid_t		pid;
@@ -49,7 +27,7 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 	pid = fork();
 	if (pid == 0)
 	{
-		path = find_in_path(node->cmd->args[0]);
+		path = get_command_path(node->cmd->args[0], *envs);
 		char_envs = (char**)reconstruct_envs(*envs);
 		if (DEBUG)
 			printf("%p\n", node);

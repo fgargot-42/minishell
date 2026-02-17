@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 23:00:31 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 20:26:09 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,10 @@ void		exec(t_node *root, t_list **envs, t_ctx *ctx);
 
 // exec_pipeline.c
 int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
+
+// exec_path.c
+
+char	*get_command_path(char *cmd, t_list *env);
 
 // expander.c
 
