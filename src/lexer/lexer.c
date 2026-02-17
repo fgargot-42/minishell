@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/17 20:58:43 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/17 21:36:47 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,59 +48,14 @@ static int	is_special(char c)
 		|| c == '\0' || c == '&' || c == '(' || c == ')');
 }
 
-/*static char *extract_quoted_word(t_lexer *lexer, char quote_char,
-	t_quote_type *quote_type)
-{
-	int			start;
-	int			len;
-	char		*word;
-	const int	start = lexer->pos;
-	int			len;
-	char		*word;
-	int			open_single;
-	int			open_double;
-
-	lexer->pos++;
-	start = lexer->pos;
-	len = 0;
-	while (lexer->pos < lexer->len && current_char(lexer) != quote_char)
-	{
-		if (quote_char == '"' && current_char(lexer) == '\\')
-		{
-			lexer->pos++;
-			if (lexer->pos < lexer->len)
-				lexer->pos++;
-			len += 2;
-			continue ;
-		}
-		lexer->pos++;
-		len++;
-	}
-	if (current_char(lexer) != quote_char)
-	{
-		fprintf(stderr, "Error: unclosed quote\n");
-		return (NULL);
-	}
-	word = (char *)malloc(sizeof(char) * (len + 1));
-	if (!word)
-		return (NULL);
-	strncpy(word, &lexer->input[start], len);
-	word[len] = '\0';
-	lexer->pos++;
-	if (quote_char == '\'')
-		*quote_type = QUOTE_SINGLE;
-	else
-		*quote_type = QUOTE_DOUBLE;
-	return (word);
-}*/
 static char	*extract_word(t_lexer *lexer)
 {
-
 	const int	start = lexer->pos;
 	int			len;
 	char		*word;
 	int			open_single;
 	int			open_double;
+
 	len = 0;
 	open_single = 0;
 	open_double = 0;
@@ -180,7 +135,7 @@ t_token	*get_next_token(t_lexer *lexer)
 			return (create_token(TOKEN_AND, "&&"));
 		}
 		fprintf(stderr, "single & error\n");
-		return (create_token(TOKEN_EOF, NULL)); // temporaire
+		return (create_token(TOKEN_EOF, NULL));
 	}
 	else if (c == '(')
 	{

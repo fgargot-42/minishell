@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 16:55:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:25:57 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,7 @@ static long	ft_atol(char *str)
 
 int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
-	int	err_code;
-
 	(void)envs;
-	err_code = ctx->error_code;
 	if (cmd->args[1] && cmd->args[2])
 	{
 		if (!ft_is_long(cmd->args[1]))
@@ -106,8 +103,8 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 				cmd->args[1]);
 			exit(2);
 		}
-		err_code = ft_atol(cmd->args[1]);
+		ctx->error_code = ft_atol(cmd->args[1]);
 	}
 	fprintf(stdout, "exit\n");
-	exit(err_code & 0xff);
+	exit(ctx->error_code & 0xff);
 }

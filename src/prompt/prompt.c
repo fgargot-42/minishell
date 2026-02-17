@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 17:16:49 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:23:19 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,13 @@ static char	*default_prompt(int err)
 	free_parts(&p);
 	return (prompt);
 }
+
 static char	*debug_prompt(int err)
 {
 	(void)err;
 	return (strdup("minishellgdb#"));
 }
+
 char	*build_prompt(int err)
 {
 	if (DEBUG)

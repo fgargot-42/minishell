@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:02:08 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/17 21:02:14 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/17 21:26:37 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static int	match(char *pattern, char *filename)
 		return (match(pattern + 1, filename + 1));
 	return (0);
 }
+
 static int	count_matches(char *pattern)
 {
 	DIR				*dir;
@@ -63,6 +64,7 @@ static int	count_matches(char *pattern)
 	closedir(dir);
 	return (count);
 }
+
 static char	**fill_matches(char *pattern, int count)
 {
 	DIR				*dir;
@@ -93,11 +95,11 @@ static char	**fill_matches(char *pattern, int count)
 	return (matches);
 }
 
-static void	sort_string_array(char **arr) // bubble sort for *
+static void	sort_string_array(char **arr)
 {
-	int i;
-	int j;
-	char *tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	while (arr[i])

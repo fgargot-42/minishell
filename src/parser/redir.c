@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 18:59:56 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:39:17 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	cleanup_node_fds(t_node *node)
 		node->fd_out = STDOUT_FILENO;
 	}
 }
+
 static int	handle_heredoc(char *delimiter)
 {
 	int		pipe_fd[2];
@@ -70,36 +71,6 @@ static int	handle_heredoc(char *delimiter)
 	close(pipe_fd[1]);
 	waitpid(pid, NULL, 0);
 	return (pipe_fd[0]);
-}
-static char	*get_type_name(t_token_type type)
-{
-	if (type == TOKEN_REDIR_IN)
-		return ("<");
-	if (type == TOKEN_REDIR_OUT)
-		return (">");
-	if (type == TOKEN_APPEND)
-		return (">>");
-	if (type == TOKEN_HEREDOC)
-		return ("<<");
-	return (NULL);
-}
-
-void	print_redirs(t_redir *redirs)
-{
-	t_redir	*current;
-
-	current = redirs;
-	printf(CYAN "\n══════════════════════════ REDIRS ═══════════════════════════\n" RESET);
-	printf(BLUE "⟩ " CYAN "[" RESET);
-	while (current)
-	{
-		printf("(" YELLOW "%s" RESET ": " MAGENTA "%s" RESET ")",
-			get_type_name(current->type), current->file);
-		current = current->next;
-		if (current)
-			printf(BLUE ", " RESET);
-	}
-	printf(CYAN "]\n" RESET);
 }
 
 int	is_redirection(t_token_type type)

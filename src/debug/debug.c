@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 20:25:22 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 16:56:35 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:39:31 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,3 +77,58 @@ void	print_tree_clean(t_node *node)
 		last_child[i++] = false;
 	print_tree_recursive(node, 0, last_child);
 }
+
+void	print_str_list(char **str_list)
+{
+	int	i;
+
+	i = 0;
+	fprintf(stderr,
+		CYAN "\n═══════════════════════════ ARGS ════════════════════════════\n" RESET);
+	fprintf(stderr, BLUE "⟩ " CYAN "[" RESET);
+	while (str_list[i])
+	{
+		fprintf(stderr, MAGENTA "%s" RESET, str_list[i]);
+		i++;
+		if (str_list[i])
+			fprintf(stderr, BLUE ", " RESET);
+		else
+			fprintf(stderr, BLUE ", " RESET);
+	}
+	fprintf(stderr, RED "NULL" CYAN "]\n" RESET);
+}
+
+static char	*get_type_name(t_token_type type)
+{
+	if (type == TOKEN_REDIR_IN)
+		return ("<");
+	if (type == TOKEN_REDIR_OUT)
+		return (">");
+	if (type == TOKEN_APPEND)
+		return (">>");
+	if (type == TOKEN_HEREDOC)
+		return ("<<");
+	return (NULL);
+}
+
+
+
+void	print_redirs(t_redir *redirs)
+{
+	t_redir	*current;
+
+	current = redirs;
+	printf(CYAN "\n══════════════════════════ REDIRS ═══════════════════════════\n" RESET);
+	printf(BLUE "⟩ " CYAN "[" RESET);
+	while (current)
+	{
+		printf("(" YELLOW "%s" RESET ": " MAGENTA "%s" RESET ")",
+			get_type_name(current->type), current->file);
+		current = current->next;
+		if (current)
+			printf(BLUE ", " RESET);
+	}
+	printf(CYAN "]\n" RESET);
+}
+
+

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 16:54:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:34:24 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,35 +58,33 @@ static void	update_new_pwd(t_list **envs)
 	}
 }
 
-int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
+
+static int	cd_home(t_list **envs)
 {
 	t_list	*path;
-	char	*str_path;
-	int		chdir_status;
 
+	path = get_env_node_by_key(*envs, "HOME");
+	if (!path || !((t_env *)path->content)->value)
+	{
+		fprintf(stderr, "HOME not set\n");
+		return (1);
+	}
+	return (-chdir(((t_env *)path->content)->value));
+}
+
+int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
+{
 	(void)ctx;
 	if (cmd->args[2])
 	{
-		fprintf(stderr, "cd: too many argssss!\n");
+		fprintf(stderr, "cd: too many arguments\n");
 		return (1);
 	}
 	if (!cmd->args[1])
-	{
-		path = get_env_node_by_key(*envs, "HOME");
-		if (!path || !((t_env *)path->content)->value)
-		{
-			printf("HOME not set");
-			return (1);
-		}
-		else
-			chdir_status = chdir(((t_env *)path->content)->value);
-	}
-	else
-	{
-		str_path = cmd->args[1];
-		update_old_pwd(envs);
-		chdir_status = chdir(str_path);
-		update_new_pwd(envs);
-	}
-	return (-chdir_status);
+		return (cd_home(envs));
+	update_old_pwd(envs);
+	if (chdir(cmd->args[1]))
+		return (1);
+	update_new_pwd(envs);
+	return (0);
 }

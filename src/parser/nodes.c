@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   nodes.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/17 21:30:31 by mabarrer          #+#    #+#             */
+/*   Updated: 2026/02/17 21:37:28 by mabarrer         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_node	*create_node(t_node_type type, t_node *left, t_node *right)
@@ -31,6 +43,7 @@ t_node	*create_cmd_node(t_cmd *cmd)
 	node->cmd = cmd;
 	return (node);
 }
+
 void	print_tree(t_node *node, int d)
 {
 	int	i;
