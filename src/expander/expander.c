@@ -24,7 +24,7 @@ static void	replace_env(char **input, t_env *env, char *key, size_t *pos)
 	if (env && env->value)
 		value = env->value;
 	new_input = malloc(sizeof(char) * (ft_strlen(*input) + ft_strlen(value)
-		- ft_strlen(key)));
+				- ft_strlen(key)));
 	if (!new_input)
 		return ;
 	ft_strlcpy(new_input, *input, *pos + 1);
@@ -45,14 +45,14 @@ static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
 	size_t	before_len;
 	size_t	error_len;
 	size_t	after_start;
-	
+
 	error_str = ft_itoa(ctx->error_code);
 	if (!error_str)
 		return ;
 	original = *input;
-	before_len = *pos;           // Length before "$?"
+	before_len = *pos; // Length before "$?"
 	error_len = ft_strlen(error_str);
-	after_start = *pos + 2;      // Position after "$?" (skip 2 chars)
+	after_start = *pos + 2; // Position after "$?" (skip 2 chars)
 	new_input = malloc(sizeof(char) * (ft_strlen(original) + error_len - 1));
 	if (!new_input)
 	{
@@ -61,8 +61,7 @@ static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
 	}
 	ft_strlcpy(new_input, original, before_len + 1);
 	ft_strlcpy(new_input + before_len, error_str, error_len + 1);
-	ft_strlcpy(new_input + before_len + error_len,
-		original + after_start,
+	ft_strlcpy(new_input + before_len + error_len, original + after_start,
 		ft_strlen(original + after_start) + 1);
 	*pos = before_len + error_len;
 	free(original);
@@ -75,15 +74,15 @@ static t_env	*get_env(t_list *envs, char *key)
 	t_env	*env;
 
 	env = NULL;
-	node = get_env_node_by_key(envs, key); 
+	node = get_env_node_by_key(envs, key);
 	if (node)
 		env = (t_env *)node->content;
 	return (env);
 }
 static bool	is_special_dollar(char *input, size_t i)
 {
-	char next_char;
-	
+	char	next_char;
+
 	next_char = input[i + 1];
 	return (next_char == ' ' || next_char == '\0');
 }
@@ -97,7 +96,7 @@ static char	*extract_var_name(char *input, size_t start_pos, size_t *end_pos)
 {
 	size_t	len;
 	char	*var_name;
-	
+
 	len = start_pos;
 	while (ft_isalnum(input[len]) || input[len] == '_')
 		len++;
@@ -112,8 +111,8 @@ static void	expand_regular_var(char **input, size_t *i, t_list *envs)
 	t_env	*env;
 	size_t	name_start;
 	size_t	name_end;
-	
-	name_start = *i + 1;  // Position after '$'
+
+	name_start = *i + 1; // Position after '$'
 	var_name = extract_var_name(*input, name_start, &name_end);
 	if (!var_name)
 		return ;
@@ -127,11 +126,10 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	size_t	i;
 	char	*str;
 	int		open_squote;
-	
+
 	i = 0;
 	open_squote = 0;
 	str = *input;
-	
 	while (i < ft_strlen(str))
 	{
 		if (str[i] == '\'')
@@ -141,7 +139,6 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 			i++;
 			continue ;
 		}
-		
 		// Handle different types of $ expansion
 		if (is_special_dollar(str, i))
 		{
@@ -152,7 +149,6 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 			replace_errorcode_env(input, &i, ctx);
 		else
 			expand_regular_var(input, &i, envs);
-		
 		// Update pointer since input may have been reallocated
 		str = *input;
 		i = 0;
@@ -174,23 +170,23 @@ static int	count_spaces(char *s)
 			open_single = !open_single;
 		if (*s == '\"' && !open_single)
 			open_double = !open_double;
-		if (*s ==  ' ' && !open_single && !open_double)
+		if (*s == ' ' && !open_single && !open_double)
 			res++;
 		s++;
 	}
 	return (res);
 }
 
-static char *get_next_split_noquote(char *str, int *pos)
+static char	*get_next_split_noquote(char *str, int *pos)
 {
-	int			open_squote;
-	int			open_dquote;
-	int			start;
-	char		*res;
-	
+	int		open_squote;
+	int		open_dquote;
+	int		start;
+	char	*res;
+
 	open_squote = 0;
 	open_dquote = 0;
-	while (str[*pos] &&  str[*pos] == ' ')
+	while (str[*pos] && str[*pos] == ' ')
 		(*pos)++;
 	start = *pos;
 	while (str[*pos])
@@ -245,7 +241,7 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 	int		i;
 
 	split_count = 0;
-	new_count =  0;
+	new_count = 0;
 	while (split_str[split_count])
 		split_count++;
 	new_split = ft_split_noquote(new_string);
@@ -289,7 +285,7 @@ static void	expand_wildcards_in_cmd(t_cmd *cmd)
 	char	**expanded;
 
 	if (!cmd || !cmd->args)
-		return;
+		return ;
 	i = 0;
 	while (cmd->args[i])
 	{

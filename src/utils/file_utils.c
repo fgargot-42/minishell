@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "minishell.h"
+#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
-#include "libft.h"
-#include "minishell.h"
+
 static void	print_file_error(char *filepath, int err, t_ctx *ctx)
 {
 	char	*join;
@@ -34,7 +35,7 @@ static void	print_file_error(char *filepath, int err, t_ctx *ctx)
 
 int	file_open_read(char *filepath, t_ctx *ctx)
 {
-	int		fd;
+	int	fd;
 
 	fd = open(filepath, O_RDONLY);
 	if (fd < 0)
@@ -44,8 +45,8 @@ int	file_open_read(char *filepath, t_ctx *ctx)
 
 int	file_open_write(char *filepath, t_ctx *ctx)
 {
-	int		fd;
-	
+	int	fd;
+
 	fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		print_file_error(filepath, errno, ctx);
@@ -54,7 +55,7 @@ int	file_open_write(char *filepath, t_ctx *ctx)
 
 int	file_open_append(char *filepath, t_ctx *ctx)
 {
-	int		fd;
+	int	fd;
 
 	fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)

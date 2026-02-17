@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/16 19:10:50 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/17 21:00:37 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ static int	add_env_value_append(t_list *node, char **env)
 
 static int	add_env_value_replace(t_list *node, char **env)
 {
-	char	*new_str;;
+	char	*new_str;
 	int		i;
 
+	;
 	i = 1;
 	new_str = ft_strchr(*env, '=');
 	if (!new_str)
@@ -106,7 +107,7 @@ static int	add_env_value_replace(t_list *node, char **env)
 	return (i);
 }
 
-static	int add_new_env_value(t_list **env_list, char **env)
+static int	add_new_env_value(t_list **env_list, char **env)
 {
 	char	*new_str;
 	t_list	*node;
@@ -131,7 +132,8 @@ static int	add_env(char **env, t_list **env_list)
 	int		append;
 	int		arg_count;
 
-	arg_count = 1;;
+	arg_count = 1;
+	;
 	key_len = ft_strlen(*env);
 	key = ft_strchr(*env, '+');
 	append = (key != NULL);
@@ -159,6 +161,9 @@ static int	add_env(char **env, t_list **env_list)
 	char	**args;
 	int		i;
 	int		status;
+	int		i;
+	int		status;
+	int		had_error;
 
 	(void)ctx;
 	status = 0;
@@ -178,20 +183,19 @@ static int	add_env(char **env, t_list **env_list)
 		if (status)
 		{
 			i += 1;
-			dprintf(2, "minishell: export: `%s': not a valid identifier\n", *args);
+			dprintf(2, "minishell: export: `%s': not a valid identifier\n",
+				*args);
 			continue ;
 		}
 		i = add_env(args, envs);
 	}
 	return (status);
 }*/
-
 int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	int		i;
 	int		status;
 	int		had_error;
-
 	(void)ctx;
 	had_error = 0;
 	if (!envs || !*envs)
@@ -207,11 +211,11 @@ int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		status = check_envname_format(cmd->args[i]);
 		if (status)
 		{
-			dprintf(2, "minishell: export: `%s': not a valid identifier\n", 
-					cmd->args[i]);
+			dprintf(2, "minishell: export: `%s': not a valid identifier\n",
+				cmd->args[i]);
 			had_error = 1;
 			i++;
-			continue;
+			continue ;
 		}
 		add_env(&cmd->args[i], envs);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/16 23:02:19 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 20:58:43 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ static char	current_char(t_lexer *lexer)
 
 static void	skip_whitespace(t_lexer *lexer)
 {
-	while (current_char(lexer) == ' ' || current_char(lexer) == '\t' || current_char(lexer) == '\n')
+	while (current_char(lexer) == ' ' || current_char(lexer) == '\t'
+		|| current_char(lexer) == '\n')
 		lexer->pos++;
 }
 
@@ -47,15 +48,21 @@ static int	is_special(char c)
 		|| c == '\0' || c == '&' || c == '(' || c == ')');
 }
 
-/*static char *extract_quoted_word(t_lexer *lexer, char quote_char, t_quote_type *quote_type)
+/*static char *extract_quoted_word(t_lexer *lexer, char quote_char,
+	t_quote_type *quote_type)
 {
-	int start;
-	int len;
-	char *word;
+	int			start;
+	int			len;
+	char		*word;
+	const int	start = lexer->pos;
+	int			len;
+	char		*word;
+	int			open_single;
+	int			open_double;
+
 	lexer->pos++;
 	start = lexer->pos;
 	len = 0;
-
 	while (lexer->pos < lexer->len && current_char(lexer) != quote_char)
 	{
 		if (quote_char == '"' && current_char(lexer) == '\\')
@@ -80,7 +87,6 @@ static int	is_special(char c)
 	strncpy(word, &lexer->input[start], len);
 	word[len] = '\0';
 	lexer->pos++;
-
 	if (quote_char == '\'')
 		*quote_type = QUOTE_SINGLE;
 	else
@@ -89,16 +95,16 @@ static int	is_special(char c)
 }*/
 static char	*extract_word(t_lexer *lexer)
 {
+
 	const int	start = lexer->pos;
 	int			len;
 	char		*word;
 	int			open_single;
 	int			open_double;
-
 	len = 0;
 	open_single = 0;
 	open_double = 0;
-	while (!(is_special(current_char(lexer)) && !open_single && !open_double) 
+	while (!(is_special(current_char(lexer)) && !open_single && !open_double)
 		&& current_char(lexer) != '\n')
 	{
 		if (!open_double && current_char(lexer) == '\'')
@@ -110,7 +116,7 @@ static char	*extract_word(t_lexer *lexer)
 	}
 	word = (char *)malloc(sizeof(char) * (len + 1));
 	if (!word)
-	    return (NULL);
+		return (NULL);
 	strncpy(word, &lexer->input[start], len);
 	word[len] = '\0';
 	return (word);
@@ -130,6 +136,7 @@ t_token	*create_token(t_token_type type, char *value)
 t_token	*get_next_token(t_lexer *lexer)
 {
 	char	c;
+
 	skip_whitespace(lexer);
 	c = current_char(lexer);
 	if (c == '\0')
@@ -185,10 +192,6 @@ t_token	*get_next_token(t_lexer *lexer)
 		lexer->pos++;
 		return (create_token(TOKEN_RPAREN, ")"));
 	}
-	//else if (c == '"')
-	//	return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '"', &quote), quote));
-	//else if (c == '\'')
-	//	return (create_token(TOKEN_WORD, extract_quoted_word(lexer, '\'', &quote), quote));
 	else
 		return (create_token(TOKEN_WORD, extract_word(lexer)));
 }
@@ -210,7 +213,8 @@ int	check_lexer_errors(t_token *lexer)
 	while (current && current->next)
 	{
 		if (current->type == TOKEN_RPAREN)
-			if (current->next->type == TOKEN_LPAREN || current->next->type == TOKEN_WORD)
+			if (current->next->type == TOKEN_LPAREN
+				|| current->next->type == TOKEN_WORD)
 				return (1);
 		if (is_redir_token(current) || current->type == TOKEN_LPAREN)
 			if (current->next->type != TOKEN_WORD)
@@ -219,7 +223,8 @@ int	check_lexer_errors(t_token *lexer)
 			return (1);
 		if (current->type == TOKEN_AND || current->type == TOKEN_OR
 			|| current->type == TOKEN_PIPE)
-			if (!is_redir_token(current->next) && current->next->type != TOKEN_WORD
+			if (!is_redir_token(current->next)
+				&& current->next->type != TOKEN_WORD
 				&& current->next->type != TOKEN_LPAREN)
 				return (1);
 		current = current->next;

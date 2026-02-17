@@ -13,7 +13,6 @@
 #include "minishell.h"
 #include <stdbool.h>
 
-
 static void	print_connector(int depth, bool *last_child, bool is_last)
 {
 	int	i;
@@ -22,9 +21,9 @@ static void	print_connector(int depth, bool *last_child, bool is_last)
 	while (i < depth)
 	{
 		if (i == depth - 1)
-			printf(is_last ? CYAN"    └── "RESET : CYAN"    ├── "RESET);
+			printf(is_last ? CYAN "    └── " RESET : CYAN "    ├── " RESET);
 		else
-			printf(last_child[i] ? "        " : CYAN"    │   "RESET);
+			printf(last_child[i] ? "        " : CYAN "    │   " RESET);
 		i++;
 	}
 }
@@ -33,20 +32,20 @@ static void	print_node_label(t_node *node)
 {
 	if (node->type == NODE_CMD)
 	{
-		printf("⚡ "GREEN"CMD"RESET": ");
+		printf("⚡ " GREEN "CMD" RESET ": ");
 		if (node->cmd && node->cmd->args && node->cmd->args[0])
-			printf(CYAN"%s"RESET"\n", node->cmd->args[0]);
+			printf(CYAN "%s" RESET "\n", node->cmd->args[0]);
 		else
-			printf(CYAN"(empty)"RESET"\n");
+			printf(CYAN "(empty)" RESET "\n");
 	}
 	else if (node->type == NODE_PIPE)
-		printf(CYAN"│ "BLUE"PIPE"RESET"\n");
+		printf(CYAN "│ " BLUE "PIPE" RESET "\n");
 	else if (node->type == NODE_AND)
-		printf(YELLOW"&& AND"RESET"\n");
+		printf(YELLOW "&& AND" RESET "\n");
 	else if (node->type == NODE_OR)
-		printf(MAGENTA"|| OR"RESET"\n");
+		printf(MAGENTA "|| OR" RESET "\n");
 	else if (node->type == NODE_GROUP)
-		printf(RED"( ) GROUP"RESET"\n");
+		printf(RED "( ) GROUP" RESET "\n");
 }
 
 static void	print_tree_recursive(t_node *node, int depth, bool *last_child)

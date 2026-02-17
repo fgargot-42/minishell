@@ -14,9 +14,9 @@
 
 static int	strlen_noquote(char *str)
 {
-	int		open_squote;
-	int		open_dquote;
-	int		i;
+	int	open_squote;
+	int	open_dquote;
+	int	i;
 
 	open_squote = 0;
 	open_dquote = 0;
@@ -45,7 +45,7 @@ char	*remove_quotes(char *str)
 	open_quotes[1] = 0;
 	i = 0;
 	res_len = strlen_noquote(str);
-	res =  malloc(sizeof(char) * (res_len + 1));
+	res = malloc(sizeof(char) * (res_len + 1));
 	if (!res)
 		return (NULL);
 	res[res_len] = '\0';

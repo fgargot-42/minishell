@@ -19,8 +19,7 @@ int	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	char	*path;
 	char	**char_envs;
 
-	char_envs = (char**)reconstruct_envs(*envs);
-
+	char_envs = (char **)reconstruct_envs(*envs);
 	if (DEBUG)
 		print_str_list(node->cmd->args);
 	if (node->type == NODE_GROUP)
@@ -93,7 +92,8 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 	return (pid);
 }
 
-static int	resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx, int *fd)
+static int	resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx,
+		int *fd)
 {
 	int	redir_invalid_left;
 	int	redir_invalid_right;
@@ -113,8 +113,8 @@ static int	resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx, int *fd)
 
 int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 {
-	int	status;
-	int	fd[2];
+	int		status;
+	int		fd[2];
 	pid_t	pid[2];
 	int		redir_invalid;
 
@@ -129,7 +129,7 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	if (node->right->type == NODE_PIPE)
 		status = exec_pipeline(node->right, envs, ctx);
 	else if (!(redir_invalid & 2))
-			pid[1] = exec_right_pipe_cmd(node->right, envs, ctx);
+		pid[1] = exec_right_pipe_cmd(node->right, envs, ctx);
 	close(fd[0]);
 	waitpid(pid[0], NULL, 0);
 	if (pid[1])

@@ -56,7 +56,7 @@ static int	ft_is_long(char *str)
 	return (is_long);
 }
 
-static	long	ft_atol(char *str)
+static long	ft_atol(char *str)
 {
 	long	nb;
 	int		sign;
@@ -82,7 +82,7 @@ static	long	ft_atol(char *str)
 
 int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
-	int		err_code;
+	int	err_code;
 
 	(void)envs;
 	err_code = ctx->error_code;
@@ -91,10 +91,10 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		if (!ft_is_long(cmd->args[1]))
 		{
 			fprintf(stdout, "exit\n");
-			fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]);
+			fprintf(stderr, "minishell: exit: %s: numeric argument required\n",
+				cmd->args[1]);
 			exit(2);
 		}
-
 		fprintf(stderr, "exit: too many arguments\n");
 		return (1);
 	}
@@ -102,7 +102,8 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	{
 		if (!ft_is_long(cmd->args[1]))
 		{
-			fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]);
+			fprintf(stderr, "minishell: exit: %s: numeric argument required\n",
+				cmd->args[1]);
 			exit(2);
 		}
 		err_code = ft_atol(cmd->args[1]);

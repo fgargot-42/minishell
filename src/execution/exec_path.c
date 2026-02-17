@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
 #include "libft.h"
 #include "minishell.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 static char	*ft_strjoin_chr(char *str1, char *str2, char sep)
 {

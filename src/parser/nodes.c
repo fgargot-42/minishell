@@ -6,7 +6,7 @@ t_node	*create_node(t_node_type type, t_node *left, t_node *right)
 
 	node = (t_node *)malloc(sizeof(t_node));
 	if (!node)
-	    return (NULL);
+		return (NULL);
 	node->type = type;
 	node->left = left;
 	node->right = right;
@@ -22,7 +22,7 @@ t_node	*create_cmd_node(t_cmd *cmd)
 
 	node = (t_node *)malloc(sizeof(t_node));
 	if (!node)
-	    return (NULL);
+		return (NULL);
 	node->type = NODE_CMD;
 	node->left = NULL;
 	node->right = NULL;

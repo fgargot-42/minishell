@@ -11,36 +11,35 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <string.h>
-#include <unistd.h>
 #include <fcntl.h>
-#include <sys/wait.h>
 #include <readline/readline.h>
-void cleanup_node_fds(t_node *node)
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+void	cleanup_node_fds(t_node *node)
 {
 	if (!node)
 		return ;
-
 	if (node->fd_in != STDIN_FILENO)
 	{
 		close(node->fd_in);
 		node->fd_in = STDIN_FILENO;
 	}
-
 	if (node->fd_out != STDOUT_FILENO)
 	{
 		close(node->fd_out);
 		node->fd_out = STDOUT_FILENO;
 	}
 }
-static int handle_heredoc(char *delimiter)
+static int	handle_heredoc(char *delimiter)
 {
-	int pipe_fd[2];
-	char *line;
-	pid_t pid;
+	int		pipe_fd[2];
+	char	*line;
+	pid_t	pid;
+
 	if (pipe(pipe_fd) == -1)
 		return (-1);
-
 	pid = fork();
 	if (pid == -1)
 	{
@@ -48,21 +47,18 @@ static int handle_heredoc(char *delimiter)
 		close(pipe_fd[1]);
 		return (-1);
 	}
-
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
-
 		while (1)
 		{
 			line = readline(">");
 			if (!line)
-				break;
-
-			if (strcmp(line,delimiter) == 0)
+				break ;
+			if (strcmp(line, delimiter) == 0)
 			{
 				free(line);
-				break;
+				break ;
 			}
 			write(pipe_fd[1], line, strlen(line));
 			write(pipe_fd[1], "\n", 1);
@@ -71,7 +67,6 @@ static int handle_heredoc(char *delimiter)
 		close(pipe_fd[1]);
 		exit(0);
 	}
-
 	close(pipe_fd[1]);
 	waitpid(pid, NULL, 0);
 	return (pipe_fd[0]);
@@ -120,7 +115,7 @@ void	add_redirection(t_cmd *cmd, t_token **tokens)
 
 	redir = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir)
-	    return ;
+		return ;
 	redir->type = (*tokens)->type;
 	*tokens = (*tokens)->next;
 	if (!*tokens || (*tokens)->type != TOKEN_WORD)
@@ -130,7 +125,7 @@ void	add_redirection(t_cmd *cmd, t_token **tokens)
 		return ;
 	}
 	redir->file = remove_quotes((*tokens)->value);
-	//if ((*tokens)->quote != QUOTE_SINGLE)
+	// if ((*tokens)->quote != QUOTE_SINGLE)
 	//	expand_var(&redir->file, envs, ctx);
 	*tokens = (*tokens)->next;
 	redir->next = NULL;

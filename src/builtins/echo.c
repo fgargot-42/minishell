@@ -47,7 +47,7 @@ int	builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	const char	**av = (const char **)cmd->args;
 	int			i;
-	int		newline;
+	int			newline;
 
 	(void)envs;
 	(void)ctx;

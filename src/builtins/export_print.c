@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 19:48:35 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 20:52:30 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:01:12 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 	int		j;
 	char	*new_str;
 	int		nb_quotes;
+	char	*new_arg;
 
 	i = 0;
 	nb_quotes = 0;
@@ -43,11 +44,9 @@
 	}
 	return (new_str);
 }*/
-
 void	remove_args_quotes(char **args)
 {
-	char	*new_arg;
-
+	char *new_arg;
 	new_arg = remove_quotes(*args);
 	if (!new_arg)
 		return ;

@@ -20,15 +20,15 @@
 
 static pid_t	exec_command_fork(t_node *node, t_list **envs)
 {
-	pid_t		pid;
+	pid_t	pid;
 	char	**char_envs;
-	char		*path;
+	char	*path;
 
 	pid = fork();
 	if (pid == 0)
 	{
 		path = get_command_path(node->cmd->args[0], *envs);
-		char_envs = (char**)reconstruct_envs(*envs);
+		char_envs = (char **)reconstruct_envs(*envs);
 		if (DEBUG)
 			printf("%p\n", node);
 		if (node->fd_in != STDIN_FILENO)
@@ -44,7 +44,8 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 		execve(path, node->cmd->args, char_envs);
 		free(path);
 		free_string_array(char_envs);
-		fprintf(stderr, "minishell: %s: command not found\n", node->cmd->args[0]);
+		fprintf(stderr, "minishell: %s: command not found\n",
+			node->cmd->args[0]);
 		exit(127);
 	}
 	return (pid);
@@ -65,14 +66,16 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	if (resolve_redirs(node, *envs, ctx))
 		return (1);
 	if (DEBUG)
-		fprintf(stderr, "debug: fd_in=%d, fd_out=%d\n", node->fd_in, node->fd_out);
+		fprintf(stderr, "debug: fd_in=%d, fd_out=%d\n", node->fd_in,
+			node->fd_out);
 	expand_cmd_args(node, envs, ctx);
 	if (DEBUG)
 		print_str_list(node->cmd->args);
 	if (is_builtin(node->cmd))
 	{
 		if (DEBUG)
-			fprintf(stderr, "DEBUG: RUNNING %s as BUILTIN\n", node->cmd->args[0]);
+			fprintf(stderr, "DEBUG: RUNNING %s as BUILTIN\n",
+				node->cmd->args[0]);
 		status = call_builtin(node, envs, ctx);
 		cleanup_node_fds(node);
 		return (status);

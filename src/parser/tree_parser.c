@@ -11,8 +11,11 @@ t_node	*parse_tree(t_token *tokens)
 /*
 t_node	*parse_or(t_token **tokens)
 {
-	t_node	*left;
-	t_node	*right;
+	t_node			*left;
+	t_node			*right;
+	t_node			*left;
+	t_node			*right;
+	t_token_type	type;
 
 	left = parse_and(tokens); // get la gauche en premer
 	while (*tokens && (*tokens)->type == TOKEN_OR)
@@ -23,15 +26,14 @@ t_node	*parse_or(t_token **tokens)
 	}
 	return (left);
 }*/
-
 t_node	*parse_and_or(t_token **tokens)
 {
-	t_node	*left;
-	t_node	*right;
+	t_node *left;
+	t_node *right;
 	t_token_type type;
 	left = parse_pipe(tokens);
-	while (*tokens
-		&& ((*tokens)->type == TOKEN_AND || (*tokens)->type == TOKEN_OR))
+	while (*tokens && ((*tokens)->type == TOKEN_AND
+			|| (*tokens)->type == TOKEN_OR))
 	{
 		type = (*tokens)->type;
 		*tokens = (*tokens)->next; // skip les && et ||
@@ -87,8 +89,8 @@ t_node	*parse_primary(t_token **tokens)
 }
 static size_t	count_args(t_token *tokens)
 {
-	size_t count;
-	t_token *tmp;
+	size_t	count;
+	t_token	*tmp;
 
 	count = 0;
 	tmp = tokens;
@@ -102,26 +104,26 @@ static size_t	count_args(t_token *tokens)
 	}
 	return (count);
 }
-static void init_cmd(t_cmd **cmd, size_t count)
+static void	init_cmd(t_cmd **cmd, size_t count)
 {
 	*cmd = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!*cmd)
-	    return ;
+		return ;
 	(*cmd)->args = malloc(sizeof(char *) * (count + 1));
 	if (!(*cmd)->args)
 	{
-	    free(*cmd);
+		free(*cmd);
 		return ;
 	}
 }
 
-static int is_stop_token(t_token_type type)
+static int	is_stop_token(t_token_type type)
 {
-	return (type == TOKEN_PIPE || type == TOKEN_AND
-			|| type == TOKEN_OR || type == TOKEN_RPAREN);
+	return (type == TOKEN_PIPE || type == TOKEN_AND || type == TOKEN_OR
+		|| type == TOKEN_RPAREN);
 }
 
-static void handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
+static void	handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 {
 	cmd->args[*i] = strdup((*tokens)->value);
 	if (!cmd->args[*i])
@@ -136,15 +138,15 @@ static void handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 
 t_cmd	*parse_command(t_token **tokens)
 {
-	int			i;
-	t_cmd		*cmd;
-	size_t		count;
+	int		i;
+	t_cmd	*cmd;
+	size_t	count;
 
 	cmd = NULL;
 	count = count_args(*tokens);
 	init_cmd(&cmd, count);
 	if (!cmd)
-	    return (NULL);
+		return (NULL);
 	cmd->redirs = NULL;
 	cmd->envs = NULL;
 	i = 0;
@@ -186,7 +188,6 @@ void	print_str_list(char **str_list)
 	fprintf(stderr, RED "NULL" CYAN "]\n" RESET);
 }
 
-
 void	free_string_array(char **array)
 {
 	int	i;
@@ -204,8 +205,9 @@ void	free_string_array(char **array)
 
 void	free_tree(t_node *tree)
 {
-	t_redir *redir;
-	t_redir *next;
+	t_redir	*redir;
+	t_redir	*next;
+
 	if (!tree)
 		return ;
 	free_tree(tree->left);
@@ -223,7 +225,6 @@ void	free_tree(t_node *tree)
 		}
 		if (tree->cmd->envs)
 			ft_lstclear(&tree->cmd->envs, env_free);
-
 		free(tree->cmd);
 	}
 	free(tree);

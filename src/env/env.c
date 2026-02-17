@@ -41,7 +41,8 @@ t_list	*new_env(char *env_line)
 			free(new);
 			return (NULL);
 		}
-		ft_strlcpy(new->value, &env_line[key_len + 1], ft_strlen(&env_line[key_len]));
+		ft_strlcpy(new->value, &env_line[key_len + 1],
+			ft_strlen(&env_line[key_len]));
 	}
 	return (ft_lstnew(new));
 }

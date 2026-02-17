@@ -13,8 +13,8 @@
 #include "libft.h"
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <stdio.h>
 #include <signal.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -32,11 +32,11 @@ static void	sigint_handler(int sig)
 	rl_redisplay();
 }
 
-
-char *handle_input(t_ctx *ctx)
+char	*handle_input(t_ctx *ctx)
 {
 	char	*prompt;
-	char *line;
+	char	*line;
+
 	line = NULL;
 	if (isatty(STDIN_FILENO))
 	{
@@ -44,15 +44,12 @@ char *handle_input(t_ctx *ctx)
 		line = readline(prompt);
 		free(prompt);
 		if (line)
-		    add_history(line);
+			add_history(line);
 	}
 	else
 		line = get_next_line(STDIN_FILENO);
 	return (line);
 }
-
-
-
 
 int	main(int ac, char **av, char **env)
 {
@@ -68,7 +65,6 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &sigint_handler);
 	envs = generate_env(env);
-
 	while (1)
 	{
 		line = handle_input(&ctx);
@@ -77,7 +73,7 @@ int	main(int ac, char **av, char **env)
 		if (!*line)
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 		tokens = lexer(line);
 		free(line);
@@ -99,7 +95,6 @@ int	main(int ac, char **av, char **env)
 			printf("\nExit code: %i\n", ctx.error_code);
 		free_tree(tree);
 	}
-
 	ft_lstclear(&envs, env_free);
 	rl_clear_history();
 	return (ctx.error_code);
