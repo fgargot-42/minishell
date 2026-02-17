@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 21:14:42 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:54:31 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,32 +42,29 @@ static void	replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx)
 	char	*new_input;
 	char	*error_str;
 	char	*original;
-	size_t	before_len;
 	size_t	error_len;
-	size_t	after_start;
 
 	error_str = ft_itoa(ctx->error_code);
 	if (!error_str)
 		return ;
 	original = *input;
-	before_len = *pos; // Length before "$?"
 	error_len = ft_strlen(error_str);
-	after_start = *pos + 2; // Position after "$?" (skip 2 chars)
 	new_input = malloc(sizeof(char) * (ft_strlen(original) + error_len - 1));
 	if (!new_input)
 	{
 		free(error_str);
 		return ;
 	}
-	ft_strlcpy(new_input, original, before_len + 1);
-	ft_strlcpy(new_input + before_len, error_str, error_len + 1);
-	ft_strlcpy(new_input + before_len + error_len, original + after_start,
-		ft_strlen(original + after_start) + 1);
-	*pos = before_len + error_len;
+	ft_strlcpy(new_input, original, *pos + 1);
+	ft_strlcpy(new_input + *pos, error_str, error_len + 1);
+	ft_strlcpy(new_input + *pos + error_len, original + *pos + 2,
+		ft_strlen(original + *pos + 2) + 1);
+	*pos += error_len;
 	free(original);
 	free(error_str);
 	*input = new_input;
 }
+
 static t_env	*get_env(t_list *envs, char *key)
 {
 	t_list	*node;
@@ -79,6 +76,7 @@ static t_env	*get_env(t_list *envs, char *key)
 		env = (t_env *)node->content;
 	return (env);
 }
+
 static bool	is_special_dollar(char *input, size_t i)
 {
 	char	next_char;
@@ -112,7 +110,7 @@ static void	expand_regular_var(char **input, size_t *i, t_list *envs)
 	size_t	name_start;
 	size_t	name_end;
 
-	name_start = *i + 1; // Position after '$'
+	name_start = *i + 1;
 	var_name = extract_var_name(*input, name_start, &name_end);
 	if (!var_name)
 		return ;
@@ -126,7 +124,7 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	size_t	i;
 	char	*str;
 	int		open_quotes[2];
-	
+
 	i = 0;
 	open_quotes[0] = 0;
 	open_quotes[1] = 0;
@@ -137,22 +135,15 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 			open_quotes[0] = !open_quotes[0];
 		if (str[i] == '\"' && !open_quotes[0])
 			open_quotes[1] = !open_quotes[1];
-		if (str[i] != '$' || open_quotes[0])
+		if (str[i] != '$' || open_quotes[0] || is_special_dollar(str, i))
 		{
 			i++;
 			continue ;
 		}
-		// Handle different types of $ expansion
-		if (is_special_dollar(str, i))
-		{
-			i++;
-			continue ;
-		}
-		else if (is_error_code_var(str, i))
+		if (is_error_code_var(str, i))
 			replace_errorcode_env(input, &i, ctx);
 		else
 			expand_regular_var(input, &i, envs);
-		// Update pointer since input may have been reallocated
 		str = *input;
 		i = 0;
 	}
