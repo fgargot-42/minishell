@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 23:25:07 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 21:14:42 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,16 +125,19 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 {
 	size_t	i;
 	char	*str;
-	int		open_squote;
-
+	int		open_quotes[2];
+	
 	i = 0;
-	open_squote = 0;
+	open_quotes[0] = 0;
+	open_quotes[1] = 0;
 	str = *input;
 	while (i < ft_strlen(str))
 	{
-		if (str[i] == '\'')
-			open_squote = !open_squote;
-		if (str[i] != '$' || open_squote)
+		if (str[i] == '\'' && !open_quotes[1])
+			open_quotes[0] = !open_quotes[0];
+		if (str[i] == '\"' && !open_quotes[0])
+			open_quotes[1] = !open_quotes[1];
+		if (str[i] != '$' || open_quotes[0])
 		{
 			i++;
 			continue ;
