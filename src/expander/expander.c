@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 21:54:31 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/17 22:50:27 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,17 @@ static t_env	*get_env(t_list *envs, char *key)
 	return (env);
 }
 
-static bool	is_special_dollar(char *input, size_t i)
+static bool	is_special_dollar(char *input, size_t i, int *open_quotes)
 {
 	char	next_char;
 
+	if (open_quotes[0])
+		return (1);
 	next_char = input[i + 1];
-	return (next_char == ' ' || next_char == '\0');
+	if (open_quotes[1] && (next_char == '\'' || next_char == '\"'))
+		return (1);
+	return (!ft_isalpha(next_char) && next_char != '_'
+		&& next_char != '\'' && next_char != '\"' && next_char != '?');
 }
 
 static bool	is_error_code_var(char *input, size_t i)
@@ -135,7 +140,7 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 			open_quotes[0] = !open_quotes[0];
 		if (str[i] == '\"' && !open_quotes[0])
 			open_quotes[1] = !open_quotes[1];
-		if (str[i] != '$' || open_quotes[0] || is_special_dollar(str, i))
+		if (str[i] != '$' || is_special_dollar(str, i, open_quotes))
 		{
 			i++;
 			continue ;
@@ -146,6 +151,8 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 			expand_regular_var(input, &i, envs);
 		str = *input;
 		i = 0;
+		open_quotes[0] = 0;
+		open_quotes[1] = 0;
 	}
 }
 
