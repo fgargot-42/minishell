@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 22:50:27 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/18 19:35:09 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,13 +156,13 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	}
 }
 
-static int	count_spaces(char *s)
+static int	count_words(char *s)
 {
 	int	res;
 	int	open_single;
 	int	open_double;
 
-	res = 0;
+	res = *s != 0;
 	open_single = 0;
 	open_double = 0;
 	while (*s)
@@ -215,7 +215,7 @@ static char	**ft_split_noquote(char *str)
 
 	index = 0;
 	pos = 0;
-	count = count_spaces(str) + 1;
+	count = count_words(str);
 	split = malloc(sizeof(char *) * (count + 1));
 	if (!split)
 		return (NULL);
@@ -248,7 +248,7 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 	new_split = ft_split_noquote(new_string);
 	if (!new_split)
 		return (0);
-	new_count = count_spaces(new_string) + 1;
+	new_count = count_words(new_string);
 	split_count += new_count;
 	split_res = malloc(sizeof(char *) * split_count);
 	if (!split_res)
@@ -320,7 +320,7 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 	while (node->cmd->args[i])
 	{
 		new_arg_len = 1;
-		if (count_spaces(node->cmd->args[i]))
+		if (count_words(node->cmd->args[i]) != 1)
 			new_arg_len = split_add(&node->cmd->args, node->cmd->args[i], i);
 		i += new_arg_len;
 	}

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 21:39:17 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/18 20:16:58 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,7 @@ void	add_redirection(t_cmd *cmd, t_token **tokens)
 		free(redir);
 		return ;
 	}
-	redir->file = remove_quotes((*tokens)->value);
-	// if ((*tokens)->quote != QUOTE_SINGLE)
-	//	expand_var(&redir->file, envs, ctx);
+	redir->file = ft_strdup((*tokens)->value);
 	*tokens = (*tokens)->next;
 	redir->next = NULL;
 	if (!cmd->redirs)
@@ -115,6 +113,7 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 {
 	t_redir	*redir;
 	int		new_fd;
+	char	*tmp;
 
 	if (!node->cmd)
 		return (0);
@@ -122,6 +121,9 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 	while (redir)
 	{
 		expand_var(&redir->file, envs, ctx);
+		tmp = remove_quotes(redir->file);
+		free(redir->file);
+		redir->file = tmp;
 		if (redir->type == TOKEN_REDIR_IN)
 			new_fd = file_open_read(redir->file, ctx);
 		else if (redir->type == TOKEN_REDIR_OUT)

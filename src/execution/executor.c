@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/18 19:10:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/18 19:47:44 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	exit_fork_clean(t_node *node, char **char_envs, char *path)
 	is_path = ft_strrchr(node->cmd->args[0], '/');
 	free(path);
 	free_string_array(char_envs);
+	if (ft_strlen(node->cmd->args[0]) == 0)
+		exit(0);
 	if (!ft_strncmp(node->cmd->args[0], ".", 2))
 	{
 		ft_putstr_fd("minishell: filename argument required", 2);
@@ -142,5 +144,5 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	return (42);
+	return (0);
 }
