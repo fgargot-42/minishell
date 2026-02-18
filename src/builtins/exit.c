@@ -6,13 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 21:25:57 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/18 22:08:40 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 static int	check_is_long(char *str, int sign)
 {
@@ -87,7 +88,8 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	{
 		if (!ft_is_long(cmd->args[1]))
 		{
-			fprintf(stdout, "exit\n");
+			if (isatty(STDIN_FILENO))
+				fprintf(stderr, "exit\n");
 			fprintf(stderr, "minishell: exit: %s: numeric argument required\n",
 				cmd->args[1]);
 			exit(2);
@@ -105,6 +107,7 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		}
 		ctx->error_code = ft_atol(cmd->args[1]);
 	}
-	fprintf(stdout, "exit\n");
+	if (isatty(STDIN_FILENO))
+		fprintf(stderr, "exit\n");
 	exit(ctx->error_code & 0xff);
 }

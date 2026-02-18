@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/18 19:35:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/18 22:17:30 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 
 	split_count = 0;
 	new_count = 0;
-	while (split_str[split_count])
+	while ((*split_str)[split_count])
 		split_count++;
 	new_split = ft_split_noquote(new_string);
 	if (!new_split)
@@ -256,7 +256,6 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 		free_string_array(new_split);
 		return (0);
 	}
-	split_res[split_count - 1] = NULL;
 	i = 0;
 	while (i < pos)
 	{
@@ -269,7 +268,7 @@ static int	split_add(char ***split_str, char *new_string, int pos)
 		i++;
 	}
 	free((*split_str)[i - new_count]);
-	while (i < split_count - 1)
+	while (i < split_count)
 	{
 		split_res[i] = (*split_str)[i - new_count + 1];
 		i++;
