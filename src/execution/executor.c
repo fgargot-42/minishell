@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 23:37:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/18 19:10:01 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,60 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <errno.h>
+#include <sys/stat.h>
+
+static void	check_is_dir(char *filepath)
+{
+	struct stat	stat_buf;
+	int			status;
+	
+	status = stat(filepath, &stat_buf);
+	if (status != 0)
+		return ;
+	if (stat_buf.st_mode & S_IFDIR)
+	{
+		fprintf(stderr, "minishell: %s: Is a directory\n",
+				filepath);
+		errno = EISDIR;
+	}
+}
+
+static void	check_file_access(char *filepath)
+{
+	if (access(filepath, F_OK) || access(filepath, X_OK))
+	{
+		if (errno == EACCES)
+			fprintf(stderr, "minishell: %s: Permission denied\n", filepath);
+		if (errno == ENOENT)
+			fprintf(stderr, "minishell: %s: No such file or directory\n", filepath);
+	}
+	else
+		check_is_dir(filepath);
+}
 
 void	exit_fork_clean(t_node *node, char **char_envs, char *path)
 {
-	int	is_path;
+	char	*is_path;
 
-	is_path = ft_strchr(node->cmd->args[0], '/') != NULL;
+	is_path = ft_strrchr(node->cmd->args[0], '/');
 	free(path);
 	free_string_array(char_envs);
+	if (!ft_strncmp(node->cmd->args[0], ".", 2))
+	{
+		ft_putstr_fd("minishell: filename argument required", 2);
+		exit(2);
+	}
+	errno = 0;
 	if (is_path)
 	{
-		if (access(node->cmd->args[0], F_OK) == -1)
-		{
-			fprintf(stderr, "minishell: %s: No such file or directory\n",
-					node->cmd->args[0]);
-			exit(127);
-		}
-		fprintf(stderr, "minishell: %s: Permission denied\n",
-				node->cmd->args[0]);
-		exit(126);
+		check_file_access(node->cmd->args[0]);
 	}
-	fprintf(stderr, "minishell: %s: command not found\n",
+	else
+		fprintf(stderr, "minishell: %s: command not found\n",
 			node->cmd->args[0]);
+	if (errno == EACCES || errno == EISDIR)
+		exit(126);
 	exit(127);
 }
 
