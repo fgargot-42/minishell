@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/18 19:47:44 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/18 20:52:40 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ void	exit_fork_clean(t_node *node, char **char_envs, char *path)
 {
 	char	*is_path;
 
-	is_path = ft_strrchr(node->cmd->args[0], '/');
 	free(path);
 	free_string_array(char_envs);
+	if (!node->cmd->args[0])
+		return ;
+	is_path = ft_strrchr(node->cmd->args[0], '/');
 	if (ft_strlen(node->cmd->args[0]) == 0)
 		exit(0);
 	if (!ft_strncmp(node->cmd->args[0], ".", 2))

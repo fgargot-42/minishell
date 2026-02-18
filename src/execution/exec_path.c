@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 20:18:14 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 20:31:24 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/18 20:49:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ char	*get_command_path(char *cmd, t_list *env)
 	char	*cmd_out;
 	t_list	*path_env;
 
+	if (!cmd)
+		return (NULL);
 	cmd_out = ft_strdup(cmd);
 	if (!env)
 		return (cmd_out);
