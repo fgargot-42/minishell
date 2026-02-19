@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 18:12:27 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 19:28:51 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ static pid_t	exec_command_fork(t_node *node, t_list **envs)
 	{
 		path = get_command_path(node->cmd->args[0], *envs);
 		char_envs = (char **)reconstruct_envs(*envs);
-		if (DEBUG)
-			printf("%p\n", node);
 		if (node->fd_in != STDIN_FILENO)
 		{
 			dup2(node->fd_in, 0);
@@ -110,8 +108,6 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	int		status;
 	pid_t	pid;
 
-	if (DEBUG)
-		print_str_list(node->cmd->args);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 	{
 		cleanup_node_fds(node);
@@ -119,23 +115,13 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 	}
 	if (resolve_redirs(node, *envs, ctx))
 		return (1);
-	if (DEBUG)
-		fprintf(stderr, "debug: fd_in=%d, fd_out=%d\n", node->fd_in,
-			node->fd_out);
 	expand_cmd_args(node, envs, ctx);
-	if (DEBUG)
-		print_str_list(node->cmd->args);
 	if (is_builtin(node->cmd))
 	{
-		if (DEBUG)
-			fprintf(stderr, "DEBUG: RUNNING %s as BUILTIN\n",
-				node->cmd->args[0]);
 		status = call_builtin(node, envs, ctx);
 		cleanup_node_fds(node);
 		return (status);
 	}
-	if (DEBUG)
-		fprintf(stderr, "DEBUG: RUNNING %s as EXTERNAL\n", node->cmd->args[0]);
 	pid = exec_command_fork(node, envs);
 	if (node->fd_in != STDIN_FILENO)
 		close(node->fd_in);

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 18:22:00 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 20:22:57 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include <stdlib.h>
 # include "libft.h"
 
-# define DEBUG 0
-
 // Color codes
 # define RED     "\001\033[0;31m\002"
 # define GREEN   "\001\033[0;32m\002"
@@ -28,26 +26,20 @@
 # define CYAN    "\001\033[0;36m\002"
 # define RESET   "\001\033[0m\002"
 
-
-# define PROMPT_OK    " ✨ "CYAN"> "RESET
-# define PROMPT_127   " ❌ "RED"> "RESET
-# define PROMPT_ERR   " ⚠️  "RED"> "RESET
-
 typedef struct s_prompt_parts
 {
-    char    *errcode;
-    char    *icon;
-    char    *name;
-    char    *cwd;
-    char    *sep;
-    char    *color;
-}   t_prompt_parts;
-
+	char	*errcode;
+	char	*icon;
+	char	*name;
+	char	*cwd;
+	char	*sep;
+	char	*color;
+}			t_prompt_parts;
 
 typedef struct s_ctx
 {
-	int error_code;
-}	t_ctx;
+	int	error_code;
+}		t_ctx;
 
 typedef struct s_env
 {
@@ -135,107 +127,102 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-// lexer_utils.c
-void	print_tokens(t_token *tokens);
-void	free_tokens(t_token *tokens);
-
 // lexer.c
-t_token	*lexer(char *input);
-int	check_lexer_errors(t_token *lexer);
+t_token		*lexer(char *input);
 
-// parser.c
-//t_cmd	*parser(t_token *tokens);
+// lexer_utils.c
 
-// tree_parser.c le bon
+int			is_redir_token(t_token *token);
+int			is_operator_token(t_token *token);
+void		free_tokens(t_token *tokens);
 
-t_node	*parse_tree(t_token *tokens);
-//t_node	*parse_or(t_token **tokens);
-t_node	*parse_and_or(t_token **tokens);
-t_node	*parse_pipe(t_token **tokens);
-t_node	*parse_primary(t_token **tokens);
-t_cmd	*parse_command(t_token **tokens);
-void	print_str_list(char **str_list);
+// lexer_syntax.c
+int			lexer_has_syntax_error(t_token *lexer, t_ctx *ctx);
+
+// tree_parser.c 
+
+t_node		*parse_tree(t_token *tokens);
+t_node		*parse_and_or(t_token **tokens);
+t_node		*parse_pipe(t_token **tokens);
+t_node		*parse_primary(t_token **tokens);
+t_cmd		*parse_command(t_token **tokens);
+void		print_str_list(char **str_list);
+
 // nodes.c
-t_node	*create_node(t_node_type type, t_node *left, t_node *right);
-t_node	*create_cmd_node(t_cmd *cmd);
-//void	print_tree(t_node *node, int d);
-void	free_tree(t_node *root);
+t_node		*create_node(t_node_type type, t_node *left, t_node *right);
+t_node		*create_cmd_node(t_cmd *cmd);
+void		free_tree(t_node *root);
+
 // redir.c
-void	cleanup_node_fds(t_node *node);
-void	print_redirs(t_redir *redirs);
-int		is_redirection(t_token_type type);
-void	add_redirection(t_cmd *cmd, t_token **tokens);
-int		resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx);
+void		cleanup_node_fds(t_node *node);
+int			is_redirection(t_token_type type);
+void		add_redirection(t_cmd *cmd, t_token **tokens);
+int			resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx);
 
 // execution.c
-int		exec_command(t_node *node, t_list **envs, t_ctx *ctx);
-char	*find_in_path(char *cmd);
-void	exit_fork_clean(t_node *node, char **char_envs, char *path);
+int			exec_command(t_node *node, t_list **envs, t_ctx *ctx);
+char		*find_in_path(char *cmd);
+void		exit_fork_clean(t_node *node, char **char_envs, char *path);
 
 // exec_tree
 void		exec(t_node *root, t_list **envs, t_ctx *ctx);
 
 // exec_pipeline.c
-int		exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
+int			exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
 
 // exec_path.c
 
-char	*get_command_path(char *cmd, t_list *env);
+char		*get_command_path(char *cmd, t_list *env);
 
 // expander.c
 
-void	expand_var(char **input, t_list *envs, t_ctx *ctx);
-void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx);
-// builtin.c
+void		expand_var(char **input, t_list *envs, t_ctx *ctx);
+void		expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx);
 
+// builtin.c
 typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
-int		is_builtin(t_cmd *cmd);
-int		call_builtin(t_node *node, t_list **envs, t_ctx *ctx);
-void	builtin_export_print(t_list **envs);
+int			is_builtin(t_cmd *cmd);
+int			call_builtin(t_node *node, t_list **envs, t_ctx *ctx);
+void		builtin_export_print(t_list **envs);
 
 // env.c
 
-t_list	*new_env(char *env_line);
-t_list	*generate_env(char **env);
-void	print_env_export(t_list *env);
+t_list		*new_env(char *env_line);
+t_list		*generate_env(char **env);
+void		print_env_export(t_list *env);
 const char	**reconstruct_envs(t_list *envs);
 
 // env_utils.c
-t_list	*get_env_node_by_key(t_list *env_list, char *key);
+t_list		*get_env_node_by_key(t_list *env_list, char *key);
 
 // builtins;
-int		builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx);
-int		builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx);
-int		builtin_pwd(t_cmd *cmd, t_list **envs, t_ctx *ctx);
-int		builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx);
-int		builtin_unset(t_cmd *cmd, t_list **envs, t_ctx *ctx);
-int		builtin_env(t_cmd *cmd, t_list **envs, t_ctx *ctx);
-int		builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int			builtin_echo(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int			builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int			builtin_pwd(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int			builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int			builtin_unset(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int			builtin_env(t_cmd *cmd, t_list **envs, t_ctx *ctx);
+int			builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 
-void	remove_args_quotes(char **args);
+void		remove_args_quotes(char **args);
 
 // export_utils
-void	free_env(t_list *env_list);
-
-void	env_free(void *content);
-void	free_string_array(char **array);
+void		free_env(t_list *env_list);
+void		env_free(void *content);
+void		free_string_array(char **array);
 
 // file utils
-
-int		file_open_read(char *filepath, t_ctx *ctx);
-int		file_open_write(char *filepath, t_ctx *ctx);
-int		file_open_append(char *filepath, t_ctx *ctx);
+int			file_open_read(char *filepath, t_ctx *ctx);
+int			file_open_write(char *filepath, t_ctx *ctx);
+int			file_open_append(char *filepath, t_ctx *ctx);
 
 // string utils
+char		*remove_quotes(char *str);
+char		*ft_strjoin_chr(char *str1, char *str2, char sep);
+char		*ft_strjoin_all_chr(char **str_array, char sep);
 
-char	*remove_quotes(char *str);
-char	*ft_strjoin_chr(char *str1, char *str2, char sep);
-char	*ft_strjoin_all_chr(char **str_array, char sep);
-
-// debug
-void	print_tree_clean(t_node *node);
 // wildcards
-//
-int     has_wildcards(char *str);
-char    **expand_wildcards(char *pattern);
+int			has_wildcards(char *str);
+char		**expand_wildcards(char *pattern);
+
 #endif	//MINISHELL_H

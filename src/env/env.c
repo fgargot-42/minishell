@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 19:19:46 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 19:25:51 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	print_env_export(t_list *env)
 	}
 }
 
-// key value -> KEY=VALUE char*
 static char	*create_env_line(char *key, char *value)
 {
 	char	*temp;

@@ -18,6 +18,7 @@ SRC=main.c \
 	prompt/prompt.c \
 	lexer/lexer.c \
 	lexer/lexer_utils.c \
+	lexer/lexer_syntax.c \
 	parser/tree_parser.c \
 	parser/nodes.c \
 	parser/redir.c \
@@ -32,7 +33,6 @@ SRC=main.c \
 	builtins/exit.c \
 	utils/file_utils.c \
 	utils/string_utils.c \
-	debug/debug.c \
 	wildcards/wildcards.c
 OBJ=$(SRC:.c=.o)
 

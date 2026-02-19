@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/17 21:23:19 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/19 19:36:17 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	free_parts(t_prompt_parts *p)
 	free(p->cwd);
 }
 
-static char	*default_prompt(int err)
+char	*build_prompt(int err)
 {
 	t_prompt_parts	p;
 	char			*prompt;
@@ -68,18 +68,4 @@ static char	*default_prompt(int err)
 	prompt = join_free(prompt, RESET, 1, 0);
 	free_parts(&p);
 	return (prompt);
-}
-
-static char	*debug_prompt(int err)
-{
-	(void)err;
-	return (strdup("minishellgdb#"));
-}
-
-char	*build_prompt(int err)
-{
-	if (DEBUG)
-		return (debug_prompt(err));
-	else
-		return (default_prompt(err));
 }

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 16:57:31 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 19:27:40 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@
 void	exec(t_node *root, t_list **envs, t_ctx *ctx)
 {
 	if (root->type == NODE_CMD)
-	{
-		if (DEBUG)
-			print_redirs(root->cmd->redirs);
 		ctx->error_code = exec_command(root, envs, ctx);
-	}
 	else if (root->type == NODE_PIPE)
 		ctx->error_code = exec_pipeline(root, envs, ctx);
 	else if (root->type == NODE_OR)

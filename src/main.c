@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/18 21:48:44 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 20:23:54 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,15 @@ char	*handle_input(t_ctx *ctx)
 	return (line);
 }
 
-int	main(int ac, char **av, char **env)
+static void	main_loop(t_list *envs, t_ctx *ctx)
 {
 	char	*line;
 	t_node	*tree;
 	t_token	*tokens;
-	t_list	*envs;
-	t_ctx	ctx;
-
-	ctx.error_code = 0;
-	(void)ac;
-	(void)av;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, &sigint_handler);
-	envs = generate_env(env);
+	
 	while (1)
 	{
-		line = handle_input(&ctx);
+		line = handle_input(ctx);
 		if (!line)
 			break ;
 		if (!*line)
@@ -77,24 +69,27 @@ int	main(int ac, char **av, char **env)
 		}
 		tokens = lexer(line);
 		free(line);
-		if (DEBUG)
-			print_tokens(tokens);
-		if (tokens && check_lexer_errors(tokens))
-		{
-			free_tokens(tokens);
-			ctx.error_code = 2;
-			ft_putstr_fd("Syntax error\n", 2);
+		if (lexer_has_syntax_error(tokens, ctx))
 			continue ;
-		}
 		tree = parse_tree(tokens);
-		if (DEBUG)
-			print_tree_clean(tree);
 		free_tokens(tokens);
-		exec(tree, &envs, &ctx);
-		if (DEBUG)
-			printf("\nExit code: %i\n", ctx.error_code);
+		exec(tree, &envs, ctx);
 		free_tree(tree);
 	}
+}
+
+int	main(int ac, char **av, char **env)
+{
+	t_list	*envs;
+	t_ctx	ctx;
+
+	ctx.error_code = 0;
+	(void)ac;
+	(void)av;
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &sigint_handler);
+	envs = generate_env(env);
+	main_loop(envs, &ctx);
 	ft_lstclear(&envs, env_free);
 	rl_clear_history();
 	if (isatty(STDIN_FILENO))

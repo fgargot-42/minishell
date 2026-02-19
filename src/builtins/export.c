@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 19:07:57 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 19:24:42 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,41 +156,6 @@ static int	add_env(char **env, t_list **env_list)
 	return (arg_count);
 }
 
-/*int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
-{
-	char	**args;
-	int		i;
-	int		status;
-	int		i;
-	int		status;
-	int		had_error;
-
-	(void)ctx;
-	status = 0;
-	args = cmd->args;
-	if (!envs || !*envs)
-		return (0);
-	if (!cmd->args[1])
-	{
-		builtin_export_print(envs);
-		return (0);
-	}
-	i = 1;
-	while (*(args + i))
-	{
-		args += i;
-		status = check_envname_format(*args);
-		if (status)
-		{
-			i += 1;
-			dprintf(2, "minishell: export: `%s': not a valid identifier\n",
-				*args);
-			continue ;
-		}
-		i = add_env(args, envs);
-	}
-	return (status);
-}*/
 int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	int		i;

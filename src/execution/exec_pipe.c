@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/17 23:41:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 19:27:11 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ void	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	char	**char_envs;
 
 	char_envs = (char **)reconstruct_envs(*envs);
-	if (DEBUG)
-		print_str_list(node->cmd->args);
 	if (node->type == NODE_GROUP)
 	{
 		exec(node, envs, ctx);
@@ -30,8 +28,6 @@ void	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 		exit(1);
 	expand_cmd_args(node, envs, ctx);
-	if (DEBUG)
-		print_str_list(node->cmd->args);
 	if (is_builtin(node->cmd))
 		exit(call_builtin(node, envs, ctx));
 	path = get_command_path(node->cmd->args[0], *envs);
@@ -43,15 +39,11 @@ pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)
 {
 	pid_t	pid;
 
-	if (DEBUG)
-		print_redirs(node->cmd->redirs);
 	pid = fork();
 	if (pid < 0)
 		return (-1);
 	if (pid == 0)
 	{
-		if (DEBUG)
-			printf("%p\n", node);
 		close(read_fd);
 		dup2(node->fd_out, STDOUT_FILENO);
 		close(node->fd_out);
@@ -69,15 +61,11 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	pid_t	pid;
 
-	if (DEBUG)
-		print_redirs(node->cmd->redirs);
 	pid = fork();
 	if (pid < 0)
 		return (-1);
 	if (pid == 0)
 	{
-		if (DEBUG)
-			printf("%p\n", node);
 		dup2(node->fd_in, STDIN_FILENO);
 		close(node->fd_in);
 		if (node->fd_out != STDOUT_FILENO)

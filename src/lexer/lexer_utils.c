@@ -6,46 +6,11 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:48:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 16:58:16 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 20:18:54 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_tokens(t_token *tokens)
-{
-	fprintf(stderr,
-		CYAN "\n═══════════════════════════ LEXER ═══════════════════════════\n" RESET);
-	fprintf(stderr, BLUE "⟩ " RESET);
-	while (tokens && tokens->type != TOKEN_EOF)
-	{
-		if (tokens->type == TOKEN_WORD)
-			fprintf(stderr, MAGENTA "WORD" RESET "(" CYAN "%s" RESET ")",
-				tokens->value);
-		else if (tokens->type == TOKEN_PIPE)
-			fprintf(stderr, YELLOW "PIPE" RESET);
-		else if (tokens->type == TOKEN_REDIR_IN)
-			fprintf(stderr, GREEN "REDIR_IN" RESET);
-		else if (tokens->type == TOKEN_REDIR_OUT)
-			fprintf(stderr, GREEN "REDIR_OUT" RESET);
-		else if (tokens->type == TOKEN_APPEND)
-			fprintf(stderr, GREEN "APPEND" RESET);
-		else if (tokens->type == TOKEN_HEREDOC)
-			fprintf(stderr, GREEN "HEREDOC" RESET);
-		else if (tokens->type == TOKEN_AND)
-			fprintf(stderr, GREEN "&&" RESET);
-		else if (tokens->type == TOKEN_OR)
-			fprintf(stderr, GREEN "||" RESET);
-		else if (tokens->type == TOKEN_LPAREN)
-			fprintf(stderr, GREEN "(" RESET);
-		else if (tokens->type == TOKEN_RPAREN)
-			fprintf(stderr, GREEN ")" RESET);
-		tokens = tokens->next;
-		if (tokens && tokens->type != TOKEN_EOF)
-			fprintf(stderr, BLUE " → " RESET);
-	}
-	fprintf(stderr, BLUE " → " RED "EOF\n" RESET);
-}
 
 void	free_tokens(t_token *tokens)
 {
@@ -59,4 +24,16 @@ void	free_tokens(t_token *tokens)
 		free(tokens);
 		tokens = tmp;
 	}
+}
+
+int	is_redir_token(t_token *token)
+{
+	return (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
+		|| token->type == TOKEN_HEREDOC || token->type == TOKEN_APPEND);
+}
+
+int	is_operator_token(t_token *token)
+{
+	return (token->type == TOKEN_AND || token->type == TOKEN_OR
+		|| token->type == TOKEN_PIPE);
 }
