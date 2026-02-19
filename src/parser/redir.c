@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 22:48:12 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/19 23:29:37 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,6 @@ static t_redir	*new_redir(t_token **tokens)
 	redir->type = (*tokens)->type;
 	redir->next = NULL;
 	*tokens = (*tokens)->next;
-	if (!*tokens || (*tokens)->type != TOKEN_WORD)
-	{
-		fprintf(stderr, "error redir not filename\n");
-		free(redir);
-		return (NULL);
-	}
 	redir->file = ft_strdup((*tokens)->value);
 	*tokens = (*tokens)->next;
 	return (redir);
