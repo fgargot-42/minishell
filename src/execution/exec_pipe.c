@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 19:27:11 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 22:53:00 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,7 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 		pid[1] = exec_right_pipe_cmd(node->right, envs, ctx);
 	close(fd[0]);
 	waitpid(pid[0], NULL, 0);
-	if (pid[1])
-	{
-		waitpid(pid[1], &status, 0);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-	}
+	if (pid[1] && waitpid(pid[1], &status, 0) > 0 && WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return (status);
 }
