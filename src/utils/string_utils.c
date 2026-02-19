@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 20:31:00 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 21:44:46 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 22:42:32 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,29 @@ static int	strlen_noquote(char *str)
 	return (i);
 }
 
+static char	*allocate_string(int res_len)
+{
+	char	*res;
+
+	res = malloc(sizeof(char) * (res_len + 1));
+	if (!res)
+		return (NULL);
+	res[res_len] = '\0';
+	return (res);
+}
+
 char	*remove_quotes(char *str)
 {
 	char	*res;
-	int		res_len;
 	int		open_quotes[2];
+	int		res_len;
 	int		i;
 
 	open_quotes[0] = 0;
 	open_quotes[1] = 0;
 	i = 0;
 	res_len = strlen_noquote(str);
-	res = malloc(sizeof(char) * (res_len + 1));
-	if (!res)
-		return (NULL);
-	res[res_len] = '\0';
+	res = allocate_string(res_len);
 	while (*str)
 	{
 		if (*str == '\'' && !open_quotes[1])
