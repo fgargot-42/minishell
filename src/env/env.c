@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/12 16:56:47 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 19:19:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_list	*new_env(char *env_line)
 	if (!new)
 		return (NULL);
 	key_len = 0;
-	while (env_line[key_len] && env_line[key_len] != '=')
+	while (env_line[key_len] && env_line[key_len] != '='
+		&& env_line[key_len] != '+')
 		key_len++;
 	new->key = malloc(sizeof(char) * (key_len + 1));
 	if (!new->key)
@@ -32,18 +33,11 @@ t_list	*new_env(char *env_line)
 	}
 	ft_strlcpy(new->key, env_line, key_len + 1);
 	new->value = NULL;
+	if (env_line[key_len] == '+')
+		key_len++;
+	new->value = NULL;
 	if (env_line[key_len])
-	{
-		new->value = malloc(sizeof(char) * (ft_strlen(env_line) - key_len));
-		if (!new->value)
-		{
-			free(new->key);
-			free(new);
-			return (NULL);
-		}
-		ft_strlcpy(new->value, &env_line[key_len + 1],
-			ft_strlen(&env_line[key_len]));
-	}
+		new->value = ft_strdup(&env_line[key_len + 1]);
 	return (ft_lstnew(new));
 }
 
