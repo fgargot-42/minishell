@@ -13,6 +13,7 @@ SRC=main.c \
 	execution/exec_tree.c \
 	execution/exec_pipe.c \
 	execution/exec_path.c \
+	execution/resolve_redir.c \
 	env/env.c \
 	env/env_utils.c \
 	prompt/prompt.c \
@@ -21,6 +22,7 @@ SRC=main.c \
 	lexer/lexer_syntax.c \
 	lexer/lexer_token.c \
 	parser/tree_parser.c \
+	parser/parser_utils.c \
 	parser/nodes.c \
 	parser/redir.c \
 	expander/expander.c \

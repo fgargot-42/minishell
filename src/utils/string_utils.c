@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 20:31:00 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 18:24:46 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 21:44:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,19 @@ char	*ft_strjoin_all_chr(char **str_array, char sep)
 		i++;
 	}
 	return (res);
+}
+
+void	free_string_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }

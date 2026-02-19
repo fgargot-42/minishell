@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:30:07 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/17 21:32:22 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/19 22:00:26 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -82,56 +82,6 @@ t_node	*parse_primary(t_token **tokens)
 	return (create_cmd_node(cmd));
 }
 
-static size_t	count_args(t_token *tokens)
-{
-	size_t	count;
-	t_token	*tmp;
-
-	count = 0;
-	tmp = tokens;
-	while (tmp)
-	{
-		if (tmp->type == TOKEN_WORD)
-			count++;
-		else if (is_redirection(tmp->type))
-			tmp = tmp->next;
-		tmp = tmp->next;
-	}
-	return (count);
-}
-
-static void	init_cmd(t_cmd **cmd, size_t count)
-{
-	*cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!*cmd)
-		return ;
-	(*cmd)->args = malloc(sizeof(char *) * (count + 1));
-	if (!(*cmd)->args)
-	{
-		free(*cmd);
-		return ;
-	}
-}
-
-static int	is_stop_token(t_token_type type)
-{
-	return (type == TOKEN_PIPE || type == TOKEN_AND || type == TOKEN_OR
-		|| type == TOKEN_RPAREN);
-}
-
-static void	handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
-{
-	cmd->args[*i] = strdup((*tokens)->value);
-	if (!cmd->args[*i])
-	{
-		cmd->args[*i] = strdup("");
-		if (!cmd->args[*i])
-			return ;
-	}
-	(*i)++;
-	*tokens = (*tokens)->next;
-}
-
 t_cmd	*parse_command(t_token **tokens)
 {
 	int		i;
@@ -142,8 +92,6 @@ t_cmd	*parse_command(t_token **tokens)
 	init_cmd(&cmd, count);
 	if (!cmd)
 		return (NULL);
-	cmd->redirs = NULL;
-	cmd->envs = NULL;
 	i = 0;
 	while (*tokens)
 	{
@@ -161,46 +109,4 @@ t_cmd	*parse_command(t_token **tokens)
 	}
 	cmd->args[i] = NULL;
 	return (cmd);
-}
-
-void	free_string_array(char **array)
-{
-	int	i;
-
-	if (!array)
-		return ;
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
-
-void	free_tree(t_node *tree)
-{
-	t_redir	*redir;
-	t_redir	*next;
-
-	if (!tree)
-		return ;
-	free_tree(tree->left);
-	free_tree(tree->right);
-	if (tree->cmd)
-	{
-		free_string_array(tree->cmd->args);
-		redir = tree->cmd->redirs;
-		while (redir)
-		{
-			next = redir->next;
-			free(redir->file);
-			free(redir);
-			redir = next;
-		}
-		if (tree->cmd->envs)
-			ft_lstclear(&tree->cmd->envs, env_free);
-		free(tree->cmd);
-	}
-	free(tree);
 }

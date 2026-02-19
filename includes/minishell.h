@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 21:27:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 21:56:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,18 +147,23 @@ int			is_special(char c);
 int			lexer_has_syntax_error(t_token *lexer, t_ctx *ctx);
 
 // tree_parser.c 
-
 t_node		*parse_tree(t_token *tokens);
 t_node		*parse_and_or(t_token **tokens);
 t_node		*parse_pipe(t_token **tokens);
 t_node		*parse_primary(t_token **tokens);
 t_cmd		*parse_command(t_token **tokens);
-void		print_str_list(char **str_list);
+
+// parser_utils.c
+void		free_tree(t_node *root);
+size_t		count_args(t_token *tokens);
+void		handle_word_token(t_cmd *cmd, t_token **tokens, int *i);
+int			is_stop_token(t_token_type type);
+void		init_cmd(t_cmd **cmd, size_t count);
+
 
 // nodes.c
 t_node		*create_node(t_node_type type, t_node *left, t_node *right);
 t_node		*create_cmd_node(t_cmd *cmd);
-void		free_tree(t_node *root);
 
 // redir.c
 void		cleanup_node_fds(t_node *node);
