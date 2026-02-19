@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 21:44:22 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/19 23:48:14 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +36,18 @@ static int	check_envname_format(char *str)
 static int	add_quoted_arg_value(char **arg, char **env)
 {
 	int		i;
-	char	*new_str;
 	char	*tmp;
 
 	i = 1;
 	while (env[i])
 	{
-		new_str = ft_strdup(env[i]);
-		if (!new_str)
-			break ;
 		tmp = ft_strjoin(*arg, " ");
-		if (!tmp)
-		{
-			free(new_str);
-			break ;
-		}
 		free(*arg);
-		*arg = ft_strjoin(tmp, new_str);
-		i++;
-		if (!*arg || ft_strchr(new_str, '\"'))
-		{
-			free(new_str);
+		*arg = ft_strjoin(tmp, env[i]);
+		free(tmp);
+		if (!*arg || ft_strchr(env[i], '\"'))
 			break ;
-		}
-		free(new_str);
+		i++;
 	}
 	return (i);
 }
