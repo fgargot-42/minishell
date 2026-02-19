@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/18 22:08:40 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 23:41:27 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,8 @@ static long	ft_atol(char *str)
 int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	(void)envs;
-	if (cmd->args[1] && cmd->args[2])
-	{
-		if (!ft_is_long(cmd->args[1]))
-		{
-			if (isatty(STDIN_FILENO))
-				fprintf(stderr, "exit\n");
-			fprintf(stderr, "minishell: exit: %s: numeric argument required\n",
-				cmd->args[1]);
-			exit(2);
-		}
-		fprintf(stderr, "exit: too many arguments\n");
-		return (1);
-	}
+	if (isatty(STDIN_FILENO))
+		fprintf(stderr, "exit\n");
 	if (cmd->args[1])
 	{
 		if (!ft_is_long(cmd->args[1]))
@@ -105,9 +94,12 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 				cmd->args[1]);
 			exit(2);
 		}
+		if (cmd->args[2])
+		{
+			fprintf(stderr, "minishell: exit: too many arguments\n");
+			return (1);
+		}
 		ctx->error_code = ft_atol(cmd->args[1]);
 	}
-	if (isatty(STDIN_FILENO))
-		fprintf(stderr, "exit\n");
 	exit(ctx->error_code & 0xff);
 }
