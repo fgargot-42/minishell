@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/17 21:34:24 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/19 21:46:50 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static void	update_new_pwd(t_list **envs)
 		((t_env *)pwd_node->content)->value = get_cwd();
 	}
 }
-
 
 static int	cd_home(t_list **envs)
 {

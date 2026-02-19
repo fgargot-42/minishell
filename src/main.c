@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 20:23:54 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 21:34:26 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	main_loop(t_list *envs, t_ctx *ctx)
 	char	*line;
 	t_node	*tree;
 	t_token	*tokens;
-	
+
 	while (1)
 	{
 		line = handle_input(ctx);

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 19:24:42 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 21:44:22 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ static int	add_env_value_replace(t_list *node, char **env)
 	char	*new_str;
 	int		i;
 
-	;
 	i = 1;
 	new_str = ft_strchr(*env, '=');
 	if (!new_str)
@@ -133,7 +132,6 @@ static int	add_env(char **env, t_list **env_list)
 	int		arg_count;
 
 	arg_count = 1;
-	;
 	key_len = ft_strlen(*env);
 	key = ft_strchr(*env, '+');
 	append = (key != NULL);
@@ -161,8 +159,9 @@ int	builtin_export(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	int		i;
 	int		status;
 	int		had_error;
-	(void)ctx;
+
 	had_error = 0;
+	(void)ctx;
 	if (!envs || !*envs)
 		return (0);
 	if (!cmd->args[1])
