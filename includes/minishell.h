@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 21:56:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 23:14:44 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ void		handle_word_token(t_cmd *cmd, t_token **tokens, int *i);
 int			is_stop_token(t_token_type type);
 void		init_cmd(t_cmd **cmd, size_t count);
 
-
 // nodes.c
 t_node		*create_node(t_node_type type, t_node *left, t_node *right);
 t_node		*create_cmd_node(t_cmd *cmd);
@@ -190,6 +189,24 @@ char		*get_command_path(char *cmd, t_list *env);
 
 void		expand_var(char **input, t_list *envs, t_ctx *ctx);
 void		expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx);
+
+// expander_split.c
+
+int			split_add(char ***split_str, char *new_string, int pos);
+
+// expander_replace.c
+
+void		replace_env(char **input, t_env *env, char *key, size_t *pos);
+void		replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx);
+
+// expander_utils.c
+
+char		*extract_var_name(char *input, size_t start_pos,
+				size_t *end_pos);
+t_env		*get_env(t_list *envs, char *key);
+int			is_special_dollar(char *input, size_t i, int *open_quotes);
+int			count_words(char *s);
+void		check_open_quotes(char c, int *quotes);
 
 // builtin.c
 typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
