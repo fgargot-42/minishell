@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 18:23:12 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 18:52:45 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,6 +315,7 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 		expand_var(&node->cmd->args[i], *envs, ctx);
 		i++;
 	}
+	expand_wildcards_in_cmd(node->cmd);
 	i = 0;
 	while (node->cmd->args[i])
 	{
@@ -324,7 +325,6 @@ void	expand_cmd_args(t_node *node, t_list **envs, t_ctx *ctx)
 		i += new_arg_len;
 	}
 	i = 0;
-	expand_wildcards_in_cmd(node->cmd);
 	while (node->cmd->args[i])
 	{
 		tmp = remove_quotes(node->cmd->args[i]);
