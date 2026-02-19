@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quote_utils.c                                      :+:      :+:    :+:   */
+/*   string_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 20:31:00 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/16 21:35:47 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 18:24:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "libft.h"
 
 static int	strlen_noquote(char *str)
 {
@@ -61,6 +62,39 @@ char	*remove_quotes(char *str)
 			i++;
 		}
 		str++;
+	}
+	return (res);
+}
+
+char	*ft_strjoin_chr(char *str1, char *str2, char sep)
+{
+	char	*res;
+	int		reslen;
+
+	reslen = ft_strlen(str1) + ft_strlen(str2) + 1;
+	res = malloc(sizeof(char) * (reslen + 1));
+	if (!res)
+		return (NULL);
+	ft_strlcpy(res, str1, reslen);
+	res[ft_strlen(str1)] = sep;
+	ft_strlcpy(&res[ft_strlen(str1) + 1], str2, reslen);
+	return (res);
+}
+
+char	*ft_strjoin_all_chr(char **str_array, char sep)
+{
+	int		i;
+	char	*res;
+	char	*old;
+
+	res = ft_strjoin_chr(str_array[0], str_array[1], sep);
+	i = 2;
+	while (str_array[i])
+	{
+		old = res;
+		res = ft_strjoin_chr(res, str_array[i], sep);
+		free(old);
+		i++;
 	}
 	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:02:08 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/17 21:26:37 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/19 18:04:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,6 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <sys/types.h>
-
-int	has_wildcards(char *str)
-{
-	while (*str)
-	{
-		if (*str == '*')
-			return (1);
-		str++;
-	}
-	return (0);
-}
 
 static int	match(char *pattern, char *filename)
 {
@@ -43,93 +32,77 @@ static int	match(char *pattern, char *filename)
 	return (0);
 }
 
-static int	count_matches(char *pattern)
+static t_list	*get_matches(char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	int				count;
+	t_list			*matches;
+	t_list			*new;
 
-	count = 0;
+	matches = NULL;
 	dir = opendir(".");
 	if (!dir)
 		return (0);
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (!(entry->d_name[0] == '.' && pattern[0] != '.'))
-			if (match(pattern, entry->d_name))
-				count++;
+		if (!(entry->d_name[0] == '.' && pattern[0] != '.')
+			&& match(pattern, entry->d_name))
+		{
+			new = ft_lstnew(ft_strdup(entry->d_name));
+			ft_lstadd_back(&matches, new);
+		}
 		entry = readdir(dir);
 	}
-	closedir(dir);
-	return (count);
-}
-
-static char	**fill_matches(char *pattern, int count)
-{
-	DIR				*dir;
-	struct dirent	*entry;
-	char			**matches;
-	int				i;
-
-	i = 0;
-	matches = malloc(sizeof(char *) * (count + 1));
-	if (!matches)
-		return (NULL);
-	dir = opendir(".");
-	if (!dir)
-	{
-		free(matches);
-		return (NULL);
-	}
-	entry = readdir(dir);
-	while (entry)
-	{
-		if (!(entry->d_name[0] == '.' && pattern[0] != '.'))
-			if (match(pattern, entry->d_name))
-				matches[i++] = ft_strdup(entry->d_name);
-		entry = readdir(dir);
-	}
-	matches[i] = NULL;
 	closedir(dir);
 	return (matches);
 }
 
-static void	sort_string_array(char **arr)
+static char	**ft_lst_to_array(t_list **list)
 {
 	int		i;
-	int		j;
-	char	*tmp;
+	int		count;
+	char	**result;
+	t_list	*node;
 
 	i = 0;
-	while (arr[i])
+	count = ft_lstsize(*list);
+	result = malloc(sizeof(char *) * (count + 1));
+	if (!result)
+		return (NULL);
+	node = *list;
+	while (node)
 	{
-		j = i + 1;
-		while (arr[j])
+		result[i] = ft_strdup((char *)(node->content));
+		if (!result[i])
 		{
-			if (ft_strcmp(arr[i], arr[j]) > 0)
-			{
-				tmp = arr[i];
-				arr[i] = arr[j];
-				arr[j] = tmp;
-			}
-			j++;
+			ft_lstclear(list, free);
+			free(result);
+			return (NULL);
 		}
 		i++;
+		node = node->next;
 	}
+	result[i] = NULL;
+	return (result);
+}
+
+static int	list_strcmp(void *s1, void *s2)
+{
+	return (ft_strcmp((char *)s1, (char *)s2));
 }
 
 char	**expand_wildcards(char *pattern)
 {
-	int		count;
+	t_list	*match_list;
 	char	**matches;
 
-	count = count_matches(pattern);
-	if (count == 0)
-		return (NULL);
-	matches = fill_matches(pattern, count);
+	match_list = get_matches(pattern);
+	if (ft_lstsize(match_list) >= 2)
+		ft_lstsort(&match_list, list_strcmp);
+	matches = ft_lst_to_array(&match_list);
+	ft_lstclear(&match_list, free);
 	if (!matches)
 		return (NULL);
-	sort_string_array(matches);
 	return (matches);
 }

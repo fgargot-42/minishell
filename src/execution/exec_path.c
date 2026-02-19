@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 20:18:14 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/18 20:49:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 18:13:09 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,6 @@
 #include "minishell.h"
 #include <stdlib.h>
 #include <unistd.h>
-
-static char	*ft_strjoin_chr(char *str1, char *str2, char sep)
-{
-	char	*res;
-	int		reslen;
-
-	reslen = ft_strlen(str1) + ft_strlen(str2) + 1;
-	res = malloc(sizeof(char) * (reslen + 1));
-	if (!res)
-		return (NULL);
-	ft_strlcpy(res, str1, reslen);
-	res[ft_strlen(str1)] = sep;
-	ft_strlcpy(&res[ft_strlen(str1) + 1], str2, reslen);
-	return (res);
-}
 
 static char	*find_exec_path(char *cmd, char **path_array)
 {
