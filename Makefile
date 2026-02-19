@@ -39,6 +39,7 @@ SRC=main.c \
 	builtins/exit.c \
 	utils/file_utils.c \
 	utils/string_utils.c \
+	utils/string_utils2.c \
 	wildcards/wildcards.c
 OBJ=$(SRC:.c=.o)
 
