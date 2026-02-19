@@ -19,6 +19,7 @@ SRC=main.c \
 	lexer/lexer.c \
 	lexer/lexer_utils.c \
 	lexer/lexer_syntax.c \
+	lexer/lexer_token.c \
 	parser/tree_parser.c \
 	parser/nodes.c \
 	parser/redir.c \

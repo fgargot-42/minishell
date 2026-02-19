@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 20:22:57 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 21:27:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,19 @@ typedef struct s_token
 
 // lexer.c
 t_token		*lexer(char *input);
+char		*extract_word(t_lexer *lexer);
+
+// lexer_token.c
+
+t_token		*get_next_token(t_lexer *lexer);
 
 // lexer_utils.c
 
 int			is_redir_token(t_token *token);
 int			is_operator_token(t_token *token);
 void		free_tokens(t_token *tokens);
+char		current_char(t_lexer *lexer);
+int			is_special(char c);
 
 // lexer_syntax.c
 int			lexer_has_syntax_error(t_token *lexer, t_ctx *ctx);

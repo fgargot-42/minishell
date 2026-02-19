@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:48:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 20:18:54 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 21:14:43 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,18 @@ int	is_operator_token(t_token *token)
 {
 	return (token->type == TOKEN_AND || token->type == TOKEN_OR
 		|| token->type == TOKEN_PIPE);
+}
+
+char	current_char(t_lexer *lexer)
+{
+	if (lexer->pos >= lexer->len)
+		return ('\0');
+	else
+		return (lexer->input[lexer->pos]);
+}
+
+int	is_special(char c)
+{
+	return (c == '|' || c == '<' || c == '>' || c == ' ' || c == '\t'
+		|| c == '\0' || c == '&' || c == '(' || c == ')');
 }

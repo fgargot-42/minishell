@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:22:56 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 16:55:47 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/19 20:51:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -15,7 +15,8 @@
 void	env_free(void *to_delete)
 {
 	free(((t_env *)to_delete)->key);
-	free(((t_env *)to_delete)->value);
+	if (((t_env *)to_delete)->value)
+		free(((t_env *)to_delete)->value);
 	free(to_delete);
 }
 
