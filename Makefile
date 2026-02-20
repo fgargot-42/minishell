@@ -33,6 +33,7 @@ SRC=main.c \
 	builtins/cd.c \
 	builtins/pwd.c \
 	builtins/export.c \
+	builtins/export_add.c \
 	builtins/export_print.c \
 	builtins/unset.c \
 	builtins/env.c \
@@ -64,8 +65,5 @@ fclean: clean
 	make fclean -C $(LIBFTDIR)
 
 re: fclean all
-
-test: re
-	cd minishell_tester/src/ && bash ./tester all
 
 .PHONY: all clean fclean re

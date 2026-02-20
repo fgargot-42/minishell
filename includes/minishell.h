@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:14:44 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 17:09:32 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,8 @@ void		remove_args_quotes(char **args);
 void		free_env(t_list *env_list);
 void		env_free(void *content);
 void		free_string_array(char **array);
+int			add_quoted_arg_value(char **arg, char **env);
+int			add_env(char **env, t_list **env_list);
 
 // file utils
 int			file_open_read(char *filepath, t_ctx *ctx);
