@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/20 19:31:18 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 20:15:06 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,11 @@ int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	}
 	if (!cmd->args[1])
 		return (cd_home(envs));
+	if (cmd->args[1][0] == '-' && cmd->args[1][1])
+	{
+		ft_putstr_fd("cd: invalid option\n", 2);
+		return (2);
+	}
 	update_old_pwd(envs);
 	if (chdir(cmd->args[1]))
 		return (1);

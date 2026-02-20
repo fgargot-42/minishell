@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:41 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/12 16:55:37 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 20:39:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int	builtin_pwd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	(void)cmd;
 	(void)envs;
 	(void)ctx;
+	if (cmd->args[1] && cmd->args[1][0] == '-' && cmd->args[1][1])
+	{
+		ft_putstr_fd("pwd: invalid option\n", 2);
+		return (2);
+	}
 	if (getcwd(buf, sizeof(buf)))
 		printf("%s\n", buf);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 20:31:00 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 19:27:18 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 20:37:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ char	*ft_strjoin_all_chr(char **str_array, char sep)
 	char	*res;
 	char	*old;
 
-	res = ft_strjoin_chr(str_array[0], str_array[1], sep);
-	i = 2;
+	res = ft_strdup(str_array[0]);
+	i = 1;
 	while (str_array[i])
 	{
 		old = res;
