@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 21:16:31 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 21:26:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 19:04:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static t_token	*get_operator_token(t_lexer *lexer, char c)
 			lexer->pos++;
 			return (create_token(TOKEN_AND, "&&"));
 		}
-		fprintf(stderr, "single & error\n");
+		ft_putstr_fd("single & error\n", 2);
 		return (create_token(TOKEN_EOF, NULL));
 	}
 }

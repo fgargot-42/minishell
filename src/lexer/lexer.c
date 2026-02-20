@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 21:39:27 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 19:28:13 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_lexer	*init_lexer(char *input)
 		return (NULL);
 	lexer->input = input;
 	lexer->pos = 0;
-	lexer->len = strlen(input);
+	lexer->len = ft_strlen(input);
 	return (lexer);
 }
 
@@ -32,26 +32,22 @@ char	*extract_word(t_lexer *lexer)
 	const int	start = lexer->pos;
 	int			len;
 	char		*word;
-	int			open_single;
-	int			open_double;
+	int			open_quotes[2];
 
 	len = 0;
-	open_single = 0;
-	open_double = 0;
-	while (!(is_special(current_char(lexer)) && !open_single && !open_double)
-		&& current_char(lexer) != '\n')
+	open_quotes[0] = 0;
+	open_quotes[1] = 0;
+	while (!(is_special(current_char(lexer)) && !open_quotes[0]
+			&& !open_quotes[1]) && current_char(lexer) != '\n')
 	{
-		if (!open_double && current_char(lexer) == '\'')
-			open_single = !open_single;
-		if (!open_single && current_char(lexer) == '\"')
-			open_double = !open_double;
+		check_open_quotes(current_char(lexer), open_quotes);
 		lexer->pos++;
 		len++;
 	}
 	word = (char *)malloc(sizeof(char) * (len + 1));
 	if (!word)
 		return (NULL);
-	strncpy(word, &lexer->input[start], len);
+	ft_strlcpy(word, &lexer->input[start], len + 1);
 	word[len] = '\0';
 	return (word);
 }

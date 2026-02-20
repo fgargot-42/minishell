@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:42:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:15:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 18:59:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,15 @@ int	is_special_dollar(char *input, size_t i, int *open_quotes)
 int	count_words(char *s)
 {
 	int	res;
-	int	open_single;
-	int	open_double;
+	int	open_quotes[2];
 
 	res = *s != 0;
-	open_single = 0;
-	open_double = 0;
+	open_quotes[0] = 0;
+	open_quotes[1] = 0;
 	while (*s)
 	{
-		if (*s == '\'' && !open_double)
-			open_single = !open_single;
-		if (*s == '\"' && !open_single)
-			open_double = !open_double;
-		if (*s == ' ' && !open_single && !open_double)
+		check_open_quotes(*s, open_quotes);
+		if (*s == ' ' && !open_quotes[0] && !open_quotes[1])
 			res++;
 		s++;
 	}
@@ -70,12 +66,4 @@ char	*extract_var_name(char *input, size_t start_pos, size_t *end_pos)
 	*end_pos = len;
 	var_name = ft_substr(&input[start_pos], 0, len - start_pos);
 	return (var_name);
-}
-
-void	check_open_quotes(char c, int *open_quotes)
-{
-	if (c == '\'' && !open_quotes[1])
-		open_quotes[0] = !open_quotes[0];
-	if (c == '\"' && !open_quotes[0])
-		open_quotes[1] = !open_quotes[1];
 }

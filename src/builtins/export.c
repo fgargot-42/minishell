@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:39 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/20 17:17:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 17:38:10 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ static int	builtin_export_add(t_cmd *cmd, t_list **envs)
 		status = check_envname_format(cmd->args[i]);
 		if (status)
 		{
-			dprintf(2, "minishell: export: `%s': not a valid identifier\n",
-				cmd->args[i]);
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(cmd->args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
 			is_error = 1;
 			i++;
 			continue ;

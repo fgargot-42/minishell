@@ -6,11 +6,10 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 21:34:26 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/20 19:35:30 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <signal.h>

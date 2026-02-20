@@ -6,12 +6,11 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/20 16:54:38 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 17:10:40 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 18:02:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "libft.h"
 
 static int	add_env_value_append(t_list *node, char **env)
 {
@@ -58,13 +57,19 @@ static int	add_env_value_replace(t_list *node, char **env)
 static int	add_new_env_value(t_list **env_list, char **env)
 {
 	char	*new_str;
+	t_env	*node_elem;
 	t_list	*node;
 	int		i;
 
 	i = 1;
-	node = new_env(*env);
+	node_elem = new_env(*env);
+	if (!node_elem)
+		return (1);
+	node = ft_lstnew(node_elem);
+	if (!node)
+		return (1);
 	ft_lstadd_back(env_list, node);
-	new_str = strchr(*env, '=');
+	new_str = ft_strchr(*env, '=');
 	if (new_str && ft_strchr(new_str, '\"'))
 		i = add_quoted_arg_value(&((t_env *)node->content)->value, env);
 	if (((t_env *)node->content)->value)

@@ -6,11 +6,10 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:41:27 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/20 19:31:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 #include <stdlib.h>
 #include <unistd.h>
@@ -85,18 +84,19 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	(void)envs;
 	if (isatty(STDIN_FILENO))
-		fprintf(stderr, "exit\n");
+		ft_putstr_fd("exit\n", 2);
 	if (cmd->args[1])
 	{
 		if (!ft_is_long(cmd->args[1]))
 		{
-			fprintf(stderr, "minishell: exit: %s: numeric argument required\n",
-				cmd->args[1]);
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(cmd->args[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 			exit(2);
 		}
 		if (cmd->args[2])
 		{
-			fprintf(stderr, "minishell: exit: too many arguments\n");
+			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 			return (1);
 		}
 		ctx->error_code = ft_atol(cmd->args[1]);

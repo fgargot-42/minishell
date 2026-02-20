@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 21:47:34 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 22:00:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 19:38:17 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ size_t	count_args(t_token *tokens)
 	{
 		if (tmp->type == TOKEN_WORD)
 			count++;
-		else if (is_redirection(tmp->type))
+		else if (is_redir_token(tmp))
 			tmp = tmp->next;
 		tmp = tmp->next;
 	}
@@ -73,10 +73,10 @@ void	init_cmd(t_cmd **cmd, size_t count)
 	(*cmd)->envs = NULL;
 }
 
-int	is_stop_token(t_token_type type)
+int	is_stop_token(t_token *token)
 {
-	return (type == TOKEN_PIPE || type == TOKEN_AND || type == TOKEN_OR
-		|| type == TOKEN_RPAREN);
+	return (token->type == TOKEN_PIPE || token->type == TOKEN_AND
+		|| token->type == TOKEN_OR || token->type == TOKEN_RPAREN);
 }
 
 void	handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
@@ -84,7 +84,7 @@ void	handle_word_token(t_cmd *cmd, t_token **tokens, int *i)
 	cmd->args[*i] = ft_strdup((*tokens)->value);
 	if (!cmd->args[*i])
 	{
-		cmd->args[*i] = strdup("");
+		cmd->args[*i] = ft_strdup("");
 		if (!cmd->args[*i])
 			return ;
 	}

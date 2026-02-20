@@ -6,9 +6,10 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:30:07 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 22:00:26 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 19:15:38 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 #include <string.h>
 
@@ -71,7 +72,7 @@ t_node	*parse_primary(t_token **tokens)
 			*tokens = (*tokens)->next;
 		else
 		{
-			fprintf(stderr, "error missing )\n");
+			ft_putstr_fd("error missing )\n", 2);
 			return (NULL);
 		}
 		return (create_node(NODE_GROUP, node, NULL));
@@ -95,9 +96,9 @@ t_cmd	*parse_command(t_token **tokens)
 	i = 0;
 	while (*tokens)
 	{
-		if (is_stop_token((*tokens)->type))
+		if (is_stop_token(*tokens))
 			break ;
-		if (is_redirection((*tokens)->type))
+		if (is_redir_token(*tokens))
 		{
 			add_redirection(cmd, tokens);
 			continue ;

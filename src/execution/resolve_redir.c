@@ -6,12 +6,11 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:04:18 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 22:37:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 18:31:10 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "libft.h"
 #include <unistd.h>
 #include <readline/readline.h>
 #include <sys/wait.h>
@@ -31,8 +30,8 @@ static void	read_heredoc(int *pipe_fd, char *delimiter)
 			free(line);
 			break ;
 		}
-		write(pipe_fd[1], line, ft_strlen(line));
-		write(pipe_fd[1], "\n", 1);
+		ft_putstr_fd(line, pipe_fd[1]);
+		ft_putstr_fd("\n", pipe_fd[1]);
 		free(line);
 	}
 	close(pipe_fd[1]);

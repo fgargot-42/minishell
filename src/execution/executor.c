@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:46:56 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 18:28:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
@@ -30,8 +29,9 @@ static void	check_is_dir(char *filepath)
 		return ;
 	if (stat_buf.st_mode & S_IFDIR)
 	{
-		fprintf(stderr, "minishell: %s: Is a directory\n",
-			filepath);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(filepath, 2);
+		ft_putstr_fd(": Is a directory\n", 2);
 		errno = EISDIR;
 	}
 }
@@ -41,10 +41,17 @@ static void	check_file_access(char *filepath)
 	if (access(filepath, F_OK) || access(filepath, X_OK))
 	{
 		if (errno == EACCES)
-			fprintf(stderr, "minishell: %s: Permission denied\n", filepath);
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(filepath, 2);
+			ft_putstr_fd(": Permission denied\n", 2);
+		}
 		if (errno == ENOENT)
-			fprintf(stderr, "minishell: %s: No such file or directory\n",
-				filepath);
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(filepath, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
 	}
 	else
 		check_is_dir(filepath);
@@ -66,12 +73,13 @@ void	exit_fork_clean(t_node *node, char **char_envs, char *path)
 	}
 	errno = 0;
 	if (is_path)
-	{
 		check_file_access(node->cmd->args[0]);
-	}
 	else
-		fprintf(stderr, "minishell: %s: command not found\n",
-			node->cmd->args[0]);
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(node->cmd->args[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+	}
 	if (errno == EACCES || errno == EISDIR)
 		exit(126);
 	exit(127);

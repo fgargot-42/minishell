@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:02:08 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 18:04:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 19:26:36 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,5 @@ char	**expand_wildcards(char *pattern)
 		ft_lstsort(&match_list, list_strcmp);
 	matches = ft_lst_to_array(&match_list);
 	ft_lstclear(&match_list, free);
-	if (!matches)
-		return (NULL);
 	return (matches);
 }

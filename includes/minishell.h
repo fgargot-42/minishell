@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 17:09:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 19:14:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ t_cmd		*parse_command(t_token **tokens);
 void		free_tree(t_node *root);
 size_t		count_args(t_token *tokens);
 void		handle_word_token(t_cmd *cmd, t_token **tokens, int *i);
-int			is_stop_token(t_token_type type);
+int			is_stop_token(t_token *token);
 void		init_cmd(t_cmd **cmd, size_t count);
 
 // nodes.c
@@ -216,7 +216,7 @@ void		builtin_export_print(t_list **envs);
 
 // env.c
 
-t_list		*new_env(char *env_line);
+t_env		*new_env(char *env_line);
 t_list		*generate_env(char **env);
 void		print_env_export(t_list *env);
 const char	**reconstruct_envs(t_list *envs);

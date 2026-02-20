@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:29:37 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 19:09:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,6 @@ void	cleanup_node_fds(t_node *node)
 		close(node->fd_out);
 		node->fd_out = STDOUT_FILENO;
 	}
-}
-
-int	is_redirection(t_token_type type)
-{
-	return (type == TOKEN_REDIR_IN || type == TOKEN_REDIR_OUT
-		|| type == TOKEN_APPEND || type == TOKEN_HEREDOC);
 }
 
 static t_redir	*new_redir(t_token **tokens)

@@ -6,14 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 19:25:51 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 17:58:36 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-t_list	*new_env(char *env_line)
+t_env	*new_env(char *env_line)
 {
 	t_env	*new;
 	size_t	key_len;
@@ -38,17 +38,25 @@ t_list	*new_env(char *env_line)
 	new->value = NULL;
 	if (env_line[key_len])
 		new->value = ft_strdup(&env_line[key_len + 1]);
-	return (ft_lstnew(new));
+	return (new);
 }
 
 t_list	*generate_env(char **env)
 {
 	t_list	*head;
+	t_env	*new_elem;
+	t_list	*env_current;
 
 	head = NULL;
 	while (*env)
 	{
-		ft_lstadd_back(&head, new_env(*env));
+		new_elem = new_env(*env);
+		if (!new_elem)
+			break ;
+		env_current = ft_lstnew(new_elem);
+		if (!env_current)
+			break ;
+		ft_lstadd_back(&head, env_current);
 		env++;
 	}
 	return (head);

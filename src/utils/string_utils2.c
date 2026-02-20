@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 23:43:03 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 23:43:29 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/20 18:59:38 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,12 @@ void	free_string_array(char **array)
 		i++;
 	}
 	free(array);
+}
+
+void	check_open_quotes(char c, int *open_quotes)
+{
+	if (c == '\'' && !open_quotes[1])
+		open_quotes[0] = !open_quotes[0];
+	if (c == '\"' && !open_quotes[0])
+		open_quotes[1] = !open_quotes[1];
 }

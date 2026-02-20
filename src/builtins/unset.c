@@ -6,11 +6,10 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:22:56 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 20:51:08 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 17:47:39 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-#include <string.h>
 
 void	env_free(void *to_delete)
 {
@@ -47,7 +46,7 @@ int	builtin_unset(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		prev = NULL;
 		while (current)
 		{
-			if (!strcmp(((t_env *)current->content)->key, *args))
+			if (!ft_strcmp(((t_env *)current->content)->key, *args))
 			{
 				env_delete(envs, current, prev);
 				break ;

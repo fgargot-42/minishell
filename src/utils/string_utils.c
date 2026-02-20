@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 20:31:00 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:43:56 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/20 19:27:18 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,18 @@
 
 static int	strlen_noquote(char *str)
 {
-	int	open_squote;
-	int	open_dquote;
+	int	open_quotes[2];
 	int	i;
 
-	open_squote = 0;
-	open_dquote = 0;
+	open_quotes[0] = 0;
+	open_quotes[1] = 0;
 	i = 0;
 	while (*str)
 	{
-		if (*str == '\'' && !open_dquote)
-			open_squote = !open_squote;
-		else if (*str == '\"' && !open_squote)
-			open_dquote = !open_dquote;
+		if (*str == '\'' && !open_quotes[1])
+			open_quotes[0] = !open_quotes[0];
+		else if (*str == '\"' && !open_quotes[0])
+			open_quotes[1] = !open_quotes[1];
 		else
 			i++;
 		str++;

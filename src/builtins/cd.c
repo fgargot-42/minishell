@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 21:46:50 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/20 19:31:18 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	cd_home(t_list **envs)
 	path = get_env_node_by_key(*envs, "HOME");
 	if (!path || !((t_env *)path->content)->value)
 	{
-		fprintf(stderr, "HOME not set\n");
+		ft_putstr_fd("HOME not set\n", 2);
 		return (1);
 	}
 	return (-chdir(((t_env *)path->content)->value));
@@ -76,7 +76,7 @@ int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	(void)ctx;
 	if (cmd->args[2])
 	{
-		fprintf(stderr, "cd: too many arguments\n");
+		ft_putstr_fd("cd: too many arguments\n", 2);
 		return (1);
 	}
 	if (!cmd->args[1])
