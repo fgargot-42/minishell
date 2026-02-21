@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 00:20:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 19:54:18 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ char		*extract_var_name(char *input, size_t start_pos,
 t_env		*get_env(t_list *envs, char *key);
 int			is_special_dollar(char *input, size_t i, int *open_quotes);
 int			count_words(char *s);
-void		check_open_quotes(char c, int *quotes);
+void		update_open_quotes(char c, int *quotes);
 
 // builtin.c
 typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);

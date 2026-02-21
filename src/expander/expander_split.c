@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:48:38 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:08:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 19:38:47 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,19 @@
 
 static char	*get_next_split_noquote(char *str, int *pos)
 {
-	int		open_squote;
-	int		open_dquote;
+	int		open_quotes[2];
 	int		start;
 	char	*res;
 
-	open_squote = 0;
-	open_dquote = 0;
+	open_quotes[0] = 0;
+	open_quotes[1] = 0;
 	while (str[*pos] && str[*pos] == ' ')
 		(*pos)++;
 	start = *pos;
 	while (str[*pos])
 	{
-		open_squote = !open_squote && !open_dquote && str[*pos] == '\'';
-		open_dquote = !open_squote && !open_dquote && str[*pos] == '\"';
-		if (str[*pos] == ' ' && !open_squote && !open_dquote)
+		update_open_quotes(str[*pos], open_quotes);
+		if (str[*pos] == ' ' && !open_quotes[0] && !open_quotes[1])
 			break ;
 		(*pos)++;
 	}

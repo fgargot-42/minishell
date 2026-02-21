@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 01:02:49 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/20 19:28:13 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 19:40:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*extract_word(t_lexer *lexer)
 	while (!(is_special(current_char(lexer)) && !open_quotes[0]
 			&& !open_quotes[1]) && current_char(lexer) != '\n')
 	{
-		check_open_quotes(current_char(lexer), open_quotes);
+		update_open_quotes(current_char(lexer), open_quotes);
 		lexer->pos++;
 		len++;
 	}

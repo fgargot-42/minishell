@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 00:48:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 19:39:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	open_quotes[1] = 0;
 	while (i < ft_strlen((*input)))
 	{
-		check_open_quotes((*input)[i], open_quotes);
+		update_open_quotes((*input)[i], open_quotes);
 		if ((*input)[i] != '$' || is_special_dollar(*input, i, open_quotes))
 		{
 			i++;

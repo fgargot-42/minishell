@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:42:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 18:59:29 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 19:39:55 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	count_words(char *s)
 	open_quotes[1] = 0;
 	while (*s)
 	{
-		check_open_quotes(*s, open_quotes);
+		update_open_quotes(*s, open_quotes);
 		if (*s == ' ' && !open_quotes[0] && !open_quotes[1])
 			res++;
 		s++;
