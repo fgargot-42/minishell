@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 18:22:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 21:40:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ static int	resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx,
 	int	redir_invalid_left;
 	int	redir_invalid_right;
 
+	propagate_redirs(node);
 	redir_invalid_left = resolve_redirs(node->left, *envs, ctx);
 	if (node->left->fd_out == STDOUT_FILENO)
 		node->left->fd_out = fd[1];

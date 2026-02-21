@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:04:18 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 18:31:10 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 21:33:54 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 	t_redir	*redir;
 	int		new_fd;
 
-	if (!node->cmd)
+	if (!node)
 		return (0);
-	redir = node->cmd->redirs;
+	redir = node->redirs;
 	while (redir)
 	{
 		new_fd = open_redir(&redir, envs, ctx);

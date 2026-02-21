@@ -6,55 +6,51 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 23:25:49 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 00:48:01 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static void	expand_regular_var(char **input, size_t *i, t_list *envs)
+static size_t	expand_regular_var(char **input, size_t i, t_list *envs)
 {
 	char	*var_name;
 	t_env	*env;
 	size_t	name_start;
 	size_t	name_end;
+	size_t	new_index;
 
-	name_start = *i + 1;
+	name_start = i + 1;
 	var_name = extract_var_name(*input, name_start, &name_end);
 	if (!var_name)
-		return ;
+		return (i + 1);
 	env = get_env(envs, var_name);
-	replace_env(input, env, var_name, i);
+	new_index = replace_env(input, env, var_name, i);
 	free(var_name);
+	return (new_index);
 }
 
 void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 {
 	size_t	i;
-	char	*str;
 	int		open_quotes[2];
 
 	i = 0;
 	open_quotes[0] = 0;
 	open_quotes[1] = 0;
-	str = *input;
-	while (i < ft_strlen(str))
+	while (i < ft_strlen((*input)))
 	{
-		check_open_quotes(str[i], open_quotes);
-		if (str[i] != '$' || is_special_dollar(str, i, open_quotes))
+		check_open_quotes((*input)[i], open_quotes);
+		if ((*input)[i] != '$' || is_special_dollar(*input, i, open_quotes))
 		{
 			i++;
 			continue ;
 		}
-		if (str[i + 1] == '?')
-			replace_errorcode_env(input, &i, ctx);
+		if ((*input)[i + 1] == '?')
+			i = replace_errorcode_env(input, i, ctx);
 		else
-			expand_regular_var(input, &i, envs);
-		str = *input;
-		i = 0;
-		open_quotes[0] = 0;
-		open_quotes[1] = 0;
+			i = expand_regular_var(input, i, envs);
 	}
 }
 

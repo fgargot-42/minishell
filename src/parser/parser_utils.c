@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 21:47:34 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 19:38:17 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 23:05:28 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_tree(t_node *tree)
 	if (tree->cmd)
 	{
 		free_string_array(tree->cmd->args);
-		redir = tree->cmd->redirs;
+		redir = tree->redirs;
 		while (redir)
 		{
 			next = redir->next;
@@ -69,7 +69,6 @@ void	init_cmd(t_cmd **cmd, size_t count)
 		free(*cmd);
 		return ;
 	}
-	(*cmd)->redirs = NULL;
 	(*cmd)->envs = NULL;
 }
 

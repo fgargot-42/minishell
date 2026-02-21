@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 19:09:46 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 22:28:04 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,21 @@ static t_redir	*new_redir(t_token **tokens)
 	return (redir);
 }
 
-void	add_redirection(t_cmd *cmd, t_token **tokens)
+void	add_redirection(t_redir **redir, t_token **tokens)
 {
-	t_redir	*redir;
 	t_redir	*tmp;
+	t_redir	*new_redirection;
 
-	redir = new_redir(tokens);
-	if (!redir)
+	new_redirection = new_redir(tokens);
+	if (!new_redirection)
 		return ;
-	if (!cmd->redirs)
+	if (!*redir)
 	{
-		cmd->redirs = redir;
+		*redir = new_redirection;
 		return ;
 	}
-	tmp = cmd->redirs;
+	tmp = *redir;
 	while (tmp->next)
 		tmp = tmp->next;
-	tmp->next = redir;
+	tmp->next = new_redirection;
 }

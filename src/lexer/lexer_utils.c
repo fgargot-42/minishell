@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:48:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 21:14:43 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 22:15:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,16 @@ void	free_tokens(t_token *tokens)
 
 int	is_redir_token(t_token *token)
 {
+	if (!token)
+		return (0);
 	return (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
 		|| token->type == TOKEN_HEREDOC || token->type == TOKEN_APPEND);
 }
 
 int	is_operator_token(t_token *token)
 {
+	if (!token)
+		return (0);
 	return (token->type == TOKEN_AND || token->type == TOKEN_OR
 		|| token->type == TOKEN_PIPE);
 }

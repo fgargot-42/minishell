@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 20:11:34 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/19 20:26:15 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 23:38:37 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	lexer_has_syntax_error(t_token *lexer, t_ctx *ctx)
 	if (!lexer || !check_lexer_errors(lexer))
 		return (0);
 	ctx->error_code = 2;
-	free(lexer);
+	free_tokens(lexer);
 	ft_putstr_fd("Syntax error\n", 2);
 	return (1);
 }

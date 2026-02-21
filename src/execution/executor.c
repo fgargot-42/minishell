@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 18:28:08 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 23:19:07 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,6 @@ int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
 		cleanup_node_fds(node);
 		return (1);
 	}
-	if (resolve_redirs(node, *envs, ctx))
-		return (1);
 	expand_cmd_args(node, envs, ctx);
 	if (is_builtin(node->cmd))
 	{

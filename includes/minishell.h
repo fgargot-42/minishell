@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 19:14:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 00:20:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,6 @@ typedef enum e_node_type
 	NODE_GROUP
 }	t_node_type;
 
-typedef struct s_node
-{
-	t_node_type		type;
-	struct s_node	*left;
-	struct s_node	*right;
-	int				fd_in;
-	int				fd_out;
-	struct s_cmd	*cmd; // set as null si pas fin de branche
-}	t_node;
-
 /*
 
 	echo "salut" && ls -l
@@ -106,10 +96,20 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
+typedef struct s_node
+{
+	t_node_type		type;
+	struct s_node	*left;
+	struct s_node	*right;
+	t_redir			*redirs;
+	int				fd_in;
+	int				fd_out;
+	struct s_cmd	*cmd; // set as null si pas fin de branche
+}	t_node;
+
 typedef struct s_cmd
 {
 	char			**args; // ["ls", "-la", NULL]
-	t_redir			*redirs;
 	t_list			*envs;
 }	t_cmd;
 
@@ -151,7 +151,7 @@ t_node		*parse_tree(t_token *tokens);
 t_node		*parse_and_or(t_token **tokens);
 t_node		*parse_pipe(t_token **tokens);
 t_node		*parse_primary(t_token **tokens);
-t_cmd		*parse_command(t_token **tokens);
+t_cmd		*parse_command(t_token **tokens, t_redir **redir);
 
 // parser_utils.c
 void		free_tree(t_node *root);
@@ -161,13 +161,14 @@ int			is_stop_token(t_token *token);
 void		init_cmd(t_cmd **cmd, size_t count);
 
 // nodes.c
-t_node		*create_node(t_node_type type, t_node *left, t_node *right);
-t_node		*create_cmd_node(t_cmd *cmd);
+t_node		*create_node(t_node_type type, t_node *left, t_node *right,
+				t_redir *redir);
+t_node		*create_cmd_node(t_cmd *cmd, t_redir *redir);
 
 // redir.c
 void		cleanup_node_fds(t_node *node);
 int			is_redirection(t_token_type type);
-void		add_redirection(t_cmd *cmd, t_token **tokens);
+void		add_redirection(t_redir **redir, t_token **tokens);
 int			resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx);
 
 // execution.c
@@ -177,6 +178,7 @@ void		exit_fork_clean(t_node *node, char **char_envs, char *path);
 
 // exec_tree
 void		exec(t_node *root, t_list **envs, t_ctx *ctx);
+void		propagate_redirs(t_node *node);
 
 // exec_pipeline.c
 int			exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
@@ -196,8 +198,8 @@ int			split_add(char ***split_str, char *new_string, int pos);
 
 // expander_replace.c
 
-void		replace_env(char **input, t_env *env, char *key, size_t *pos);
-void		replace_errorcode_env(char **input, size_t *pos, t_ctx *ctx);
+size_t		replace_env(char **input, t_env *env, char *key, size_t pos);
+size_t		replace_errorcode_env(char **input, size_t pos, t_ctx *ctx);
 
 // expander_utils.c
 

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:23:55 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/20 17:30:06 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/20 23:37:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ int	builtin_env(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	t_env	*curr_env;
 
 	(void)ctx;
+	if (cmd->args[1])
+	{
+		if (cmd->args[1][0] == '-')
+			return (125);
+		return (127);
+	}
 	if (!cmd || !envs || !*envs)
 		return (1);
 	current = *envs;
