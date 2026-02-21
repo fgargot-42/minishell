@@ -14,6 +14,7 @@ SRC=main.c \
 	execution/exec_pipe.c \
 	execution/exec_path.c \
 	execution/resolve_redir.c \
+	execution/resolve_redir_pipe.c \
 	env/env.c \
 	env/env_utils.c \
 	prompt/prompt.c \

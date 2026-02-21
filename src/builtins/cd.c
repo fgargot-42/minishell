@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/20 20:15:06 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 20:26:55 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*get_cwd(void)
 	return (res);
 }
 
-static void	update_old_pwd(t_list **envs)
+static void	update_old_pwd(t_list **envs, char *old_pwd)
 {
 	t_list	*pwd_node;
 
@@ -42,8 +42,10 @@ static void	update_old_pwd(t_list **envs)
 	if (pwd_node)
 	{
 		free(((t_env *)pwd_node->content)->value);
-		((t_env *)pwd_node->content)->value = get_cwd();
+		((t_env *)pwd_node->content)->value = old_pwd;
 	}
+	else
+		free(old_pwd);
 }
 
 static void	update_new_pwd(t_list **envs)
@@ -73,6 +75,8 @@ static int	cd_home(t_list **envs)
 
 int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
+	char	*old_pwd;
+
 	(void)ctx;
 	if (cmd->args[2])
 	{
@@ -86,9 +90,13 @@ int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		ft_putstr_fd("cd: invalid option\n", 2);
 		return (2);
 	}
-	update_old_pwd(envs);
+	old_pwd = get_cwd();
 	if (chdir(cmd->args[1]))
+	{
+		free(old_pwd);
 		return (1);
+	}
+	update_old_pwd(envs, old_pwd);
 	update_new_pwd(envs);
 	return (0);
 }

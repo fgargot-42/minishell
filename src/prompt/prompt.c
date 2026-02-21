@@ -6,22 +6,22 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/19 19:36:17 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 21:42:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "unistd.h"
 
-static char	*join_free(char *s1, char *s2, int free_s1, int free_s2)
+static char	*join_free(char *s1, char *s2)
 {
 	char	*result;
 
-	result = ft_strjoin(s1, s2);
-	if (free_s1)
+	result = NULL;
+	if (s1 && s2)
+		result = ft_strjoin(s1, s2);
+	if (s1)
 		free(s1);
-	if (free_s2)
-		free(s2);
 	return (result);
 }
 
@@ -56,16 +56,16 @@ char	*build_prompt(int err)
 	if (!p.errcode || !p.cwd)
 		return (ft_strdup("🐚 " BLUE "minicoquille" CYAN " ⟩ " RESET));
 	prompt = ft_strjoin("[", p.errcode);
-	prompt = join_free(prompt, "] ", 1, 0);
-	prompt = join_free(prompt, p.icon, 1, 0);
-	prompt = join_free(prompt, p.color, 1, 0);
-	prompt = join_free(prompt, p.name, 1, 0);
-	prompt = join_free(prompt, ": ", 1, 0);
-	prompt = join_free(prompt, p.cwd, 1, 0);
-	prompt = join_free(prompt, " ", 1, 0);
-	prompt = join_free(prompt, p.color, 1, 0);
-	prompt = join_free(prompt, p.sep, 1, 0);
-	prompt = join_free(prompt, RESET, 1, 0);
+	prompt = join_free(prompt, "] ");
+	prompt = join_free(prompt, p.icon);
+	prompt = join_free(prompt, p.color);
+	prompt = join_free(prompt, p.name);
+	prompt = join_free(prompt, ": ");
+	prompt = join_free(prompt, p.cwd);
+	prompt = join_free(prompt, " ");
+	prompt = join_free(prompt, p.color);
+	prompt = join_free(prompt, p.sep);
+	prompt = join_free(prompt, RESET);
 	free_parts(&p);
 	return (prompt);
 }

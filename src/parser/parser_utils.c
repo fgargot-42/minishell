@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 21:47:34 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 23:05:28 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 21:46:54 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	init_cmd(t_cmd **cmd, size_t count)
 	if (!(*cmd)->args)
 	{
 		free(*cmd);
+		*cmd = NULL;
 		return ;
 	}
 	(*cmd)->envs = NULL;

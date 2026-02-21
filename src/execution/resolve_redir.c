@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:04:18 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 21:33:54 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 21:16:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ static void	read_heredoc(int *pipe_fd, char *delimiter)
 	close(pipe_fd[0]);
 	while (1)
 	{
-		line = readline(">");
+		if (isatty(STDIN_FILENO))
+			line = readline(">");
+		else
+			line = get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;
 		if (ft_strcmp(line, delimiter) == 0)

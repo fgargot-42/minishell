@@ -6,13 +6,22 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 23:21:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 23:45:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/types.h>
 #include <unistd.h>
+
+void	apply_redirect(int node_fd, int std_fd)
+{
+	if (node_fd != std_fd)
+	{
+		dup2(node_fd, std_fd);
+		close(node_fd);
+	}
+}
 
 void	propagate_redirs(t_node *node)
 {

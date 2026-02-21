@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 21:16:31 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 19:04:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 21:14:32 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static t_token	*create_token(t_token_type type, char *value)
 	t_token	*tok;
 
 	tok = (t_token *)malloc(sizeof(t_token));
+	if (!tok)
+		return (NULL);
 	tok->type = type;
 	tok->value = value;
 	tok->next = NULL;

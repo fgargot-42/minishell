@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 17:58:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 22:04:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,17 @@ t_list	*generate_env(char **env)
 	{
 		new_elem = new_env(*env);
 		if (!new_elem)
-			break ;
+		{
+			ft_lstclear(&head, free);
+			return (NULL);
+		}
 		env_current = ft_lstnew(new_elem);
 		if (!env_current)
-			break ;
+		{
+			free(new_elem);
+			ft_lstclear(&head, free);
+			return (NULL);
+		}
 		ft_lstadd_back(&head, env_current);
 		env++;
 	}
@@ -90,7 +97,7 @@ static char	*create_env_line(char *key, char *value)
 	return (result);
 }
 
-const char	**reconstruct_envs(t_list *envs)
+char	**reconstruct_envs(t_list *envs)
 {
 	char	**array;
 	t_list	*current;
@@ -111,5 +118,5 @@ const char	**reconstruct_envs(t_list *envs)
 		current = current->next;
 	}
 	array[i] = NULL;
-	return ((const char **)array);
+	return (array);
 }

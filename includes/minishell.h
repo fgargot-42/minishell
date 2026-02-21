@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 19:54:18 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 23:46:12 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,11 @@ t_node		*create_cmd_node(t_cmd *cmd, t_redir *redir);
 void		cleanup_node_fds(t_node *node);
 int			is_redirection(t_token_type type);
 void		add_redirection(t_redir **redir, t_token **tokens);
+
+// resolve_redir.c
 int			resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx);
+int			resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx,
+				int *fd);
 
 // execution.c
 int			exec_command(t_node *node, t_list **envs, t_ctx *ctx);
@@ -179,6 +183,7 @@ void		exit_fork_clean(t_node *node, char **char_envs, char *path);
 // exec_tree
 void		exec(t_node *root, t_list **envs, t_ctx *ctx);
 void		propagate_redirs(t_node *node);
+void		apply_redirect(int node_fd, int std_fd);
 
 // exec_pipeline.c
 int			exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);
@@ -221,7 +226,7 @@ void		builtin_export_print(t_list **envs);
 t_env		*new_env(char *env_line);
 t_list		*generate_env(char **env);
 void		print_env_export(t_list *env);
-const char	**reconstruct_envs(t_list *envs);
+char		**reconstruct_envs(t_list *envs);
 
 // env_utils.c
 t_list		*get_env_node_by_key(t_list *env_list, char *key);

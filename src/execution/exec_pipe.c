@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 21:40:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/21 23:45:51 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-void	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
+static void	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	char	*path;
 	char	**char_envs;
 
-	char_envs = (char **)reconstruct_envs(*envs);
 	if (node->type == NODE_GROUP)
 	{
 		exec(node, envs, ctx);
@@ -31,11 +30,14 @@ void	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 	if (is_builtin(node->cmd))
 		exit(call_builtin(node, envs, ctx));
 	path = get_command_path(node->cmd->args[0], *envs);
-	execve(path, node->cmd->args, (char *const *)char_envs);
+	char_envs = reconstruct_envs(*envs);
+	if (path && char_envs)
+		execve(path, node->cmd->args, char_envs);
 	exit_fork_clean(node, char_envs, path);
 }
 
-pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)
+static pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int fd_read,
+					t_ctx *ctx)
 {
 	pid_t	pid;
 
@@ -44,20 +46,15 @@ pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int read_fd, t_ctx *ctx)
 		return (-1);
 	if (pid == 0)
 	{
-		close(read_fd);
-		dup2(node->fd_out, STDOUT_FILENO);
-		close(node->fd_out);
-		if (node->fd_in != STDIN_FILENO)
-		{
-			dup2(node->fd_in, 0);
-			close(node->fd_in);
-		}
+		close(fd_read);
+		apply_redirect(node->fd_in, STDIN_FILENO);
+		apply_redirect(node->fd_out, STDOUT_FILENO);
 		exec_pipe_command(node, envs, ctx);
 	}
 	return (pid);
 }
 
-pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
+static pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	pid_t	pid;
 
@@ -66,36 +63,28 @@ pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 		return (-1);
 	if (pid == 0)
 	{
-		dup2(node->fd_in, STDIN_FILENO);
-		close(node->fd_in);
-		if (node->fd_out != STDOUT_FILENO)
-		{
-			dup2(node->fd_out, 1);
-			close(node->fd_out);
-		}
+		apply_redirect(node->fd_in, STDIN_FILENO);
+		apply_redirect(node->fd_out, STDOUT_FILENO);
 		exec_pipe_command(node, envs, ctx);
 	}
 	return (pid);
 }
 
-static int	resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx,
-		int *fd)
+static int	update_pipe_exit_status(int *pid, int status)
 {
-	int	redir_invalid_left;
-	int	redir_invalid_right;
+	int	new_status;
 
-	propagate_redirs(node);
-	redir_invalid_left = resolve_redirs(node->left, *envs, ctx);
-	if (node->left->fd_out == STDOUT_FILENO)
-		node->left->fd_out = fd[1];
-	if (node->left->fd_in == STDIN_FILENO)
-		node->left->fd_in = node->fd_in;
-	redir_invalid_right = resolve_redirs(node->right, *envs, ctx);
-	if (node->right->fd_in == STDIN_FILENO)
-		node->right->fd_in = fd[0];
-	if (node->right->fd_out == STDOUT_FILENO)
-		node->right->fd_out = node->fd_out;
-	return (redir_invalid_left + redir_invalid_right * 2);
+	new_status = 1;
+	if (pid[0] > 0)
+		waitpid(pid[0], NULL, 0);
+	if (pid[1] <= 0)
+		return (status);
+	waitpid(pid[1], &status, 0);
+	if (WIFEXITED(status))
+		new_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+		new_status = 128 + WTERMSIG(status);
+	return (new_status);
 }
 
 int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
@@ -105,23 +94,23 @@ int	exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx)
 	pid_t	pid[2];
 	int		redir_invalid;
 
-	pipe(fd);
+	if (pipe(fd) == -1)
+	{
+		ft_putstr_fd("minishell: pipe failed\n", 2);
+		return (1);
+	}
 	pid[0] = -1;
 	pid[1] = 0;
 	redir_invalid = resolve_pipe_redirs(node, envs, ctx, fd);
 	status = redir_invalid == 2;
 	if (!(redir_invalid & 1))
-		pid[0] = exec_left_pipe_cmd(node->left, envs, fd[0], ctx);
-	close(fd[1]);
+		pid[0] = exec_left_pipe_cmd(node->left, envs, node->right->fd_in, ctx);
+	cleanup_node_fds(node->left);
 	if (node->right->type == NODE_PIPE)
 		status = exec_pipeline(node->right, envs, ctx);
 	else if (!(redir_invalid & 2))
 		pid[1] = exec_right_pipe_cmd(node->right, envs, ctx);
-	close(fd[0]);
-	waitpid(pid[0], NULL, 0);
-	if (pid[1])
-		waitpid(pid[1], &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	cleanup_node_fds(node->right);
+	status = update_pipe_exit_status(pid, status);
 	return (status);
 }
