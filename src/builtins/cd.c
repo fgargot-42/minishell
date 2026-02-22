@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/21 20:26:55 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/22 01:03:18 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_cwd(void)
 
 	i = 128;
 	res = NULL;
-	while (!res)
+	while (!res && i > 0)
 	{
 		pwd = malloc(i * sizeof(char));
 		if (!pwd)

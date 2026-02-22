@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 20:41:39 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/22 00:32:35 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ static int	exec_command_fork(t_node *node, t_list **envs)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGPIPE, sigpipe_handler);
 		path = get_command_path(node->cmd->args[0], *envs);
 		char_envs = (char **)reconstruct_envs(*envs);
 		apply_redirect(node->fd_in, STDIN_FILENO);

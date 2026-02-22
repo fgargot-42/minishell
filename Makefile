@@ -42,6 +42,7 @@ SRC=main.c \
 	utils/file_utils.c \
 	utils/string_utils.c \
 	utils/string_utils2.c \
+	signals/signal_handling.c \
 	wildcards/wildcards.c
 OBJ=$(SRC:.c=.o)
 

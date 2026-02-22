@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:48:38 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 19:38:47 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/22 01:06:10 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static char	*get_next_split_noquote(char *str, int *pos)
 	if (!res)
 		return (NULL);
 	ft_strlcpy(res, &str[start], *pos - start + 1);
-	pos++;
 	return (res);
 }
 
@@ -85,12 +84,12 @@ static void	build_new_split(char **split_dst, char **split_src,
 		split_dst[i] = split_new[i - pos];
 		i++;
 	}
-	free(split_src[i - new_count]);
 	while (split_src[i - new_count])
 	{
 		split_dst[i] = split_src[i - new_count + 1];
 		i++;
 	}
+	free(split_src[pos]);
 }
 
 int	split_add(char ***split_str, char *new_string, int pos)

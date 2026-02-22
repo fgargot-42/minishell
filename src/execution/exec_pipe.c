@@ -6,19 +6,26 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 23:45:51 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/22 00:38:56 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
 
 static void	exec_pipe_command(t_node *node, t_list **envs, t_ctx *ctx)
 {
-	char	*path;
-	char	**char_envs;
+	char				*path;
+	char				**char_envs;
+	struct sigaction	sa;
 
+	sa.sa_handler = sigpipe_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGPIPE, &sa, NULL);
+	signal(SIGQUIT, SIG_DFL);
 	if (node->type == NODE_GROUP)
 	{
 		exec(node, envs, ctx);

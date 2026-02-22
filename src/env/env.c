@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 22:04:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/22 01:02:00 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,6 @@ t_list	*generate_env(char **env)
 		env++;
 	}
 	return (head);
-}
-
-void	print_env_export(t_list *env)
-{
-	t_list	*current;
-
-	current = env;
-	while (current != NULL)
-	{
-		printf("%s=%s\n", ((t_env *)current->content)->key,
-			((t_env *)current->content)->value);
-		current = current->next;
-	}
 }
 
 static char	*create_env_line(char *key, char *value)

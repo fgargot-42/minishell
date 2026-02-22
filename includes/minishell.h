@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 23:46:12 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/22 01:01:36 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,6 @@ void		builtin_export_print(t_list **envs);
 
 t_env		*new_env(char *env_line);
 t_list		*generate_env(char **env);
-void		print_env_export(t_list *env);
 char		**reconstruct_envs(t_list *envs);
 
 // env_utils.c
@@ -258,6 +257,11 @@ int			file_open_append(char *filepath, t_ctx *ctx);
 char		*remove_quotes(char *str);
 char		*ft_strjoin_chr(char *str1, char *str2, char sep);
 char		*ft_strjoin_all_chr(char **str_array, char sep);
+
+// signals
+
+void		sigint_handler(int sig);
+void		sigpipe_handler(int sig);
 
 // wildcards
 int			has_wildcards(char *str);
