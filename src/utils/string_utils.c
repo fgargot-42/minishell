@@ -6,12 +6,12 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 20:31:00 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 01:14:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 01:18:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
+#include "minishell.h"
 
 static int	strlen_noquote(char *str)
 {
@@ -62,7 +62,7 @@ char	*remove_quotes(char *str)
 	while (*str)
 	{
 		if ((*str == '\'' && !open_quotes[1])
-			|| (str == '\"' && !open_quotes[0]))
+			|| (*str == '\"' && !open_quotes[0]))
 			update_open_quotes(*str, open_quotes);
 		else
 		{
