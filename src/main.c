@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/22 00:20:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/23 23:18:44 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	main_loop(t_list *envs, t_ctx *ctx)
 			continue ;
 		tree = parse_tree(tokens);
 		free_tokens(tokens);
-		exec(tree, &envs, ctx);
+		exec(tree, NULL, &envs, ctx);
 		free_tree(tree);
 	}
 }
@@ -74,8 +74,8 @@ int	main(int ac, char **av, char **env)
 	t_ctx	ctx;
 
 	ctx.error_code = 0;
-	(void)ac;
-	(void)av;
+	ctx.argc = ac;
+	ctx.argv = av;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &sigint_handler);
 	envs = generate_env(env);

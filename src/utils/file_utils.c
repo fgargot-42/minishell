@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 20:58:31 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/13 22:46:52 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/02/24 01:14:35 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,8 @@
 
 static void	print_file_error(char *filepath, int err, t_ctx *ctx)
 {
-	char	*join;
-
 	ctx->error_code = err;
-	join = ft_strjoin("minishell: ", filepath);
-	errno = err;
-	if (join)
-	{
-		perror(join);
-		free(join);
-	}
-	else
-		perror("minishell");
+	print_error(filepath);
 }
 
 int	file_open_read(char *filepath, t_ctx *ctx)
@@ -61,4 +51,20 @@ int	file_open_append(char *filepath, t_ctx *ctx)
 	if (fd < 0)
 		print_file_error(filepath, errno, ctx);
 	return (fd);
+}
+
+int	check_spaces_in_filename(char *filename)
+{
+	int	open_quotes[2];
+
+	open_quotes[0] = 0;
+	open_quotes[1] = 0;
+	while (*filename)
+	{
+		update_open_quotes(*filename, open_quotes);
+		if (*filename == ' ' && !open_quotes[1])
+			return (1);
+		filename++;
+	}
+	return (0);
 }

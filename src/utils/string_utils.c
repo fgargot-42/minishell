@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 20:31:00 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 20:37:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 01:14:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,15 @@ char	*remove_quotes(char *str)
 	open_quotes[0] = 0;
 	open_quotes[1] = 0;
 	i = 0;
+	if (!str)
+		return (NULL);
 	res_len = strlen_noquote(str);
 	res = allocate_string(res_len);
 	while (*str)
 	{
-		if (*str == '\'' && !open_quotes[1])
-			open_quotes[0] = !open_quotes[0];
-		else if (*str == '\"' && !open_quotes[0])
-			open_quotes[1] = !open_quotes[1];
+		if ((*str == '\'' && !open_quotes[1])
+			|| (str == '\"' && !open_quotes[0]))
+			update_open_quotes(*str, open_quotes);
 		else
 		{
 			res[i] = *str;

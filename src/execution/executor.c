@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/22 00:32:35 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 00:36:55 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,27 +110,29 @@ static int	exec_command_fork(t_node *node, t_list **envs)
 	return (status);
 }
 
-int	exec_command(t_node *node, t_list **envs, t_ctx *ctx)
+int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 {
 	int		status;
 
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 	{
-		cleanup_node_fds(node);
-		return (1);
+		cleanup_node_fds(node, parent);
+		return (0);
 	}
 	expand_cmd_args(node, envs, ctx);
+	if (!node->cmd->args || !node->cmd->args[0])
+	{
+		cleanup_node_fds(node, parent);
+		return (0);
+	}
 	if (is_builtin(node->cmd))
 	{
 		status = call_builtin(node, envs, ctx);
-		cleanup_node_fds(node);
+		cleanup_node_fds(node, parent);
 		return (status);
 	}
 	status = exec_command_fork(node, envs);
-	if (node->fd_in != STDIN_FILENO)
-		close(node->fd_in);
-	if (node->fd_out != STDOUT_FILENO)
-		close(node->fd_out);
+	cleanup_node_fds(node, parent);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (0);

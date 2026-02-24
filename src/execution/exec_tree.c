@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 23:45:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 00:13:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,48 +23,55 @@ void	apply_redirect(int node_fd, int std_fd)
 	}
 }
 
-void	propagate_redirs(t_node *node)
+void	inherit_redirs(t_node *node, t_node *parent)
 {
-	if (node->left)
+	if (!parent)
+		return ;
+	if (node == parent->left)
 	{
-		node->left->fd_in = node->fd_in;
-		if (node->type == NODE_GROUP || node->type == NODE_OR
-			|| node->type == NODE_AND)
-			node->left->fd_out = node->fd_out;
+		if (node->fd_in != parent->fd_in && parent->fd_in != STDIN_FILENO)
+		{
+			if (node->fd_in != STDIN_FILENO)
+				close(node->fd_in);
+			node->fd_in = parent->fd_in;
+		}
 	}
-	if (node->right)
+	if (node == parent->right || parent->type == NODE_GROUP
+		|| parent->type == NODE_AND || parent->type == NODE_OR)
 	{
-		if (node->type == NODE_GROUP || node->type == NODE_OR
-			|| node->type == NODE_AND)
-			node->right->fd_in = node->fd_in;
-		node->right->fd_out = node->fd_out;
+		if (node->fd_out != parent->fd_out && parent->fd_out != STDOUT_FILENO)
+		{
+			if (node->fd_out != STDOUT_FILENO)
+				close(node->fd_out);
+			node->fd_out = parent->fd_out;
+		}
 	}
 }
 
-void	exec(t_node *root, t_list **envs, t_ctx *ctx)
+void	exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx)
 {
 	if (resolve_redirs(root, *envs, ctx))
 	{
 		ctx->error_code = 1;
 		return ;
 	}
-	propagate_redirs(root);
+	inherit_redirs(root, parent);
 	if (root->type == NODE_CMD)
-		ctx->error_code = exec_command(root, envs, ctx);
+		ctx->error_code = exec_command(root, parent, envs, ctx);
 	else if (root->type == NODE_PIPE)
 		ctx->error_code = exec_pipeline(root, envs, ctx);
 	else if (root->type == NODE_OR)
 	{
-		exec(root->left, envs, ctx);
+		exec(root->left, root, envs, ctx);
 		if (ctx->error_code != 0)
-			exec(root->right, envs, ctx);
+			exec(root->right, root, envs, ctx);
 	}
 	else if (root->type == NODE_AND)
 	{
-		exec(root->left, envs, ctx);
+		exec(root->left, root, envs, ctx);
 		if (ctx->error_code == 0)
-			exec(root->right, envs, ctx);
+			exec(root->right, root, envs, ctx);
 	}
 	else if (root->type == NODE_GROUP)
-		exec(root->left, envs, ctx);
+		exec(root->left, root, envs, ctx);
 }

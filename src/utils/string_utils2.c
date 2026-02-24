@@ -6,11 +6,14 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 23:43:03 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/21 19:39:05 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/23 22:32:35 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
+#include "libft.h"
 
 void	free_string_array(char **array)
 {
@@ -33,4 +36,19 @@ void	update_open_quotes(char c, int *open_quotes)
 		open_quotes[0] = !open_quotes[0];
 	if (c == '\"' && !open_quotes[0])
 		open_quotes[1] = !open_quotes[1];
+}
+
+void	print_error(char *msg)
+{
+	char	*err_msg;
+	int		error;
+
+	error = errno;
+	err_msg = ft_strjoin("minishell: ", msg);
+	errno = error;
+	if (err_msg)
+		perror(err_msg);
+	else
+		perror("minishell");
+	free(err_msg);
 }

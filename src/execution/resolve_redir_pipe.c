@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resolve_redir2.c                                   :+:      :+:    :+:   */
+/*   resolve_redir_pipe.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 21:00:52 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 23:13:00 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/23 23:31:56 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx, int *fd)
 	int	redir_invalid_left;
 	int	redir_invalid_right;
 
-	propagate_redirs(node);
+	inherit_redirs(node->left, node);
+	inherit_redirs(node->right, node);
 	redir_invalid_left = resolve_redirs(node->left, *envs, ctx);
 	if (node->left->fd_out == STDOUT_FILENO)
 		node->left->fd_out = fd[1];

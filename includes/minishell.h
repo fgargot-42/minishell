@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/22 01:01:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 00:12:38 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ typedef struct s_prompt_parts
 
 typedef struct s_ctx
 {
-	int	error_code;
-}		t_ctx;
+	int		error_code;
+	int		argc;
+	char	**argv;
+}			t_ctx;
 
 typedef struct s_env
 {
@@ -166,7 +168,7 @@ t_node		*create_node(t_node_type type, t_node *left, t_node *right,
 t_node		*create_cmd_node(t_cmd *cmd, t_redir *redir);
 
 // redir.c
-void		cleanup_node_fds(t_node *node);
+void		cleanup_node_fds(t_node *node, t_node *parent);
 int			is_redirection(t_token_type type);
 void		add_redirection(t_redir **redir, t_token **tokens);
 
@@ -176,13 +178,14 @@ int			resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx,
 				int *fd);
 
 // execution.c
-int			exec_command(t_node *node, t_list **envs, t_ctx *ctx);
+int			exec_command(t_node *node, t_node *parent, t_list **envs,
+				t_ctx *ctx);
 char		*find_in_path(char *cmd);
 void		exit_fork_clean(t_node *node, char **char_envs, char *path);
 
 // exec_tree
-void		exec(t_node *root, t_list **envs, t_ctx *ctx);
-void		propagate_redirs(t_node *node);
+void		exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx);
+void		inherit_redirs(t_node *node, t_node *parent);
 void		apply_redirect(int node_fd, int std_fd);
 
 // exec_pipeline.c
@@ -203,8 +206,10 @@ int			split_add(char ***split_str, char *new_string, int pos);
 
 // expander_replace.c
 
-size_t		replace_env(char **input, t_env *env, char *key, size_t pos);
+size_t		replace_regular_env(char **input, t_env *env, char *key,
+				size_t pos);
 size_t		replace_errorcode_env(char **input, size_t pos, t_ctx *ctx);
+size_t		replace_numeric_env(char **input, size_t pos, t_ctx *ctx);
 
 // expander_utils.c
 
@@ -252,11 +257,13 @@ int			add_env(char **env, t_list **env_list);
 int			file_open_read(char *filepath, t_ctx *ctx);
 int			file_open_write(char *filepath, t_ctx *ctx);
 int			file_open_append(char *filepath, t_ctx *ctx);
+int			check_spaces_in_filename(char *filename);
 
 // string utils
 char		*remove_quotes(char *str);
 char		*ft_strjoin_chr(char *str1, char *str2, char sep);
 char		*ft_strjoin_all_chr(char **str_array, char sep);
+void		print_error(char *msg);
 
 // signals
 

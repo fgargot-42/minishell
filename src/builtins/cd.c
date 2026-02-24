@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/22 01:03:18 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 00:30:03 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,21 +78,22 @@ int	builtin_cd(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 	char	*old_pwd;
 
 	(void)ctx;
-	if (cmd->args[2])
-	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
-		return (1);
-	}
-	if (!cmd->args[1])
+	if (!cmd->args[1] || cmd->args[1][0] == '~')
 		return (cd_home(envs));
 	if (cmd->args[1][0] == '-' && cmd->args[1][1])
 	{
 		ft_putstr_fd("cd: invalid option\n", 2);
 		return (2);
 	}
+	if (cmd->args[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		return (1);
+	}
 	old_pwd = get_cwd();
 	if (chdir(cmd->args[1]))
 	{
+		print_error(cmd->args[1]);
 		free(old_pwd);
 		return (1);
 	}

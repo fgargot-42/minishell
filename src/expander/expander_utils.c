@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:42:37 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 19:39:55 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/23 18:01:04 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	is_special_dollar(char *input, size_t i, int *open_quotes)
 	next_char = input[i + 1];
 	if (open_quotes[1] && (next_char == '\'' || next_char == '\"'))
 		return (1);
+	if (ft_isdigit(next_char))
+		return (0);
 	return (!ft_isalpha(next_char) && next_char != '_'
 		&& next_char != '\'' && next_char != '\"' && next_char != '?');
 }

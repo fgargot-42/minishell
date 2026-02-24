@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 19:39:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 01:09:33 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static size_t	expand_regular_var(char **input, size_t i, t_list *envs)
 	if (!var_name)
 		return (i + 1);
 	env = get_env(envs, var_name);
-	new_index = replace_env(input, env, var_name, i);
+	new_index = replace_regular_env(input, env, var_name, i);
 	free(var_name);
 	return (new_index);
 }
@@ -39,6 +39,8 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	i = 0;
 	open_quotes[0] = 0;
 	open_quotes[1] = 0;
+	if (!input || !(*input))
+		return ;
 	while (i < ft_strlen((*input)))
 	{
 		update_open_quotes((*input)[i], open_quotes);
@@ -49,6 +51,8 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 		}
 		if ((*input)[i + 1] == '?')
 			i = replace_errorcode_env(input, i, ctx);
+		else if (ft_isdigit((*input)[i + 1]))
+			i = replace_numeric_env(input, i, ctx);
 		else
 			i = expand_regular_var(input, i, envs);
 	}

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:02:08 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/20 19:26:36 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 00:18:07 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,20 @@ char	**expand_wildcards(char *pattern)
 	t_list	*match_list;
 	char	**matches;
 
+	if (!ft_strchr(pattern, '*'))
+	{
+		matches = malloc(sizeof(char *) * 2);
+		if (!matches)
+			return (NULL);
+		matches[0] = ft_strdup(pattern);
+		matches[1] = NULL;
+		if (!matches[0])
+		{
+			free(matches);
+			return (NULL);
+		}
+		return (matches);
+	}
 	match_list = get_matches(pattern);
 	if (ft_lstsize(match_list) >= 2)
 		ft_lstsort(&match_list, list_strcmp);
