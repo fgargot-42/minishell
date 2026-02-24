@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/23 23:18:44 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 12:12:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	main_loop(t_list *envs, t_ctx *ctx)
 	t_node	*tree;
 	t_token	*tokens;
 
-	while (1)
+	while (!ctx->is_exited)
 	{
 		line = handle_input(ctx);
 		if (!line)
@@ -76,6 +76,7 @@ int	main(int ac, char **av, char **env)
 	ctx.error_code = 0;
 	ctx.argc = ac;
 	ctx.argv = av;
+	ctx.is_exited = 0;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &sigint_handler);
 	envs = generate_env(env);

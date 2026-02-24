@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/26 22:33:33 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 19:31:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 12:16:45 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,14 @@ static long	ft_atol(char *str)
 int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 {
 	(void)envs;
-	if (isatty(STDIN_FILENO))
-		ft_putstr_fd("exit\n", 2);
 	if (cmd->args[1])
 	{
 		if (!ft_is_long(cmd->args[1]))
 		{
-			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(cmd->args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			exit(2);
+			ctx->is_exited = 1;
+			return (2);
 		}
 		if (cmd->args[2])
 		{
@@ -101,5 +99,6 @@ int	builtin_exit(t_cmd *cmd, t_list **envs, t_ctx *ctx)
 		}
 		ctx->error_code = ft_atol(cmd->args[1]);
 	}
-	exit(ctx->error_code & 0xff);
+	ctx->is_exited = 1;
+	return (ctx->error_code & 0xff);
 }

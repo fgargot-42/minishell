@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/21 21:42:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 12:41:39 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ static void	init_parts(t_prompt_parts *p, int err)
 
 	p->errcode = ft_itoa(err);
 	p->icon = "🐚 ";
-	p->name = "\001minic\002oquille";
+	p->name = "\001minic\002oquille: ";
 	getcwd(cwd, sizeof(cwd));
 	p->cwd = ft_strdup(cwd);
-	p->sep = "⟩";
+	p->sep = "⟩ ";
 	if (err == 0)
 		p->color = BLUE;
 	else
@@ -54,13 +54,12 @@ char	*build_prompt(int err)
 
 	init_parts(&p, err);
 	if (!p.errcode || !p.cwd)
-		return (ft_strdup("🐚 " BLUE "minicoquille" CYAN " ⟩ " RESET));
+		return (ft_strdup("🐚 " BLUE "\001minic\002oquille" CYAN " ⟩ " RESET));
 	prompt = ft_strjoin("[", p.errcode);
 	prompt = join_free(prompt, "] ");
 	prompt = join_free(prompt, p.icon);
 	prompt = join_free(prompt, p.color);
 	prompt = join_free(prompt, p.name);
-	prompt = join_free(prompt, ": ");
 	prompt = join_free(prompt, p.cwd);
 	prompt = join_free(prompt, " ");
 	prompt = join_free(prompt, p.color);

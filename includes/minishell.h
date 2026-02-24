@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 00:12:38 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 12:11:43 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_ctx
 	int		error_code;
 	int		argc;
 	char	**argv;
+	int		is_exited;
 }			t_ctx;
 
 typedef struct s_env
@@ -106,13 +107,12 @@ typedef struct s_node
 	t_redir			*redirs;
 	int				fd_in;
 	int				fd_out;
-	struct s_cmd	*cmd; // set as null si pas fin de branche
+	struct s_cmd	*cmd; // set as null if not leaf
 }	t_node;
 
 typedef struct s_cmd
 {
 	char			**args; // ["ls", "-la", NULL]
-	t_list			*envs;
 }	t_cmd;
 
 typedef struct s_lexer

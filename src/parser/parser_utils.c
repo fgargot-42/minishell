@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 21:47:34 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/21 21:46:54 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/02/24 12:14:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	free_tree(t_node *tree)
 			free(redir);
 			redir = next;
 		}
-		if (tree->cmd->envs)
-			ft_lstclear(&tree->cmd->envs, env_free);
 		free(tree->cmd);
 	}
 	free(tree);
@@ -70,7 +68,6 @@ void	init_cmd(t_cmd **cmd, size_t count)
 		*cmd = NULL;
 		return ;
 	}
-	(*cmd)->envs = NULL;
 }
 
 int	is_stop_token(t_token *token)
