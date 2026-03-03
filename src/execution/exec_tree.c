@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 00:13:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/03 19:51:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx)
 		return ;
 	}
 	inherit_redirs(root, parent);
+	if (DEBUG)
+		print_redirs(root->redirs);
 	if (root->type == NODE_CMD)
 		ctx->error_code = exec_command(root, parent, envs, ctx);
 	else if (root->type == NODE_PIPE)

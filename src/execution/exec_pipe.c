@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 00:14:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/03 19:56:45 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,19 @@ static void	exec_pipe_command(t_node *node, t_node *parent, t_list **envs,
 	}
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 		exit(1);
+	if (DEBUG)
+		print_str_list(node->cmd->args);
 	expand_cmd_args(node, envs, ctx);
+	if (DEBUG)
+		print_str_list(node->cmd->args);
 	if (is_builtin(node->cmd))
+	{
+		if (DEBUG)
+			fprintf(stderr, "DEBUG: RUNNING %s as BUILTIN\n", node->cmd->args[0]);
 		exit(call_builtin(node, envs, ctx));
+	}
+	if (DEBUG)
+		fprintf(stderr, "DEBUG: RUNNING %s as EXTERNAL\n", node->cmd->args[0]);
 	path = get_command_path(node->cmd->args[0], *envs);
 	char_envs = reconstruct_envs(*envs);
 	if (path && char_envs)

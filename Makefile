@@ -8,6 +8,7 @@ INCDIR=includes
 LIBFTDIR=libft
 LIBFT=$(LIBFTDIR)/libft.a
 SRC=main.c \
+	debug/debug.c \
 	execution/executor.c \
 	execution/builtin.c \
 	execution/exec_tree.c \

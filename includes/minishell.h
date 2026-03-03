@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 12:11:43 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/03 19:45:41 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "libft.h"
+
+# define DEBUG 1
 
 // Color codes
 # define RED     "\001\033[0;31m\002"
@@ -273,5 +275,11 @@ void		sigpipe_handler(int sig);
 // wildcards
 int			has_wildcards(char *str);
 char		**expand_wildcards(char *pattern);
+
+// debug
+void   		print_tree_clean(t_node *node);
+void		print_str_list(char **str_list);
+void		print_redirs(t_redir *redirs);
+void   		print_tokens(t_token *tokens);
 
 #endif	//MINISHELL_H

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 12:12:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/03 19:46:05 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,14 @@ static void	main_loop(t_list *envs, t_ctx *ctx)
 			continue ;
 		}
 		tokens = lexer(line);
+		if (DEBUG && tokens)
+			print_tokens(tokens);
 		free(line);
 		if (lexer_has_syntax_error(tokens, ctx))
 			continue ;
 		tree = parse_tree(tokens);
+		if (DEBUG && tree)
+			print_tree_clean(tree);
 		free_tokens(tokens);
 		exec(tree, NULL, &envs, ctx);
 		free_tree(tree);

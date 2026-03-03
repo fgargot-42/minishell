@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 12:07:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/03 19:57:29 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,11 @@ int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 		cleanup_node_fds(node, parent);
 		return (0);
 	}
+	if (DEBUG)
+		print_str_list(node->cmd->args);
 	expand_cmd_args(node, envs, ctx);
+	if (DEBUG)
+		print_str_list(node->cmd->args);
 	if (!node->cmd->args || !node->cmd->args[0])
 	{
 		cleanup_node_fds(node, parent);
@@ -127,10 +131,14 @@ int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 	}
 	if (is_builtin(node->cmd))
 	{
+		if (DEBUG)
+			fprintf(stderr, "DEBUG: RUNNING %s as BUILTIN\n", node->cmd->args[0]);
 		status = call_builtin(node, envs, ctx);
 		cleanup_node_fds(node, parent);
 		return (status);
 	}
+	if (DEBUG)
+		fprintf(stderr, "DEBUG: RUNNING %s as EXTERNAL\n", node->cmd->args[0]);
 	status = exec_command_fork(node, envs);
 	cleanup_node_fds(node, parent);
 	if (WIFEXITED(status))
