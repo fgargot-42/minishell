@@ -16,10 +16,9 @@ A minimal Unix shell written in C. Handles command execution, pipes, redirection
 - Environment variable expansion (`$VAR`, `$?`)
 - Wildcard expansion (`*`)
 - Built-in commands: `echo`, `cd`, `pwd`, `export`, `unset`, `env`, `exit`
-- Signal handling (`Ctrl+C`, `Ctrl+\` etc)
+- Signal handling (`Ctrl+C`, `Ctrl+D`, `Ctrl+\`)
 
 ## Instructions
-
 
 
 ```bash
