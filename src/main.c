@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 12:12:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/11 19:13:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-//#define PROMPT CYAN"🐚 "BLUE"\001minic\002oquille"CYAN" ⟩ "RESET
 
 #include "minishell.h"
 #include "prompt.h"
@@ -44,7 +42,6 @@ char	*handle_input(t_ctx *ctx)
 static void	main_loop(t_list *envs, t_ctx *ctx)
 {
 	char	*line;
-	t_node	*tree;
 	t_token	*tokens;
 
 	while (!ctx->is_exited)
@@ -61,10 +58,10 @@ static void	main_loop(t_list *envs, t_ctx *ctx)
 		free(line);
 		if (lexer_has_syntax_error(tokens, ctx))
 			continue ;
-		tree = parse_tree(tokens);
+		ctx->cmd_tree = parse_tree(tokens);
 		free_tokens(tokens);
-		exec(tree, NULL, &envs, ctx);
-		free_tree(tree);
+		exec(ctx->cmd_tree, NULL, &envs, ctx);
+		free_tree(ctx->cmd_tree);
 	}
 }
 
@@ -77,6 +74,7 @@ int	main(int ac, char **av, char **env)
 	ctx.argc = ac;
 	ctx.argv = av;
 	ctx.is_exited = 0;
+	ctx.cmd_tree = NULL;
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, &sigint_handler);
 	envs = generate_env(env);

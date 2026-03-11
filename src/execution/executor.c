@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 12:07:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/11 19:37:13 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ static void	check_file_access(char *filepath)
 		check_is_dir(filepath);
 }
 
-void	exit_fork_clean(t_node *node, char **char_envs, char *path)
+void	exit_fork_clean(t_node *node, char **char_envs, char *path,
+			t_ctx *ctx)
 {
 	char	*is_path;
 
@@ -80,12 +81,13 @@ void	exit_fork_clean(t_node *node, char **char_envs, char *path)
 		ft_putstr_fd(node->cmd->args[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 	}
+	free_tree(ctx->cmd_tree);
 	if (errno == EACCES || errno == EISDIR)
 		exit(126);
 	exit(127);
 }
 
-static int	exec_command_fork(t_node *node, t_list **envs)
+static int	exec_command_fork(t_node *node, t_list **envs, t_ctx *ctx)
 {
 	pid_t	pid;
 	char	**char_envs;
@@ -100,10 +102,11 @@ static int	exec_command_fork(t_node *node, t_list **envs)
 		signal(SIGPIPE, sigpipe_handler);
 		path = get_command_path(node->cmd->args[0], *envs);
 		char_envs = (char **)reconstruct_envs(*envs);
+		ft_lstclear(envs, env_free);
 		apply_redirect(node->fd_in, STDIN_FILENO);
 		apply_redirect(node->fd_out, STDOUT_FILENO);
 		execve(path, node->cmd->args, char_envs);
-		exit_fork_clean(node, char_envs, path);
+		exit_fork_clean(node, char_envs, path, ctx);
 	}
 	if (pid > 0)
 		waitpid(pid, &status, 0);
@@ -131,7 +134,7 @@ int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 		cleanup_node_fds(node, parent);
 		return (status);
 	}
-	status = exec_command_fork(node, envs);
+	status = exec_command_fork(node, envs, ctx);
 	cleanup_node_fds(node, parent);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));

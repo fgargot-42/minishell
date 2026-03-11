@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 00:14:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/11 19:21:59 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	exec_pipe_command(t_node *node, t_node *parent, t_list **envs,
 	char_envs = reconstruct_envs(*envs);
 	if (path && char_envs)
 		execve(path, node->cmd->args, char_envs);
-	exit_fork_clean(node, char_envs, path);
+	exit_fork_clean(node, char_envs, path, ctx);
 }
 
 static pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int fd_read,

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 12:11:43 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/11 19:20:41 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,6 @@ typedef struct s_prompt_parts
 	char	*sep;
 	char	*color;
 }			t_prompt_parts;
-
-typedef struct s_ctx
-{
-	int		error_code;
-	int		argc;
-	char	**argv;
-	int		is_exited;
-}			t_ctx;
 
 typedef struct s_env
 {
@@ -109,6 +101,15 @@ typedef struct s_node
 	int				fd_out;
 	struct s_cmd	*cmd; // set as null if not leaf
 }	t_node;
+
+typedef struct s_ctx
+{
+	int		error_code;
+	int		argc;
+	char	**argv;
+	t_node	*cmd_tree;
+	int		is_exited;
+}			t_ctx;
 
 typedef struct s_cmd
 {
@@ -181,7 +182,8 @@ int			resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx,
 int			exec_command(t_node *node, t_node *parent, t_list **envs,
 				t_ctx *ctx);
 char		*find_in_path(char *cmd);
-void		exit_fork_clean(t_node *node, char **char_envs, char *path);
+void		exit_fork_clean(t_node *node, char **char_envs,
+				char *path, t_ctx *ctx);
 
 // exec_tree
 void		exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx);
