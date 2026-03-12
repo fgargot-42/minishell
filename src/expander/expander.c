@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 01:09:33 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 18:41:59 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,16 @@ static void	expand_wildcards_in_cmd(t_cmd *cmd)
 		if (ft_strchr(cmd->args[i], '*') != NULL)
 		{
 			expanded = expand_wildcards(cmd->args[i]);
-			if (expanded && expanded[0])
+			if (expanded)
 			{
-				free(cmd->args[i]);
-				cmd->args[i] = ft_strjoin_all_chr(expanded, ' ');
-				free_string_array(expanded);
+				if (expanded[0])
+				{
+					free(cmd->args[i]);
+					cmd->args[i] = ft_strjoin_all_chr(expanded, ' ');
+					free_string_array(expanded);
+				}
+				else
+					free(expanded);
 			}
 		}
 		i++;

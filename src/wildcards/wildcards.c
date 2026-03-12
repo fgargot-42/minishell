@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:02:08 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/24 00:18:07 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 18:37:51 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ static char	**ft_lst_to_array(t_list **list)
 		result[i] = ft_strdup((char *)(node->content));
 		if (!result[i])
 		{
-			ft_lstclear(list, free);
 			free(result);
 			return (NULL);
 		}
