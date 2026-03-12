@@ -6,13 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 00:17:56 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/22 00:27:50 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 16:36:36 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <readline/readline.h>
 #include <unistd.h>
+#include <stdatomic.h>
 
 void	sigint_handler(int sig)
 {

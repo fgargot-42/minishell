@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 00:13:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 16:53:12 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,7 @@ void	inherit_redirs(t_node *node, t_node *parent)
 void	exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx)
 {
 	if (resolve_redirs(root, *envs, ctx))
-	{
-		ctx->error_code = 1;
 		return ;
-	}
 	inherit_redirs(root, parent);
 	if (root->type == NODE_CMD)
 		ctx->error_code = exec_command(root, parent, envs, ctx);

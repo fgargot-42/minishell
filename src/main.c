@@ -6,13 +6,14 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/11 19:13:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 16:44:59 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <signal.h>
+#include <stdatomic.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -31,7 +32,7 @@ char	*handle_input(t_ctx *ctx)
 		prompt = build_prompt(ctx->error_code);
 		line = readline(prompt);
 		free(prompt);
-		if (line)
+		if (line && line[0])
 			add_history(line);
 	}
 	else
@@ -62,6 +63,7 @@ static void	main_loop(t_list *envs, t_ctx *ctx)
 		free_tokens(tokens);
 		exec(ctx->cmd_tree, NULL, &envs, ctx);
 		free_tree(ctx->cmd_tree);
+		ctx->cmd_tree = NULL;
 	}
 }
 
@@ -76,7 +78,7 @@ int	main(int ac, char **av, char **env)
 	ctx.is_exited = 0;
 	ctx.cmd_tree = NULL;
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, &sigint_handler);
+	signal(SIGINT, sigint_handler);
 	envs = generate_env(env);
 	main_loop(envs, &ctx);
 	ft_lstclear(&envs, env_free);

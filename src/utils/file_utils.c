@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 20:58:31 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 01:14:35 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 16:58:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 static void	print_file_error(char *filepath, int err, t_ctx *ctx)
 {
-	ctx->error_code = err;
+	(void)err;
+	ctx->error_code = 1;
 	print_error(filepath);
 }
 

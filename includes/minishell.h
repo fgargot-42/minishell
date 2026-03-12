@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/11 19:20:41 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/11 20:51:25 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,8 @@ void		add_redirection(t_redir **redir, t_token **tokens);
 int			resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx);
 int			resolve_pipe_redirs(t_node *node, t_list **envs, t_ctx *ctx,
 				int *fd);
+// resolve_heredoc.c
+int			handle_heredoc(char **delimiter, t_list *envs, t_ctx *ctx);
 
 // execution.c
 int			exec_command(t_node *node, t_node *parent, t_list **envs,

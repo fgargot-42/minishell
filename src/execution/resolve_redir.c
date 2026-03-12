@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:04:18 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 01:08:42 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 16:56:19 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,55 +15,8 @@
 #include <readline/readline.h>
 #include <sys/wait.h>
 
-static void	read_heredoc(int *pipe_fd, char *delimiter)
-{
-	char	*line;
-
-	close(pipe_fd[0]);
-	signal(SIGINT, SIG_DFL);
-	while (1)
-	{
-		if (isatty(STDIN_FILENO))
-			line = readline(">");
-		else
-			line = get_next_line(STDIN_FILENO);
-		if (!line)
-			break ;
-		if (ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		ft_putstr_fd(line, pipe_fd[1]);
-		ft_putstr_fd("\n", pipe_fd[1]);
-		free(line);
-	}
-	close(pipe_fd[1]);
-	exit(0);
-}
-
-static int	handle_heredoc(char *delimiter)
-{
-	int		pipe_fd[2];
-	pid_t	pid;
-
-	if (pipe(pipe_fd) == -1)
-		return (-1);
-	pid = fork();
-	if (pid == -1)
-	{
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		return (-1);
-	}
-	if (pid == 0)
-		read_heredoc(pipe_fd, delimiter);
-	close(pipe_fd[1]);
-	waitpid(pid, NULL, 0);
-	return (pipe_fd[0]);
-}
-
-static int	open_redir(char **filenames, t_redir *redir, t_ctx *ctx)
+static int	open_redir(char **filenames, t_redir *redir, t_list *envs,
+				t_ctx *ctx)
 {
 	int		new_fd;
 
@@ -85,7 +38,7 @@ static int	open_redir(char **filenames, t_redir *redir, t_ctx *ctx)
 	else if (redir->type == TOKEN_APPEND)
 		new_fd = file_open_append(filenames[0], ctx);
 	else if (redir->type == TOKEN_HEREDOC)
-		new_fd = handle_heredoc(filenames[0]);
+		new_fd = handle_heredoc(filenames, envs, ctx);
 	return (new_fd);
 }
 
@@ -122,7 +75,7 @@ int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
 		tmp = remove_quotes(expanded[0]);
 		free(expanded[0]);
 		expanded[0] = tmp;
-		new_fd = open_redir(expanded, redir, ctx);
+		new_fd = open_redir(expanded, redir, envs, ctx);
 		free_string_array(expanded);
 		if (new_fd == -1)
 			cleanup_node_fds(node, NULL);
