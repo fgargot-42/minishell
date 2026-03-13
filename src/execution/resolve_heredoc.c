@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 20:49:51 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/12 18:17:27 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/12 22:04:39 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 #include <readline/readline.h>
 #include <sys/wait.h>
 
-static atomic_int	g_stop;
+extern atomic_int	g_signal;
 
 static int	heredoc_event_hook(void)
 {
-	if (g_stop)
+	if (g_signal)
 		rl_done = 1;
 	return (0);
 }
@@ -29,7 +29,7 @@ static int	heredoc_event_hook(void)
 static void	heredoc_sigint_handler(int sig)
 {
 	(void)sig;
-	g_stop = 1;
+	g_signal = 1;
 	write(1, "\n", 1);
 }
 
@@ -37,7 +37,7 @@ static void	read_heredoc_lines(char *delimiter, int pipe_fd)
 {
 	char				*line;
 
-	while (!g_stop)
+	while (!g_signal)
 	{
 		if (isatty(STDIN_FILENO))
 			line = readline("> ");
@@ -45,7 +45,7 @@ static void	read_heredoc_lines(char *delimiter, int pipe_fd)
 			line = get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;
-		if (ft_strcmp(line, delimiter) == 0 || g_stop)
+		if (ft_strcmp(line, delimiter) == 0 || g_signal)
 		{
 			free(line);
 			break ;
@@ -61,7 +61,7 @@ static void	read_heredoc(int *pipe_fd, char **delimiter, t_list *envs,
 {
 	struct sigaction	sa;
 
-	g_stop = 0;
+	g_signal = 0;
 	sa.sa_handler = heredoc_sigint_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
@@ -73,7 +73,7 @@ static void	read_heredoc(int *pipe_fd, char **delimiter, t_list *envs,
 	free_tree(ctx->cmd_tree);
 	ft_lstclear(&envs, env_free);
 	free_string_array(delimiter);
-	if (g_stop)
+	if (g_signal)
 		exit(130);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/12 16:44:59 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/13 17:52:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include "minishell.h"
 #include "prompt.h"
 
+atomic_int	g_signal;
+
 char	*handle_input(t_ctx *ctx)
 {
 	char	*prompt;
@@ -31,6 +33,8 @@ char	*handle_input(t_ctx *ctx)
 	{
 		prompt = build_prompt(ctx->error_code);
 		line = readline(prompt);
+		if (g_signal)
+			ctx->error_code = 128 + g_signal;
 		free(prompt);
 		if (line && line[0])
 			add_history(line);
@@ -40,13 +44,14 @@ char	*handle_input(t_ctx *ctx)
 	return (line);
 }
 
-static void	main_loop(t_list *envs, t_ctx *ctx)
+static void	main_loop(t_list **envs, t_ctx *ctx)
 {
 	char	*line;
 	t_token	*tokens;
 
 	while (!ctx->is_exited)
 	{
+		g_signal = 0;
 		line = handle_input(ctx);
 		if (!line)
 			break ;
@@ -61,7 +66,7 @@ static void	main_loop(t_list *envs, t_ctx *ctx)
 			continue ;
 		ctx->cmd_tree = parse_tree(tokens);
 		free_tokens(tokens);
-		exec(ctx->cmd_tree, NULL, &envs, ctx);
+		exec(ctx->cmd_tree, NULL, envs, ctx);
 		free_tree(ctx->cmd_tree);
 		ctx->cmd_tree = NULL;
 	}
@@ -80,7 +85,7 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, sigint_handler);
 	envs = generate_env(env);
-	main_loop(envs, &ctx);
+	main_loop(&envs, &ctx);
 	ft_lstclear(&envs, env_free);
 	rl_clear_history();
 	if (isatty(STDIN_FILENO))
