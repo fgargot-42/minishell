@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/13 17:52:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/13 23:52:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ char	*handle_input(t_ctx *ctx)
 	if (isatty(STDIN_FILENO))
 	{
 		prompt = build_prompt(ctx->error_code);
+		signal(SIGINT, sigint_handler);
 		line = readline(prompt);
 		if (g_signal)
 			ctx->error_code = 128 + g_signal;
+		signal(SIGINT, SIG_IGN);
 		free(prompt);
 		if (line && line[0])
 			add_history(line);
@@ -83,7 +85,6 @@ int	main(int ac, char **av, char **env)
 	ctx.is_exited = 0;
 	ctx.cmd_tree = NULL;
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, sigint_handler);
 	envs = generate_env(env);
 	main_loop(&envs, &ctx);
 	ft_lstclear(&envs, env_free);

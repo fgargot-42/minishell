@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/11 19:37:13 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/13 21:08:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ static int	exec_command_fork(t_node *node, t_list **envs, t_ctx *ctx)
 	if (pid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		signal(SIGPIPE, sigpipe_handler);
 		path = get_command_path(node->cmd->args[0], *envs);
 		char_envs = (char **)reconstruct_envs(*envs);
@@ -136,7 +137,7 @@ int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 	}
 	status = exec_command_fork(node, envs, ctx);
 	cleanup_node_fds(node, parent);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (0);
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (WEXITSTATUS(status));
 }

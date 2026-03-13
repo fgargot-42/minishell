@@ -6,11 +6,12 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 23:09:55 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/23 18:39:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/14 00:35:36 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <unistd.h>
 
 static char	*replace_env(char *input, char *rep, size_t pos, size_t env_len)
 {

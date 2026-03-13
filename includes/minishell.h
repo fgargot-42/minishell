@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/11 20:51:25 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/13 22:30:44 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ size_t		replace_regular_env(char **input, t_env *env, char *key,
 				size_t pos);
 size_t		replace_errorcode_env(char **input, size_t pos, t_ctx *ctx);
 size_t		replace_numeric_env(char **input, size_t pos, t_ctx *ctx);
+size_t		replace_home_env(char **input, size_t pos);
 
 // expander_utils.c
 

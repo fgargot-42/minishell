@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/12 18:41:59 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/13 23:02:19 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,8 @@ void	expand_var(char **input, t_list *envs, t_ctx *ctx)
 	{
 		update_open_quotes((*input)[i], open_quotes);
 		if ((*input)[i] != '$' || is_special_dollar(*input, i, open_quotes))
-		{
 			i++;
-			continue ;
-		}
-		if ((*input)[i + 1] == '?')
+		else if ((*input)[i + 1] == '?')
 			i = replace_errorcode_env(input, i, ctx);
 		else if (ft_isdigit((*input)[i + 1]))
 			i = replace_numeric_env(input, i, ctx);
