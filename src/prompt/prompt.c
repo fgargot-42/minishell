@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/24 12:41:39 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/14 00:30:59 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static void	init_parts(t_prompt_parts *p, int err)
 	char	cwd[1024];
 
 	p->errcode = ft_itoa(err);
-	p->icon = "🐚 ";
-	p->name = "\001minic\002oquille: ";
+	p->icon = "\001🐚\002 ";
+	p->name = "minicoquille: ";
 	getcwd(cwd, sizeof(cwd));
 	p->cwd = ft_strdup(cwd);
 	p->sep = "⟩ ";
@@ -54,7 +54,7 @@ char	*build_prompt(int err)
 
 	init_parts(&p, err);
 	if (!p.errcode || !p.cwd)
-		return (ft_strdup("🐚 " BLUE "\001minic\002oquille" CYAN " ⟩ " RESET));
+		return (ft_strdup("\001🐚\002 " BLUE "minicoquille: " CYAN "⟩ " RESET));
 	prompt = ft_strjoin("[", p.errcode);
 	prompt = join_free(prompt, "] ");
 	prompt = join_free(prompt, p.icon);
