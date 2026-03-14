@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/03/13 23:14:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/14 01:02:32 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,13 @@ static void	update_old_pwd(t_list **envs, char *old_pwd)
 static void	update_new_pwd(t_list **envs)
 {
 	t_list	*pwd_node;
-	t_env	*pwd_node_content;
 
 	pwd_node = get_env_node_by_key(*envs, "PWD");
 	if (pwd_node)
 	{
-		pwd_node_content = (t_env *)pwd_node->content;
-		free(pwd_node_content->value);
+		free(((t_env *)pwd_node->content)->value);
+		((t_env *)pwd_node->content)->value = get_cwd();
 	}
-	else
-	{
-		pwd_node_content = malloc(sizeof(t_env));
-		if (!pwd_node_content)
-			return ;
-		pwd_node_content->key = ft_strdup("PWD");
-		if (!pwd_node_content->key)
-		{
-			free(pwd_node_content);
-			return ;
-		}
-		pwd_node = ft_lstnew(pwd_node_content);
-		ft_lstadd_back(envs, pwd_node);
-	}
-	pwd_node_content->value = get_cwd();
 }
 
 static int	cd_home(t_list **envs)
