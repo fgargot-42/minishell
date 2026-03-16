@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 17:53:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 20:21:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,42 @@
 
 atomic_int	g_signal;
 
-char	*handle_input(t_ctx *ctx)
+static char	*get_readline(t_ctx *ctx)
 {
 	char	*prompt;
+	char	*line;
+	int		fdin_tmp;
+
+	signal(SIGINT, sigint_handler);
+	fdin_tmp = dup(STDIN_FILENO);
+	while (1)
+	{
+		prompt = build_prompt(ctx->error_code);
+		line = readline(prompt);
+		free(prompt);
+		if (g_signal)
+		{
+			ctx->error_code = 128 + g_signal;
+			g_signal = 0;
+			free(line);
+			dup2(fdin_tmp, STDIN_FILENO);
+			continue ;
+		}
+		break ;
+	}
+	close(fdin_tmp);
+	signal(SIGINT, sigint_cmd_handler);
+	return (line);
+}
+
+char	*handle_input(t_ctx *ctx)
+{
 	char	*line;
 
 	line = NULL;
 	if (isatty(STDIN_FILENO))
 	{
-		prompt = build_prompt(ctx->error_code);
-		signal(SIGINT, sigint_handler);
-		line = readline(prompt);
-		if (g_signal)
-			ctx->error_code = 128 + g_signal;
-		signal(SIGINT, sigint_cmd_handler);
-		free(prompt);
+		line = get_readline(ctx);
 		if (line && line[0])
 			add_history(line);
 	}
