@@ -6,12 +6,33 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/14 00:35:37 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 14:13:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+#include <unistd.h>
+
+static void	set_default_env(t_list **env_list)
+{
+	char	*new_env[3];
+	char	pwd[1024];
+	int		i;
+
+	getcwd(pwd, sizeof(pwd));
+	new_env[0] = "OLDPWD";
+	new_env[1] = ft_strjoin("PWD=", pwd);
+	if (!new_env[1])
+		new_env[1] = "PWD";
+	new_env[2] = "SHLVL=1";
+	i = 0;
+	while (i < 3)
+	{
+		add_env(&new_env[i], env_list);
+		i++;
+	}
+}
 
 t_env	*new_env(char *env_line)
 {
@@ -44,27 +65,16 @@ t_env	*new_env(char *env_line)
 t_list	*generate_env(char **env)
 {
 	t_list	*head;
-	t_env	*new_elem;
-	t_list	*env_current;
+	int		i;
 
 	head = NULL;
-	while (*env)
+	if (!env || !*env)
+		set_default_env(&head);
+	i = 0;
+	while (env[i])
 	{
-		new_elem = new_env(*env);
-		if (!new_elem)
-		{
-			ft_lstclear(&head, free);
-			return (NULL);
-		}
-		env_current = ft_lstnew(new_elem);
-		if (!env_current)
-		{
-			free(new_elem);
-			ft_lstclear(&head, free);
-			return (NULL);
-		}
-		ft_lstadd_back(&head, env_current);
-		env++;
+		add_env(&env[i], &head);
+		i++;
 	}
 	return (head);
 }
