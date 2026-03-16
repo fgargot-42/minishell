@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/14 00:38:51 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 21:55:57 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 static void	exec_pipe_command(t_node *node, t_node *parent, t_list **envs,
 				t_ctx *ctx)
 {
-	char				*path;
-	char				**char_envs;
+	char	*path;
+	char	**char_envs;
+	int		status;
 
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
@@ -32,7 +33,11 @@ static void	exec_pipe_command(t_node *node, t_node *parent, t_list **envs,
 		exit(1);
 	expand_cmd_args(node, envs, ctx);
 	if (is_builtin(node->cmd))
-		exit(call_builtin(node, envs, ctx));
+	{
+		status = call_builtin(node, envs, ctx);
+		builtin_fork_clean(envs, ctx);
+		exit(status);
+	}
 	path = get_command_path(node->cmd->args[0], *envs);
 	char_envs = reconstruct_envs(*envs);
 	if (path && char_envs)

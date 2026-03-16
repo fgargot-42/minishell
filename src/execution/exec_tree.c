@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:06:22 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/12 16:53:12 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 22:01:11 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx)
 	else if (root->type == NODE_OR)
 	{
 		exec(root->left, root, envs, ctx);
-		if (ctx->error_code != 0)
+		if (ctx->error_code != 0 && ctx->error_code != 130)
 			exec(root->right, root, envs, ctx);
 	}
 	else if (root->type == NODE_AND)

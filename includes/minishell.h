@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 14:47:09 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 21:55:51 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ int			exec_command(t_node *node, t_node *parent, t_list **envs,
 char		*find_in_path(char *cmd);
 void		exit_fork_clean(t_node *node, char **char_envs,
 				char *path, t_ctx *ctx);
+void		builtin_fork_clean(t_list **envs, t_ctx *ctx);
 
 // exec_tree
 void		exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx);

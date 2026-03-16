@@ -14,6 +14,7 @@ SRC=main.c \
 	execution/exec_tree.c \
 	execution/exec_pipe.c \
 	execution/exec_path.c \
+	execution/exec_utils.c \
 	execution/resolve_redir.c \
 	execution/resolve_heredoc.c \
 	execution/resolve_redir_pipe.c \

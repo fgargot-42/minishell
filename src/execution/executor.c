@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 14:47:56 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 21:57:38 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,75 +17,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
-#include <sys/stat.h>
-
-static void	check_is_dir(char *filepath)
-{
-	struct stat	stat_buf;
-	int			status;
-
-	status = stat(filepath, &stat_buf);
-	if (status != 0)
-		return ;
-	if (stat_buf.st_mode & S_IFDIR)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(filepath, 2);
-		ft_putstr_fd(": Is a directory\n", 2);
-		errno = EISDIR;
-	}
-}
-
-static void	check_file_access(char *filepath)
-{
-	if (access(filepath, F_OK) || access(filepath, X_OK))
-	{
-		if (errno == EACCES)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(filepath, 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-		}
-		if (errno == ENOENT)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(filepath, 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
-		}
-	}
-	else
-		check_is_dir(filepath);
-}
-
-void	exit_fork_clean(t_node *node, char **char_envs, char *path,
-			t_ctx *ctx)
-{
-	char	*is_path;
-
-	free(path);
-	free_string_array(char_envs);
-	if (!node->cmd->args[0])
-		return ;
-	is_path = ft_strrchr(node->cmd->args[0], '/');
-	if (!ft_strncmp(node->cmd->args[0], ".", 2))
-	{
-		ft_putstr_fd("minishell: filename argument required", 2);
-		exit(2);
-	}
-	errno = 0;
-	if (is_path)
-		check_file_access(node->cmd->args[0]);
-	else
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(node->cmd->args[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-	}
-	free_tree(ctx->cmd_tree);
-	if (errno == EACCES || errno == EISDIR)
-		exit(126);
-	exit(127);
-}
 
 static int	exec_command_fork(t_node *node, t_list **envs, t_ctx *ctx)
 {
