@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/28 21:39:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 14:13:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 14:39:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 static void	set_default_env(t_list **env_list)
 {
-	char	*new_env[3];
+	char	*new_env[4];
 	char	pwd[1024];
 	int		i;
 
@@ -26,8 +26,10 @@ static void	set_default_env(t_list **env_list)
 	if (!new_env[1])
 		new_env[1] = "PWD";
 	new_env[2] = "SHLVL=1";
+	new_env[3] =
+		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
 	i = 0;
-	while (i < 3)
+	while (i < 4)
 	{
 		add_env(&new_env[i], env_list);
 		i++;
