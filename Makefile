@@ -7,6 +7,7 @@ OBJDIR=obj
 INCDIR=includes
 LIBFTDIR=libft
 LIBFT=$(LIBFTDIR)/libft.a
+INCLUDE=-I$(INCDIR) -I$(LIBFTDIR)/includes
 SRC=main.c \
 	execution/executor.c \
 	execution/builtin.c \
@@ -48,13 +49,13 @@ SRC=main.c \
 OBJ=$(SRC:.c=.o)
 
 $(NAME): $(addprefix $(OBJDIR)/,$(OBJ)) $(LIBFT)
-	$(CC) $(CFLAGS) $(CLINK) -I$(INCDIR) $^ -o $@
+	$(CC) $(CFLAGS) $(CLINK) $(INCLUDE) $^ -o $@
 
 all: $(NAME)
 
 $(OBJDIR)/%.o:$(SRCDIR)/%.c
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I$(INCDIR) -c $? -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) -c $? -o $@
 
 $(LIBFT):
 	make -C $(LIBFTDIR)

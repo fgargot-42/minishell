@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/13 22:30:44 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 14:47:09 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,7 @@ void		print_error(char *msg);
 // signals
 
 void		sigint_handler(int sig);
+void		sigint_cmd_handler(int sig);
 void		sigpipe_handler(int sig);
 
 // wildcards

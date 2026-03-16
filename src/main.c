@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@student.42angouleme.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:31:40 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/13 23:52:23 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 17:53:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*handle_input(t_ctx *ctx)
 		line = readline(prompt);
 		if (g_signal)
 			ctx->error_code = 128 + g_signal;
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, sigint_cmd_handler);
 		free(prompt);
 		if (line && line[0])
 			add_history(line);
@@ -89,6 +89,8 @@ int	main(int ac, char **av, char **env)
 	main_loop(&envs, &ctx);
 	ft_lstclear(&envs, env_free);
 	rl_clear_history();
+	if (isatty(STDIN_FILENO) && !*env && !ctx.is_exited)
+		ft_putstr_fd("\n", 2);
 	if (isatty(STDIN_FILENO))
 		ft_putstr_fd("exit\n", 2);
 	return (ctx.error_code);

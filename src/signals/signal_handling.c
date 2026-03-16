@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 00:17:56 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/13 17:39:28 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/16 14:46:50 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ void	sigint_handler(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+}
+
+void	sigint_cmd_handler(int sig)
+{
+	g_signal = sig;
+	write(1, "\n", 1);
 }
 
 void	sigpipe_handler(int sig)
