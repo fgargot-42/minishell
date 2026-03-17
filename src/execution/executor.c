@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 21:57:38 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/17 20:50:00 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,22 @@ static int	exec_command_fork(t_node *node, t_list **envs, t_ctx *ctx)
 	return (status);
 }
 
+static int	check_cmd_node(t_node *node, t_node *parent)
+{
+	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
+	{
+		cleanup_node_fds(node, parent);
+		return (1);
+	}
+	return (0);
+}
+
 int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 {
 	int		status;
 
-	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
-	{
-		cleanup_node_fds(node, parent);
+	if (check_cmd_node(node, parent))
 		return (0);
-	}
 	expand_cmd_args(node, envs, ctx);
 	if (!node->cmd->args || !node->cmd->args[0])
 	{
@@ -69,6 +76,10 @@ int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 	status = exec_command_fork(node, envs, ctx);
 	cleanup_node_fds(node, parent);
 	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit\n", 2);
 		return (128 + WTERMSIG(status));
+	}
 	return (WEXITSTATUS(status));
 }

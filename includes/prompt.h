@@ -6,8 +6,16 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 17:47:39 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/11 17:47:42 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/17 19:01:12 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*build_prompt(int err);
+typedef struct s_prompt_parts
+{
+	char	*icon;
+	char	*name;
+	char	*cwd;
+	char	*sep;
+}			t_prompt_parts;
+
+char	*build_prompt(void);

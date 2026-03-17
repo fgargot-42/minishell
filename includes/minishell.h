@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 21:55:51 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/17 18:56:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,6 @@
 # define MAGENTA "\001\033[0;35m\002"
 # define CYAN    "\001\033[0;36m\002"
 # define RESET   "\001\033[0m\002"
-
-typedef struct s_prompt_parts
-{
-	char	*errcode;
-	char	*icon;
-	char	*name;
-	char	*cwd;
-	char	*sep;
-	char	*color;
-}			t_prompt_parts;
 
 typedef struct s_env
 {

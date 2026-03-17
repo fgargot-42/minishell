@@ -6,11 +6,12 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/03/14 00:30:59 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/17 19:00:55 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "prompt.h"
 #include "unistd.h"
 
 static char	*join_free(char *s1, char *s2)
@@ -25,46 +26,31 @@ static char	*join_free(char *s1, char *s2)
 	return (result);
 }
 
-static void	init_parts(t_prompt_parts *p, int err)
+static void	init_parts(t_prompt_parts *p)
 {
 	char	cwd[1024];
 
-	p->errcode = ft_itoa(err);
 	p->icon = "\001🐚\002 ";
 	p->name = "minicoquille: ";
 	getcwd(cwd, sizeof(cwd));
 	p->cwd = ft_strdup(cwd);
 	p->sep = "⟩ ";
-	if (err == 0)
-		p->color = BLUE;
-	else
-		p->color = RED;
 }
 
-static void	free_parts(t_prompt_parts *p)
-{
-	free(p->errcode);
-	free(p->cwd);
-}
-
-char	*build_prompt(int err)
+char	*build_prompt(void)
 {
 	t_prompt_parts	p;
 	char			*prompt;
 
-	init_parts(&p, err);
-	if (!p.errcode || !p.cwd)
+	init_parts(&p);
+	if (!p.cwd)
 		return (ft_strdup("\001🐚\002 " BLUE "minicoquille: " CYAN "⟩ " RESET));
-	prompt = ft_strjoin("[", p.errcode);
-	prompt = join_free(prompt, "] ");
-	prompt = join_free(prompt, p.icon);
-	prompt = join_free(prompt, p.color);
+	prompt = ft_strjoin(p.icon, BLUE);
 	prompt = join_free(prompt, p.name);
 	prompt = join_free(prompt, p.cwd);
 	prompt = join_free(prompt, " ");
-	prompt = join_free(prompt, p.color);
 	prompt = join_free(prompt, p.sep);
 	prompt = join_free(prompt, RESET);
-	free_parts(&p);
+	free(p.cwd);
 	return (prompt);
 }
