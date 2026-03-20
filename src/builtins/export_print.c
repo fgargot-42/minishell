@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/29 19:48:35 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/20 17:45:28 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/20 14:29:23 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ void	builtin_export_print(t_list **envs)
 	current = env_dup;
 	while (current)
 	{
+		if (!ft_strcmp(((t_env *)current->content)->key, "_"))
+		{
+			current = current->next;
+			continue ;
+		}
 		printf("declare -x %s", ((t_env *)current->content)->key);
 		if (((t_env *)current->content)->value)
 			printf("=\"%s\"", ((t_env *)current->content)->value);
