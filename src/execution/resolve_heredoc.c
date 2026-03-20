@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 20:49:51 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/12 22:04:39 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/19 13:21:10 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ static int	heredoc_event_hook(void)
 
 static void	heredoc_sigint_handler(int sig)
 {
-	(void)sig;
-	g_signal = 1;
+	g_signal = sig;
 	write(1, "\n", 1);
 }
 
@@ -37,7 +36,7 @@ static void	read_heredoc_lines(char *delimiter, int pipe_fd)
 {
 	char				*line;
 
-	while (!g_signal)
+	while (1)
 	{
 		if (isatty(STDIN_FILENO))
 			line = readline("> ");
