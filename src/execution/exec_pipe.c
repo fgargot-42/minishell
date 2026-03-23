@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 21:21:01 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 22:06:45 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int fd_read,
 		apply_redirect(node->left->fd_out, STDOUT_FILENO);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
-		signal(SIGPIPE, SIG_IGN);
 		exec_pipe_command(node->left, node, envs, ctx);
 	}
 	if (node->fd_in > 2)
@@ -83,7 +82,6 @@ static pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 		apply_redirect(node->right->fd_out, STDOUT_FILENO);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
-		signal(SIGPIPE, SIG_IGN);
 		exec_pipe_command(node->right, node, envs, ctx);
 	}
 	return (pid);
@@ -97,8 +95,6 @@ static int	update_pipe_exit_status(int *pid, int status)
 	if (pid[0] > 0)
 	{
 		waitpid(pid[0], &new_status, 0);
-		if (WIFSIGNALED(new_status) && WTERMSIG(new_status))
-			ft_putstr_fd("minishell: broken pipe\n", 2);
 	}
 	if (pid[1] <= 0)
 		return (status);
@@ -107,8 +103,8 @@ static int	update_pipe_exit_status(int *pid, int status)
 		new_status = WEXITSTATUS(status);
 	if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGPIPE)
-			ft_putstr_fd("minishell: broken pipe\n", 2);
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit\n", 2);
 		new_status = 128 + WTERMSIG(status);
 	}
 	return (new_status);

@@ -1,0 +1,11 @@
+ignore_readline.supp
+includes
+libft
+Makefile
+minishell
+nda_tester
+obj
+outfile
+README.md
+src
+tester
