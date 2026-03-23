@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 23:43:03 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/02/23 22:32:35 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 20:24:25 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,14 @@ void	update_open_quotes(char c, int *open_quotes)
 		open_quotes[0] = !open_quotes[0];
 	if (c == '\"' && !open_quotes[0])
 		open_quotes[1] = !open_quotes[1];
+}
+
+void	print_cmd_error(char *cmd_name, char *msg)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd_name, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(msg, 2);
 }
 
 void	print_error(char *msg)

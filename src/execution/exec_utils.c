@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 21:50:29 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 22:07:02 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 20:25:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,9 @@ static void	check_file_access(char *filepath)
 	if (access(filepath, F_OK) || access(filepath, X_OK))
 	{
 		if (errno == EACCES)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(filepath, 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-		}
+			print_cmd_error(filepath, "Permission denied");
 		if (errno == ENOENT)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(filepath, 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
-		}
+			print_cmd_error(filepath, "No such file or directory");
 	}
 	else
 		check_is_dir(filepath);
@@ -66,18 +58,15 @@ void	exit_fork_clean(t_node *node, char **char_envs, char *path,
 	is_path = ft_strrchr(node->cmd->args[0], '/');
 	if (!ft_strncmp(node->cmd->args[0], ".", 2))
 	{
-		ft_putstr_fd("minishell: filename argument required", 2);
+		ft_putstr_fd("minishell: filename argument required\n", 2);
+		free_tree(ctx->cmd_tree);
 		exit(2);
 	}
 	errno = 0;
 	if (is_path)
 		check_file_access(node->cmd->args[0]);
 	else
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(node->cmd->args[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-	}
+		print_cmd_error(node->cmd->args[0], "command not found");
 	free_tree(ctx->cmd_tree);
 	if (errno == EACCES || errno == EISDIR)
 		exit(126);

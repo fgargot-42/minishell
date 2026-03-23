@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/17 18:56:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 20:21:57 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,7 @@ int			check_spaces_in_filename(char *filename);
 char		*remove_quotes(char *str);
 char		*ft_strjoin_chr(char *str1, char *str2, char sep);
 char		*ft_strjoin_all_chr(char **str_array, char sep);
+void		print_cmd_error(char *cmd_name, char *msg);
 void		print_error(char *msg);
 
 // signals
