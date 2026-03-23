@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/16 21:55:57 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 17:50:15 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ static pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int fd_read,
 		apply_redirect(node->left->fd_in, STDIN_FILENO);
 		apply_redirect(node->left->fd_out, STDOUT_FILENO);
 		exec_pipe_command(node->left, node, envs, ctx);
+	}
+	if (node->fd_in > 2)
+	{
+		close(node->fd_in);
+		node->fd_in = -1;
 	}
 	return (pid);
 }

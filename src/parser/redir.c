@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:41:01 by fgargot           #+#    #+#             */
-/*   Updated: 2026/02/24 00:10:00 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 17:53:22 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void	cleanup_node_fds(t_node *node, t_node *parent)
 {
 	if (!node)
 		return ;
-	if (node->fd_in != STDIN_FILENO)
+	if (node->fd_in > 2)
 	{
 		if (!parent || node->fd_in != parent->fd_in)
 			close(node->fd_in);
 		node->fd_in = STDIN_FILENO;
 	}
-	if (node->fd_out != STDOUT_FILENO)
+	if (node->fd_out > 2)
 	{
 		if (!parent || node->fd_out != parent->fd_out)
 			close(node->fd_out);
