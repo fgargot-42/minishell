@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/16 21:50:29 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 20:25:52 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 23:41:48 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,23 @@ void	exit_fork_clean(t_node *node, char **char_envs, char *path,
 	exit(127);
 }
 
+static void	builtin_close_fds(t_node *node, t_node *parent)
+{
+	if (node->left)
+		builtin_close_fds(node->left, node);
+	if (node->right)
+		builtin_close_fds(node->right, node);
+	if (node->fd_in > 2)
+		if (!parent || node->fd_in != parent->fd_in)
+			close(node->fd_in);
+	if (node->fd_out > 2)
+		if (!parent || node->fd_out != parent->fd_out)
+			close(node->fd_out);
+}
+
 void	builtin_fork_clean(t_list **envs, t_ctx *ctx)
 {
+	builtin_close_fds(ctx->cmd_tree, NULL);
 	ft_lstclear(envs, env_free);
 	free_tree(ctx->cmd_tree);
 }
