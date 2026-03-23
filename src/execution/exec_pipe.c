@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 17:50:15 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 20:50:48 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	exec_pipe_command(t_node *node, t_node *parent, t_list **envs,
 
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
+	signal(SIGPIPE, SIG_IGN);
 	if (node->type == NODE_GROUP)
 	{
 		exec(node, parent, envs, ctx);

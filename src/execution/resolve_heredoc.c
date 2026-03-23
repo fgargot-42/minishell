@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 20:49:51 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/19 13:21:10 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/23 20:51:17 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,15 @@ static void	read_heredoc(int *pipe_fd, char **delimiter, t_list *envs,
 				t_ctx *ctx)
 {
 	struct sigaction	sa;
+	int					i;
 
+	i = 3;
+	while (i < 1024)
+	{
+		if (i != pipe_fd[1])
+			close(i);
+		i++;
+	}
 	g_signal = 0;
 	sa.sa_handler = heredoc_sigint_handler;
 	sigemptyset(&sa.sa_mask);
