@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 21:24:18 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/03/14 01:02:32 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 22:04:24 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,12 @@
 
 char	*get_cwd(void)
 {
-	char	*pwd;
+	char	pwd[1024];
 	char	*res;
-	int		i;
 
-	i = 128;
 	res = NULL;
-	while (!res && i > 0)
-	{
-		pwd = malloc(i * sizeof(char));
-		if (!pwd)
-			return (NULL);
-		res = getcwd(pwd, i);
-		if (!res)
-			free(pwd);
-		i += 128;
-	}
+	if (getcwd(pwd, 1024))
+		res = ft_strdup(pwd);
 	return (res);
 }
 

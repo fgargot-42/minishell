@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:04:18 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/12 16:56:19 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 22:12:55 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static int	open_redir(char **filenames, t_redir *redir, t_list *envs,
 	}
 	if (filenames[1])
 	{
-		ft_putstr_fd("minishell: ambiguous redirect", 2);
+		ft_putstr_fd("minishell: ambiguous redirect\n", 2);
+		ctx->error_code = 1;
 		return (-1);
 	}
 	new_fd = -1;
