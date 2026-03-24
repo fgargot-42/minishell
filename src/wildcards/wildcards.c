@@ -6,11 +6,12 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:02:08 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/03/24 17:11:14 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 22:57:43 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "minishell.h"
 #include <dirent.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -90,7 +91,23 @@ static char	**ft_lst_to_array(t_list **list)
 
 static int	list_strcmp(void *s1, void *s2)
 {
-	return (ft_strcmp((char *)s1, (char *)s2));
+	char	*s1_lowcase;
+	char	*s2_lowcase;
+	int		res;
+
+	s1_lowcase = ft_strtolower(s1);
+	if (!s1_lowcase)
+		return (0);
+	s2_lowcase = ft_strtolower(s2);
+	if (!s1_lowcase)
+	{
+		free(s1_lowcase);
+		return (0);
+	}
+	res = ft_strcmp(s1_lowcase, s2_lowcase);
+	free(s1_lowcase);
+	free(s2_lowcase);
+	return (res);
 }
 
 char	**expand_wildcards(char *pattern)

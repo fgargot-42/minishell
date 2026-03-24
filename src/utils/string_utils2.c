@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 23:43:03 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/03/23 20:24:25 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 22:53:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,23 @@
 #include <stdio.h>
 #include <errno.h>
 #include "libft.h"
+
+char	*ft_strtolower(char *str)
+{
+	char	*res;
+	int		i;
+
+	i = 0;
+	res = ft_strdup(str);
+	if (!res)
+		return (NULL);
+	while (res[i])
+	{
+		res[i] = ft_tolower(res[i]);
+		i++;
+	}
+	return (res);
+}
 
 void	free_string_array(char **array)
 {

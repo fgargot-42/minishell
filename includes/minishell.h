@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/24 21:29:53 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 22:54:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ char		*ft_strjoin_chr(char *str1, char *str2, char sep);
 char		*ft_strjoin_all_chr(char **str_array, char sep);
 void		print_cmd_error(char *cmd_name, char *msg);
 void		print_error(char *msg);
+char		*ft_strtolower(char *str);
 
 // signals
 
