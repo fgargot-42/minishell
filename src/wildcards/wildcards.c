@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/17 21:02:08 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/03/12 18:37:51 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 17:11:14 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static int	match(char *pattern, char *filename)
 		return (1);
 	if (*pattern == '*')
 	{
+		while (*pattern == '*' && *(pattern +1) == '*')
+			pattern++;
 		if (match(pattern + 1, filename))
 			return (1);
 		if (*filename && match(pattern, filename + 1))
