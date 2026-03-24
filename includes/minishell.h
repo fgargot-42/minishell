@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/24 21:23:20 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 21:29:53 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define RESET   "\001\033[0m\002"
 
 extern atomic_int	g_signal;
-typedef int			(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 
 typedef struct s_env
 {
@@ -221,6 +220,7 @@ int			count_words(char *s);
 void		update_open_quotes(char c, int *quotes);
 
 // builtin.c
+typedef int			(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 int			is_builtin(t_cmd *cmd);
 int			call_builtin(t_node *node, t_list **envs, t_ctx *ctx);
 void		builtin_export_print(t_list **envs);
