@@ -6,7 +6,7 @@
 /*   By: mabarrer <mabarrer@42angouleme.fr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/02 02:22:46 by mabarrer          #+#    #+#             */
-/*   Updated: 2026/03/17 19:00:55 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 21:32:09 by mabarrer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ static void	init_parts(t_prompt_parts *p)
 
 	p->icon = "\001🐚\002 ";
 	p->name = "minicoquille: ";
-	getcwd(cwd, sizeof(cwd));
-	p->cwd = ft_strdup(cwd);
+	if (getcwd(cwd, sizeof(cwd)))
+		p->cwd = ft_strdup(cwd);
+	else
+		p->cwd = ft_strdup("#");
 	p->sep = "⟩ ";
 }
 
