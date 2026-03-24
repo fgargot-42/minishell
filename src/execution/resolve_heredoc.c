@@ -6,18 +6,15 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 20:49:51 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 20:51:17 by mabarrer         ###   ########.fr       */
+/*   Updated: 2026/03/24 21:21:27 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <unistd.h>
 #include <signal.h>
-#include <stdatomic.h>
 #include <readline/readline.h>
 #include <sys/wait.h>
-
-extern atomic_int	g_signal;
 
 static int	heredoc_event_hook(void)
 {

@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/22 00:17:56 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 22:06:56 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 21:21:00 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 #include "prompt.h"
 #include <readline/readline.h>
 #include <unistd.h>
-#include <stdatomic.h>
-
-extern atomic_int	g_signal;
 
 void	sigint_handler(int sig)
 {

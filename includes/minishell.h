@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 22:07:18 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/24 21:23:20 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdatomic.h>
 # include "libft.h"
 
 // Color codes
@@ -25,6 +26,9 @@
 # define MAGENTA "\001\033[0;35m\002"
 # define CYAN    "\001\033[0;36m\002"
 # define RESET   "\001\033[0m\002"
+
+extern atomic_int	g_signal;
+typedef int			(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 
 typedef struct s_env
 {
@@ -57,8 +61,8 @@ typedef enum e_node_type
 	/   \
 cmd(cat) cmd(wc)
 
+*/
 
-	*/
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -217,7 +221,6 @@ int			count_words(char *s);
 void		update_open_quotes(char c, int *quotes);
 
 // builtin.c
-typedef int	(*t_builtin_func)(t_cmd *cmd, t_list **envs, t_ctx *ctx);
 int			is_builtin(t_cmd *cmd);
 int			call_builtin(t_node *node, t_list **envs, t_ctx *ctx);
 void		builtin_export_print(t_list **envs);
