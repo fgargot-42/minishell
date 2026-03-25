@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 22:06:45 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/25 23:10:46 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ static void	exec_pipe_command(t_node *node, t_node *parent, t_list **envs,
 	int		status;
 
 	if (node->type == NODE_GROUP)
-	{
-		exec(node, parent, envs, ctx);
-		exit(ctx->error_code);
-	}
+		exec_group_fork(node, parent, envs, ctx);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
 		exit(1);
 	expand_cmd_args(node, envs, ctx);
@@ -55,8 +52,7 @@ static pid_t	exec_left_pipe_cmd(t_node *node, t_list **envs, int fd_read,
 	if (pid == 0)
 	{
 		close(fd_read);
-		apply_redirect(node->left->fd_in, STDIN_FILENO);
-		apply_redirect(node->left->fd_out, STDOUT_FILENO);
+		apply_redirect(node->left, node);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		exec_pipe_command(node->left, node, envs, ctx);
@@ -78,8 +74,7 @@ static pid_t	exec_right_pipe_cmd(t_node *node, t_list **envs, t_ctx *ctx)
 		return (-1);
 	if (pid == 0)
 	{
-		apply_redirect(node->right->fd_in, STDIN_FILENO);
-		apply_redirect(node->right->fd_out, STDOUT_FILENO);
+		apply_redirect(node->right, node);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		exec_pipe_command(node->right, node, envs, ctx);

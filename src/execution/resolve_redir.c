@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:04:18 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/24 22:12:55 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/25 16:34:08 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	open_redir(char **filenames, t_redir *redir, t_list *envs,
 
 	if (!filenames || !filenames[0])
 	{
-		ft_putstr_fd("minishell: : no such file or directory", 2);
+		ft_putstr_fd("minishell: : no such file or directory\n", 2);
+		ctx->error_code = 1;
 		return (-1);
 	}
 	if (filenames[1])

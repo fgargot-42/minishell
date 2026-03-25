@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:52:46 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/24 22:54:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/25 23:10:52 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,11 +180,13 @@ char		*find_in_path(char *cmd);
 void		exit_fork_clean(t_node *node, char **char_envs,
 				char *path, t_ctx *ctx);
 void		builtin_fork_clean(t_list **envs, t_ctx *ctx);
+void		exec_group_fork(t_node *node, t_node *parent, t_list **envs,
+				t_ctx *ctx);
 
 // exec_tree
 void		exec(t_node *root, t_node *parent, t_list **envs, t_ctx *ctx);
 void		inherit_redirs(t_node *node, t_node *parent);
-void		apply_redirect(int node_fd, int std_fd);
+void		apply_redirect(t_node *node, t_node *parent);
 
 // exec_pipeline.c
 int			exec_pipeline(t_node *node, t_list **envs, t_ctx *ctx);

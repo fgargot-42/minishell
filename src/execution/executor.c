@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/27 14:50:02 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/23 22:07:03 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/25 23:11:05 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,16 @@
 #include <unistd.h>
 #include <errno.h>
 
-static int	exec_command_fork(t_node *node, t_list **envs, t_ctx *ctx)
+void	exec_group_fork(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
+{
+	exec(node, parent, envs, ctx);
+	ft_lstclear(envs, env_free);
+	free_tree(ctx->cmd_tree);
+	exit(ctx->error_code);
+}
+
+static int	exec_command_fork(t_node *node, t_node *parent, t_list **envs,
+				t_ctx *ctx)
 {
 	pid_t	pid;
 	char	**char_envs;
@@ -34,8 +43,7 @@ static int	exec_command_fork(t_node *node, t_list **envs, t_ctx *ctx)
 		path = get_command_path(node->cmd->args[0], *envs);
 		char_envs = (char **)reconstruct_envs(*envs);
 		ft_lstclear(envs, env_free);
-		apply_redirect(node->fd_in, STDIN_FILENO);
-		apply_redirect(node->fd_out, STDOUT_FILENO);
+		apply_redirect(node, parent);
 		execve(path, node->cmd->args, char_envs);
 		exit_fork_clean(node, char_envs, path, ctx);
 	}
@@ -72,7 +80,7 @@ int	exec_command(t_node *node, t_node *parent, t_list **envs, t_ctx *ctx)
 		cleanup_node_fds(node, parent);
 		return (status);
 	}
-	status = exec_command_fork(node, envs, ctx);
+	status = exec_command_fork(node, parent, envs, ctx);
 	cleanup_node_fds(node, parent);
 	if (WIFSIGNALED(status))
 	{
