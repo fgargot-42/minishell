@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 20:49:51 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/24 21:21:27 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/25 16:25:34 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ static void	heredoc_sigint_handler(int sig)
 	write(1, "\n", 1);
 }
 
-static void	read_heredoc_lines(char *delimiter, int pipe_fd)
+static void	read_heredoc_lines(char *delimiter, int pipe_fd, t_list *envs,
+				t_ctx *ctx)
 {
-	char				*line;
+	char	*line;
 
 	while (1)
 	{
@@ -46,6 +47,7 @@ static void	read_heredoc_lines(char *delimiter, int pipe_fd)
 			free(line);
 			break ;
 		}
+		expand_var(&line, envs, ctx);
 		ft_putstr_fd(line, pipe_fd);
 		ft_putstr_fd("\n", pipe_fd);
 		free(line);
@@ -72,7 +74,7 @@ static void	read_heredoc(int *pipe_fd, char **delimiter, t_list *envs,
 	sigaction(SIGINT, &sa, NULL);
 	rl_event_hook = heredoc_event_hook;
 	close(pipe_fd[0]);
-	read_heredoc_lines(*delimiter, pipe_fd[1]);
+	read_heredoc_lines(*delimiter, pipe_fd[1], envs, ctx);
 	close(pipe_fd[1]);
 	free_tree(ctx->cmd_tree);
 	ft_lstclear(&envs, env_free);
