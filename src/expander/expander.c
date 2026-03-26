@@ -6,14 +6,14 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/03 17:06:16 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/13 23:02:19 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/26 18:40:01 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static size_t	expand_regular_var(char **input, size_t i, t_list *envs)
+size_t	expand_regular_var(char **input, size_t i, t_list *envs)
 {
 	char	*var_name;
 	t_env	*env;

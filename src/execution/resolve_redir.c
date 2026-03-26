@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 22:04:18 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/25 16:34:08 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/26 18:48:05 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,46 +44,57 @@ static int	open_redir(char **filenames, t_redir *redir, t_list *envs,
 	return (new_fd);
 }
 
-static void	update_node_fds(t_node *node, t_redir *redir, int fd)
+static void	update_node_fds(t_node *node, t_node *parent,
+				t_redir *redir, int fd)
 {
 	if (redir->type == TOKEN_REDIR_OUT || redir->type == TOKEN_APPEND)
 	{
-		if (node->fd_out != STDOUT_FILENO)
+		if (node->fd_out != STDOUT_FILENO
+			&& (!parent || node->fd_out != parent->fd_out))
 			close(node->fd_out);
 		node->fd_out = fd;
 	}
 	else
 	{
-		if (node->fd_in != STDIN_FILENO)
+		if (node->fd_in != STDIN_FILENO
+			&& (!parent || node->fd_in != parent->fd_in))
 			close(node->fd_in);
 		node->fd_in = fd;
 	}
 }
 
-int	resolve_redirs(t_node *node, t_list *envs, t_ctx *ctx)
+static char	**expand_redir(t_redir *redir, t_list *envs, t_ctx *ctx)
+{
+	char	**expanded;
+	char	*tmp;
+
+	expanded = expand_wildcards(redir->file);
+	expand_var(&expanded[0], envs, ctx);
+	tmp = remove_quotes(expanded[0]);
+	free(expanded[0]);
+	expanded[0] = tmp;
+	return (expanded);
+}
+
+int	resolve_redirs(t_node *node, t_node *parent, t_list *envs, t_ctx *ctx)
 {
 	t_redir	*redir;
 	char	**expanded;
 	int		new_fd;
-	char	*tmp;
 
 	if (!node)
 		return (0);
 	redir = node->redirs;
 	while (redir)
 	{
-		expanded = expand_wildcards(redir->file);
-		expand_var(&expanded[0], envs, ctx);
-		tmp = remove_quotes(expanded[0]);
-		free(expanded[0]);
-		expanded[0] = tmp;
+		expanded = expand_redir(redir, envs, ctx);
 		new_fd = open_redir(expanded, redir, envs, ctx);
 		free_string_array(expanded);
 		if (new_fd == -1)
 			cleanup_node_fds(node, NULL);
 		if (new_fd == -1)
 			return (1);
-		update_node_fds(node, redir, new_fd);
+		update_node_fds(node, parent, redir, new_fd);
 		redir = redir->next;
 	}
 	return (0);

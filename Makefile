@@ -30,6 +30,7 @@ SRC=main.c \
 	parser/nodes.c \
 	parser/redir.c \
 	expander/expander.c \
+	expander/expander_heredoc.c \
 	expander/expander_split.c \
 	expander/expander_utils.c \
 	expander/expander_replace.c \

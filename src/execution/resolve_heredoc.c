@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 20:49:51 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/25 16:25:34 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/26 18:41:12 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	read_heredoc_lines(char *delimiter, int pipe_fd, t_list *envs,
 			free(line);
 			break ;
 		}
-		expand_var(&line, envs, ctx);
+		expand_var_heredoc(&line, envs, ctx);
 		ft_putstr_fd(line, pipe_fd);
 		ft_putstr_fd("\n", pipe_fd);
 		free(line);
