@@ -6,7 +6,7 @@
 /*   By: fgargot <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/31 19:07:32 by fgargot           #+#    #+#             */
-/*   Updated: 2026/03/25 23:10:46 by fgargot          ###   ########.fr       */
+/*   Updated: 2026/03/27 17:27:48 by fgargot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ static void	exec_pipe_command(t_node *node, t_node *parent, t_list **envs,
 	if (node->type == NODE_GROUP)
 		exec_group_fork(node, parent, envs, ctx);
 	if (!node->cmd || !node->cmd->args || !node->cmd->args[0])
-		exit(1);
+	{
+		ft_lstclear(envs, env_free);
+		free_tree(ctx->cmd_tree);
+		exit(0);
+	}
 	expand_cmd_args(node, envs, ctx);
 	if (is_builtin(node->cmd))
 	{
